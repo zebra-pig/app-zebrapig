@@ -1,0 +1,128 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+:root,:before,:after{
+    --default-background-color: #ffffff;
+    --default-background-color-semi-transparent: #ffffff90;
+    --default-background-color-transparent: #ffffff00;
+    --default-text-color: #000000;
+    --default-text-color-semi-transparent: #00000090;
+    --default-text-color-transparent: #00000000;
+    --default-accent-color: #000000;
+}
+
+@media(prefers-color-scheme: dark){
+    :root,:before,:after{
+        --default-background-color: #000000;
+        --default-background-color-semi-transparent: #00000090;
+        --default-background-color-transparent: #00000000;
+        --default-text-color: #ffffff;
+        --default-text-color-semi-transparent: #ffffff90;
+        --default-text-color-transparent: #ffffff00;
+        --default-accent-color: #ffffff;
+    }
+}
+
+
+:root
+{
+    --color-change-transition: 
+        color .4s ease, 
+        background .4s ease, 
+        fill .4s ease
+    ;
+
+    --border-style: 2px solid var(--text-color);
+
+    font-size: 16px;
+    line-height: 1.7;
+
+}
+
+h1 {
+    font-size: 2em;
+    margin: 20px 0 0 0;
+}
+
+*
+{
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+html
+{
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: var(--color-change-transition);
+
+    a
+    {
+        color: unset;
+        text-decoration: none;
+        cursor: pointer;
+        
+        &:hover
+        {
+            text-decoration: none;
+        }
+    }
+
+    font-family: 'Montserrat', sans-serif;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 500,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+.wrapper {
+    padding: 30px;
+
+    &.thin{
+        max-width: 1000px;
+        margin: auto;
+    }
+}
+
+
+section{
+    padding: 20px 0 20px;
+}
+
+@media (max-width: 800px){
+    .wrapper{
+        padding: 20px;
+    }
+
+    h1{
+        font-size: 1.4em;
+    }
+}
+
+// .pageTransition-enter-active,
+// .pageTransition-leave-active {
+//     transition: all 1s ease-out;
+// }
+
+.page-enter-from,
+.page-leave-to
+{ 
+    opacity: 0; 
+}
+
+.page-enter-active, 
+.page-leave-active 
+{ 
+    transition: opacity 0.2s ease; 
+}
