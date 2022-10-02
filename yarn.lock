@@ -1599,9 +1599,17 @@
     undici "^5.10.0"
     web-streams-polyfill "^3.2.0"
 
-"@zebrapig/three-utils@https://github.com/zebra-pig/three-utils":
+"@zebrapig/three-utils@ssh://git@github.com:zebra-pig/three-utils.git":
   version "1.0.0"
-  resolved "https://github.com/zebra-pig/three-utils#ea1367a4cf0c35417e4e6fda5a85be9ce390a04c"
+  uid ea1367a4cf0c35417e4e6fda5a85be9ce390a04c
+  resolved "ssh://git@github.com:zebra-pig/three-utils.git#ea1367a4cf0c35417e4e6fda5a85be9ce390a04c"
+  dependencies:
+    minimatch "^5.1.0"
+    three "^0.143.0"
+
+"@zebrapig/three-utils@zebra-pig/three-utils":
+  version "1.0.0"
+  resolved "git+ssh://git@github.com/zebra-pig/three-utils.git#ea1367a4cf0c35417e4e6fda5a85be9ce390a04c"
   dependencies:
     minimatch "^5.1.0"
     three "^0.143.0"
