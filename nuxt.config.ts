@@ -1,4 +1,3 @@
-import { defineNuxtConfig } from 'nuxt'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 
@@ -9,33 +8,21 @@ export default defineNuxtConfig({
     },
     modules: [
         '@intlify/nuxt3',
+        // https://nuxt-graphql-client.web.app/
+        'nuxt-graphql-client',
     ],
     css: [
         '@/styles/globals.scss',
     ],
-    build: {
-        transpile: [ 
-            'graphql',
-            'troisjs', 
-        ],
-    },
-    buildModules: [
-        // https://github.com/newbeea/nuxt3-apollo-starter
-        '@nuxt3/apollo-module',
-    ],
+    // build: {
+    //     transpile: [ 
+    //         'graphql',
+    //         'troisjs', 
+    //     ],
+    // },
     components: {
         global: true,
         dirs: ['~/components']
-    },
-    apollo:
-    {
-        clientConfigs: {
-            default: {
-                uri: process.env.API_GQL_ENDPOINT,
-                authenticationType: 'Bearer',
-            },
-        },
-        cookieAttributes: {}, // not used but throws error if not set ???
     },
     router: {
         mode: "history",
@@ -49,7 +36,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             APP_NAME: process.env.APP_NAME,
-            API_BEARER_TOKEN: process.env.API_BEARER_TOKEN,
+            // API_BEARER_TOKEN: process.env.API_BEARER_TOKEN,
             CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
         },
     },

@@ -12,7 +12,7 @@
 
 <script setup>
 const { public: { APP_NAME } } = useRuntimeConfig();
-const navigation = useNavigation("footer").result;
+const navigation = useNavigation("footer").data;
 
 </script>
 

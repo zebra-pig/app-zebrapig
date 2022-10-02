@@ -7,25 +7,21 @@
         "dev": "nuxt dev",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
-        "gql-gen": "node scripts/gql-gen.js"
+        "gql-gen": "node scripts/gql-gen.js",
+        "start": "node --es-module-specifier-resolution=node .output/server/index.mjs"
     },
     "devDependencies": {
         "@types/animejs": "^3.1.5",
         "@types/three": "^0.143.0",
-        "apollo": "^2.34.0",
         "dotenv": "^16.0.1",
         "nuxt": "3.0.0-rc.11",
         "typescript": "^4.8.3"
     },
     "dependencies": {
-        "@apollo/client": "3.5.6",
         "@intlify/nuxt3": "^0.2.4",
-        "@nuxt3/apollo-module": "^0.1.1",
-        "@vue/apollo-composable": "^4.0.0-alpha.19",
         "@zebrapig/three-utils": "https://github.com/zebra-pig/three-utils",
         "animejs": "^3.2.1",
-        "apollo-graphql": "^0.9.5",
-        "graphql": "^15.8.0",
+        "nuxt-graphql-client": "^0.1.19",
         "sass": "^1.52.3",
         "three": "^0.143.0",
         "troisjs": "^0.3.4"

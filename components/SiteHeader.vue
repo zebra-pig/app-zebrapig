@@ -13,7 +13,7 @@ onUnmounted(() =>
     document.removeEventListener('click', uncheck)
 );
 
-const navigation = useNavigation('header').result
+const navigation = useNavigation('header').data
 
 </script>
 

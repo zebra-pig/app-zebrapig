@@ -4,7 +4,7 @@ export default function useServices()
 {
     const SERVICES = [ 'video', 'development', '3d-design' ];
 
-    const navigation = useNavigation('header').result;
+    const navigation = useNavigation('header').data;
 
     const serviceLinks = computed(() =>
     {

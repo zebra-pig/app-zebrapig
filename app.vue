@@ -1,17 +1,21 @@
 <script setup lang='ts'>
 
-const { $apolloHelpers } = useNuxtApp()
-const config = useRuntimeConfig()
+// const { $apolloHelpers } = useNuxtApp()
+// const config = useRuntimeConfig()
 
-onMounted(() =>
-{
-    $apolloHelpers.onLogin(config.public.API_BEARER_TOKEN);
-});
+// onMounted(() =>
+// {
+//     $apolloHelpers.onLogin(config.public.API_BEARER_TOKEN);
+// });
 
-onUnmounted(() =>
-{
-    $apolloHelpers.onLogout()
-});
+// onUnmounted(() =>
+// {
+//     $apolloHelpers.onLogout()
+// });
+
+// useGqlCors({ credentials: 'same-origin' })
+// useGqlToken(config.public.API_BEARER_TOKEN)
+
 </script>
 
 <template>
