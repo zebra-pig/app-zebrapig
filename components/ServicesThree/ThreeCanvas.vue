@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 
-import { glbToThree } from '@zebrapig/three-utils';
+import { glbToThree } from 'zebrapig-three-utils';
 import * as THREE from 'three';
 // import GifLoader from 'three-gif-loader';
 import { AmbientLight, Camera, DirectionalLight, GltfModel, Renderer, RendererPublicInterface, Scene } from 'troisjs';

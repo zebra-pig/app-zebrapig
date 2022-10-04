@@ -1599,21 +1599,6 @@
     undici "^5.10.0"
     web-streams-polyfill "^3.2.0"
 
-"@zebrapig/three-utils@ssh://git@github.com:zebra-pig/three-utils.git":
-  version "1.0.0"
-  uid ea1367a4cf0c35417e4e6fda5a85be9ce390a04c
-  resolved "ssh://git@github.com:zebra-pig/three-utils.git#ea1367a4cf0c35417e4e6fda5a85be9ce390a04c"
-  dependencies:
-    minimatch "^5.1.0"
-    three "^0.143.0"
-
-"@zebrapig/three-utils@zebra-pig/three-utils":
-  version "1.0.0"
-  resolved "git+ssh://git@github.com/zebra-pig/three-utils.git#ea1367a4cf0c35417e4e6fda5a85be9ce390a04c"
-  dependencies:
-    minimatch "^5.1.0"
-    three "^0.143.0"
-
 "@zhead/schema-vue@^0.7.3":
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/@zhead/schema-vue/-/schema-vue-0.7.4.tgz#dab303e372e4cd491eb292081c109f677d39039a"
@@ -6514,6 +6499,14 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zebrapig-three-utils@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/zebrapig-three-utils/-/zebrapig-three-utils-1.0.0.tgz#9ed42c4bfc949e2ea70f3b529dbd23bee033c3eb"
+  integrity sha512-OxtVq+sLpA+PMIr1rTEYhmMvbPDXnxFXPULhERUwbFURe2H5UqcnrdDsOei1fgiVR20SmVkhue8bg6oTq051MQ==
+  dependencies:
+    minimatch "^5.1.0"
+    three "^0.143.0"
 
 zip-stream@^4.1.0:
   version "4.1.0"

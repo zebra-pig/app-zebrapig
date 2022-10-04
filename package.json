@@ -19,12 +19,12 @@
     },
     "dependencies": {
         "@intlify/nuxt3": "^0.2.4",
-        "@zebrapig/three-utils": "ssh://git@github.com:zebra-pig/three-utils.git",
         "animejs": "^3.2.1",
         "nuxt-graphql-client": "^0.1.19",
         "sass": "^1.52.3",
         "three": "^0.143.0",
-        "troisjs": "^0.3.4"
+        "troisjs": "^0.3.4",
+        "zebrapig-three-utils": "^1.0.0"
     },
     "resolutions": {
         "ts-invariant": "0.10.3"
