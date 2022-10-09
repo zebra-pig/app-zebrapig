@@ -62,7 +62,10 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
 <template>
     <div>
         <div class="scroll-container">
-            <div class="fixed-three">
+            <div 
+                class="fixed-three"
+                :style="{ '--clip-height': clipHeight }"
+            >
                 <client-only>
                     <three-canvas
                         :activeService="activeService"
@@ -113,7 +116,10 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
         height: 90vh;
         z-index: -1;
 
-        $h: calc(90vh - v-bind(clipHeight));
+        --clip-height: 0px;
+
+        $h: calc(90vh - var(--clip-height));
+        /* $h: calc(90vh - v-bind(clipHeight)); */
 
         clip-path: polygon(
             0    0, 

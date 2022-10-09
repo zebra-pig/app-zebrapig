@@ -1,10 +1,11 @@
 <script setup lang='ts'>
 
-import { glbToThree } from 'zebrapig-three-utils';
 import * as THREE from 'three';
-// import GifLoader from 'three-gif-loader';
-import { AmbientLight, Camera, DirectionalLight, GltfModel, Renderer, RendererPublicInterface, Scene } from 'troisjs';
+import { FXAAPass, AmbientLight, Camera, DirectionalLight, EffectComposer, GltfModel, HalftonePass, Renderer, RendererPublicInterface, RenderPass, Scene } from 'troisjs';
+import { glbToThree } from 'zebrapig-three-utils';
 import { Carousel } from './Carousel';
+import TroisOutlinePass from './TroisOutlinePass';
+import GifLoader from '../../workarounds/three-gif-loader/gif-loader.js';
 
 const props = defineProps<{
     activeService: number;
@@ -33,9 +34,9 @@ const carousel = ref(new Carousel({
 
 enum Models
 {
-    Camera,
-    Computer,
-    PlanetModel,
+    Camera = 'Camera',
+    Computer = 'Computer',
+    PlanetModel = 'PlanetModel',
 }
 
 const models = ref<{
@@ -44,6 +45,8 @@ const models = ref<{
         mixer?: THREE.AnimationMixer,
     }
 }>({});
+
+const outlineObjects = ref([]);
 
 function captureCursor(e: MouseEvent)
 {
@@ -118,22 +121,28 @@ colorMap.flipY = false;
 
 const onCamera = (gltf: any) =>
 {
-    const { root } = glbToThree(gltf, [
+    const { root, foreground } = glbToThree(gltf, [
         {
             glob: '/camera/**/*',
             material: new THREE.MeshToonMaterial({
                 map: colorMap,
                 side: THREE.DoubleSide,
-            })
+            }),
+        },
+        {
+            glob: '/camera',
+            eject: 'foreground',
         },
         {
             glob: '/shapes',
             material: new THREE.MeshBasicMaterial({
                 color: 0xFFA74D,
                 side: THREE.DoubleSide,
-            })
+            }),
         },
     ]);
+
+    outlineObjects.value = [ ...outlineObjects.value, foreground ];
 
     const mixer = new THREE.AnimationMixer(root);
 
@@ -148,20 +157,22 @@ const onCamera = (gltf: any) =>
     };
 }
 
+
 const onComputer = (gltf: any) =>
 {
     const gifPath = url`/edb0840c-8505-4b3c-a119-dc2d5dc63d4f.gif`;
 
-    // const gif = new GifLoader().load(gifPath, () => { });
-    // gif.flipY = false;
+    const gif = new GifLoader().load(gifPath, () => {});
+    gif.flipY = false;
 
-    const { root } = glbToThree(gltf, [
+    const { root, foreground } = glbToThree(gltf, [
         {
             glob: '/computer/**/*',
             material: new THREE.MeshToonMaterial({
                 map: colorMap,
                 side: THREE.DoubleSide,
-            })
+            }),
+            eject: 'foreground',
         },
         {
             glob: '/circles/**/*',
@@ -173,10 +184,12 @@ const onComputer = (gltf: any) =>
         {
             glob: '/screen/*',
             material: new THREE.MeshBasicMaterial({
-                // map: gif,
+                map: gif as THREE.Texture,
             })
         },
     ]);
+
+    outlineObjects.value = [ ...outlineObjects.value, foreground ];
 
     models.value[ Models.Computer ] =
     {
@@ -186,13 +199,14 @@ const onComputer = (gltf: any) =>
 
 const onPlanetModel = (gltf: any) =>
 {
-    const { root } = glbToThree(gltf, [
+    const { root, foreground } = glbToThree(gltf, [
         {
             glob: '/gyro/**/*',
             material: new THREE.MeshToonMaterial({
                 map: colorMap,
                 side: THREE.DoubleSide,
-            })
+            }),
+            eject: 'foreground',
         },
         {
             glob: '/shapes',
@@ -202,6 +216,8 @@ const onPlanetModel = (gltf: any) =>
             })
         },
     ]);
+
+    outlineObjects.value = [ ...outlineObjects.value, foreground ];
 
     const mixer = new THREE.AnimationMixer(root);
 
@@ -220,12 +236,18 @@ const onPlanetModel = (gltf: any) =>
 
 <template>
     <div class="canvas-backdrop" :class="{ hidden }" ref="canvasWrapper">
-        <Renderer ref="renderer" :antialias="true" :resize="true" :alpha="true" :auto-clear="true">
+        <Renderer 
+            ref="renderer" 
+            :antialias="true" 
+            :resize="true" 
+            :auto-clear="true"
+            :alpha="true" 
+        >
             <Camera ref="camera" :look-at="new THREE.Vector3()" :fov="props.fov" />
             <Scene>
-                <DirectionalLight :color="'#fffebf'" :intensity=".7" :position="new THREE.Vector3(8, -10, 12)"
+                <DirectionalLight :color="'#fffebf'" :intensity=".8" :position="new THREE.Vector3(8, -10, 12)"
                     :look-at="new THREE.Vector3()" />
-                <AmbientLight :color="'#abd7f5'" :intensity=".5" />
+                <AmbientLight :color="'#abd7f5'" :intensity=".3" />
                 <!-- CAMERA -->
                 <GltfModel :src="url`/05451335-f84f-41fd-a516-725a72051c61.glb`" @load="onCamera" />
                 <!-- COMPUTER -->
@@ -233,6 +255,12 @@ const onPlanetModel = (gltf: any) =>
                 <!-- PLANET MODEL -->
                 <GltfModel :src="url`/dc96a54b-f2f4-46e7-8e8b-be0f7ae8a2f4.glb`" @load="onPlanetModel" />
             </Scene>
+            <EffectComposer>
+                <RenderPass />
+                <TroisOutlinePass 
+                    :selectedObjects="outlineObjects"
+                />
+            </EffectComposer>
         </Renderer>
     </div>
 </template>

@@ -1378,6 +1378,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.23.tgz#75c580983846181ebe5f4abc40fe9dfb2d65665f"
   integrity sha512-DWNcCHolDq0ZKGizjx2DZjR/PqsYwAcYUJmfMWqtVU2MBMG5Mo+xFZrhGId5r/O5HOuMPyQEcM6KUBp5lBZZBg==
 
+"@types/omggif@*":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@types/omggif/-/omggif-1.0.3.tgz#69fdf6fd8cb10cb2b223a52629947616f8eccd3b"
+  integrity sha512-u6WxvVuUkf4S+93ovKXBWSKaxlkCo63l6wBEgphBiIlXEsUcNFrl0nE5NbQA5u2ffvk3xc+3aN/DfDPnmrKRlg==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -1389,6 +1394,21 @@
   integrity sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==
   dependencies:
     "@types/node" "*"
+
+"@types/three-gif-loader@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/three-gif-loader/-/three-gif-loader-1.1.0.tgz#0fc9551204eeb09b0f9cec29dc228fbe7348091b"
+  integrity sha512-xjKpyvQKDvVARsbJGHIZqRiClfXKuJRaxlX4BNbP7nRR+fVS9OnBPSyE+pcEvxwHZLbXoIbPZl9rtb7yK5ghUw==
+  dependencies:
+    "@types/omggif" "*"
+    "@types/three" "*"
+
+"@types/three@*":
+  version "0.144.0"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.144.0.tgz#a154f40122dbc3668c5424a5373f3965c6564557"
+  integrity sha512-psvEs6q5rLN50jUYZ3D4pZMfxTbdt3A243blt0my7/NcL6chaCZpHe2csbCtx0SOD9fI/XnF3wnVUAYZGqCSYg==
+  dependencies:
+    "@types/webxr" "*"
 
 "@types/three@^0.143.0":
   version "0.143.2"
@@ -4704,6 +4724,11 @@ ohmyfetch@^0.4.18, ohmyfetch@^0.4.19:
     node-fetch-native "^0.1.5"
     ufo "^0.8.5"
     undici "^5.10.0"
+
+omggif@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/omggif/-/omggif-1.0.10.tgz#ddaaf90d4a42f532e9e7cb3a95ecdd47f17c7b19"
+  integrity sha512-LMJTtvgc/nugXj0Vcrrs68Mn2D1r0zf630VNtqtpI1FEO7e+O9FP4gqs9AcnBaSEeoHIPm28u6qgPR0oyEpGSw==
 
 on-finished@2.4.1:
   version "2.4.1"
