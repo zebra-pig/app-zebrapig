@@ -1,11 +1,11 @@
 <script setup lang='ts'>
 
 import * as THREE from 'three';
-import { FXAAPass, AmbientLight, Camera, DirectionalLight, EffectComposer, GltfModel, HalftonePass, Renderer, RendererPublicInterface, RenderPass, Scene } from 'troisjs';
+import { AmbientLight, Camera, DirectionalLight, EffectComposer, GltfModel, Renderer, RendererPublicInterface, RenderPass, Scene } from 'troisjs';
 import { glbToThree } from 'zebrapig-three-utils';
+import GifLoader from '../../workarounds/three-gif-loader/gif-loader.js';
 import { Carousel } from './Carousel';
 import TroisOutlinePass from './TroisOutlinePass';
-import GifLoader from '../../workarounds/three-gif-loader/gif-loader.js';
 
 const props = defineProps<{
     activeService: number;
@@ -23,6 +23,7 @@ const camera = ref<{ camera: THREE.Camera }>();
 const cursorTarget = ref(new THREE.Vector2());
 const cursor = ref(new THREE.Vector2());
 const hidden = ref(true);
+const canvasWrapper = ref<HTMLDivElement>();
 
 const carousel = ref(new Carousel({
     inertia: 0.1,
@@ -58,9 +59,14 @@ function captureCursor(e: MouseEvent)
 
 onMounted(() =>
 {
+    document.addEventListener('mousemove', captureCursor);
+
     const clock = new THREE.Clock();
 
-    renderer.value?.onBeforeRender(() =>
+    const troisRenderer = renderer.value;
+    if (!troisRenderer) return;
+
+    renderer.value.onBeforeRender(() =>
     {
         const dt = clock.getDelta();
 
@@ -97,13 +103,12 @@ onMounted(() =>
             w, h 
         );
     })
-
-    document.addEventListener('mousemove', captureCursor);
 });
 
 onUnmounted(() =>
 {
     document.removeEventListener('mousemove', captureCursor);
+    window.removeEventListener('resize', resize);
 });
 
 watch(activeService, newService =>
@@ -114,7 +119,6 @@ watch(activeService, newService =>
 
 const url = (path: TemplateStringsArray) => CONTENT_ENDPOINT + path[ 0 ];
 const txtLoader = new THREE.TextureLoader();
-
 const colorMap = txtLoader.load(url`/32f10b23-4298-4f55-a5a7-f9cf57211f45.png`);
 colorMap.magFilter = THREE.NearestFilter;
 colorMap.flipY = false;
@@ -239,15 +243,15 @@ const onPlanetModel = (gltf: any) =>
         <Renderer 
             ref="renderer" 
             :antialias="true" 
-            :resize="true" 
-            :auto-clear="true"
+            :auto-clear="true" 
             :alpha="true" 
+            :resize="true"
         >
             <Camera ref="camera" :look-at="new THREE.Vector3()" :fov="props.fov" />
             <Scene>
-                <DirectionalLight :color="'#fffebf'" :intensity=".8" :position="new THREE.Vector3(8, -10, 12)"
+                <DirectionalLight :color="'#fffebf'" :intensity="1.0" :position="new THREE.Vector3(8, -10, 12)"
                     :look-at="new THREE.Vector3()" />
-                <AmbientLight :color="'#abd7f5'" :intensity=".3" />
+                <AmbientLight :color="'#abd7f5'" :intensity=".4" />
                 <!-- CAMERA -->
                 <GltfModel :src="url`/05451335-f84f-41fd-a516-725a72051c61.glb`" @load="onCamera" />
                 <!-- COMPUTER -->

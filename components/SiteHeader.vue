@@ -33,8 +33,11 @@ const navigation = useNavigation('header').data
 
 <style scoped lang='scss'>
 
-.header-spacer{
-    height: 62px;
+$header-height: 65px;
+
+.header-spacer
+{
+    height: $header-height;
 }
 
 .logo-link{
@@ -42,8 +45,10 @@ const navigation = useNavigation('header').data
     align-items: center;
 }
 
-.site-header {
+.site-header 
+{
     width: 100%;
+    height: $header-height;
     padding: 10px 0;
     z-index: 1000;
     position: fixed;
@@ -65,6 +70,8 @@ const navigation = useNavigation('header').data
         transition: var(--color-change-transition);
         z-index: -1;
     }
+
+    display: flex;
 
 }
 

@@ -75,20 +75,18 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                     />
                 </client-only>
             </div>
-            <div class="services-spacer">
-                <service-links-mobile 
-                    v-if="isMobile"
-                    :serviceLinks="serviceLinks"
-                    :activeService="activeService"
-                    @setActive="setActive"
-                />
-                <service-links-desktop
-                    v-else
-                    :serviceLinks="serviceLinks"
-                    :activeService="activeService"
-                    @setActive="setActive"
-                />
-            </div>
+            <service-links-mobile 
+                v-if="isMobile"
+                :serviceLinks="serviceLinks"
+                :activeService="activeService"
+                @setActive="setActive"
+            />
+            <service-links-desktop
+                v-else
+                :serviceLinks="serviceLinks"
+                :activeService="activeService"
+                @setActive="setActive"
+            />
             <div class="quote-container">
                 <h1>Lorem ipsum dolor</h1>
             </div>
@@ -119,7 +117,6 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
         --clip-height: 0px;
 
         $h: calc(90vh - var(--clip-height));
-        /* $h: calc(90vh - v-bind(clipHeight)); */
 
         clip-path: polygon(
             0    0, 
@@ -127,14 +124,6 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
             100% $h,
             100% 0
         );
-    }
-
-    .services-spacer
-    {
-        width: 100%;
-        height: 90vh;
-
-        position: relative;
     }
 
     .quote-container
@@ -155,8 +144,8 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
 
         h1 
         { 
-            font-size: 60px; 
-            margin: 1.5ch;
+            font-size: 40px; 
+            margin: 1ch;
         } 
     }
 }
