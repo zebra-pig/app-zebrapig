@@ -1,9 +1,9 @@
 <template>
     <div class="layout">
         <site-header />
-        <client-only>
+        <!-- <client-only>
             <background-base />
-        </client-only>
+        </client-only> -->
         <div class="container">
             <slot/>
         </div>
