@@ -53,8 +53,6 @@ export class Carousel
 
         this.angularVelocity += _dt * totalForce / inertia;
         this.angle += _dt * this.angularVelocity;
-
-        console.log(totalForce);
     }
 
     getArms()
