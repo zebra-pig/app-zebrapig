@@ -10,7 +10,7 @@
 
 <script setup>
 const route = useRoute()
-const data = useProjectPages(route.params.slug).data
+const { data } = useProjectPages(route.params.slug)
 
 const theme = computed(() => {
     return {
