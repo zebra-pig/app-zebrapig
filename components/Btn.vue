@@ -16,7 +16,7 @@
     outline: 0px;
     vertical-align: middle;
     width: 400px;
-    max-width: 90vw;
+    max-width: 80vw;
     text-align: center;
 }
 </style>
