@@ -1,7 +1,6 @@
 <template>
     <btn v-if="elementType == 'btn'" rel="referrer" :to="link.route" :target="linkTarget" :class="class">{{ linkTitle }}</btn>
-    
-    <nuxt-link v-else :to="'/'+link.route" rel="referrer" :target="linkTarget" :class="class">{{ linkTitle }}</nuxt-link>
+    <nuxt-link v-else :to="fullLink" rel="referrer" :target="linkTarget" :class="class">{{ linkTitle }}</nuxt-link>
 </template>
 
 <script setup>
@@ -16,6 +15,13 @@ const linkTitle = computed(() => {
 
 const linkTarget = computed(() => {
     return "_" + (props.link.target ?? "self")
+})
+
+const fullLink = computed(() => {
+    if(props.link.route.startsWith("mailto:")){
+        return props.link.route
+    }
+    return '/'+props.link.route
 })
 
 const elementType = computed(() => {
