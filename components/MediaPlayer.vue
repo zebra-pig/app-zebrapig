@@ -137,10 +137,7 @@ ${fileUrl}#xywh=${crow*w},${ccol*h + cutX},${w},${h - cutX*2}
 
 
 .plyr, .player{
-    width: 90vw;
-    @media(max-width: 800px){
-        width: 100vw;
-    }
+    width: 100vw;
 
     --plyr-color-main: #888888;
 }
