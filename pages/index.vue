@@ -88,12 +88,13 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                 @setActive="setActive"
             />
             <div class="quote-container">
-                <h1>Lorem ipsum dolor</h1>
+                <h1><a href="mailto:info@zebrapig.com">info@zebrapig.com</a></h1><br>
+                <h1><a href="tel:+41 61 563 12 70">+41 61 563 12 70</a></h1>
             </div>
         </div>
-        <section class="wrapper">
+        <!-- <section class="wrapper">
             <project-grid />
-        </section>
+        </section> -->
     </div>
 </template>
 

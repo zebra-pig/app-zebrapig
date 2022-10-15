@@ -8,12 +8,6 @@ const { data, error } = await useAsyncGql('ProjectPageList', { lang: 'de-DE' });
     <div class="project-grid" v-if="data?.project_pages">
         <project-grid-card v-for="projectPage in data?.project_pages" :key="projectPage.id"
             :project-page="projectPage" />
-        <project-grid-card v-for="projectPage in data?.project_pages" :key="projectPage.id"
-            :project-page="projectPage" />
-        <project-grid-card v-for="projectPage in data?.project_pages" :key="projectPage.id"
-            :project-page="projectPage" />
-        <project-grid-card v-for="projectPage in data?.project_pages" :key="projectPage.id"
-            :project-page="projectPage" />
     </div>
 </template>
 
