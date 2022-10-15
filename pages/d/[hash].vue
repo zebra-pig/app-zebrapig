@@ -14,7 +14,7 @@ const theme = ref({
     accentColor: "#ffffff"
 })
 
-const data = useDownloadPages(route.params.hash).result
+const data = useDownloadPages(route.params.hash).data
 
 const title = computed(() => {
     return data.value?.download_pages[0] ? data.value.download_pages[0].title : ''

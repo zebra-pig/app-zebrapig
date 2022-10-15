@@ -8,7 +8,7 @@
 
 const route = useRoute()
 
-const data = usePages("imprint").result;
+const data = usePages("imprint").data;
 
 const title = computed(() => {
     return data.value ? data.value.pages[0].translations[0]?.title : ''
