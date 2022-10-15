@@ -46,7 +46,7 @@ definePageMeta({
     .project-page{
         &.pageTransition-enter-active,
         &.pageTransition-leave-active{
-            transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
             transform-origin: bottom center;
         }
 
@@ -63,7 +63,7 @@ definePageMeta({
         &.pageTransition-leave-to{
             opacity: 0;
             transform: scale(.8);
-            transition: all .6s cubic-bezier(0.45, 0.15, 0.63, 0.17);
+            transition: all .5s cubic-bezier(0.45, 0.15, 0.63, 0.17);
         }
     }
 </style>

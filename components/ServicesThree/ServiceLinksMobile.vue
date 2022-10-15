@@ -78,7 +78,7 @@ onMounted(() =>
 .spacer
 {
     width: 100%;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 250px);
 
     position: relative;
 

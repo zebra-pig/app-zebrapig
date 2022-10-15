@@ -90,7 +90,7 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                 @setActive="setActive"
             />
             <div class="quote-container" v-if="settingsData">
-                <h1><a :href="'mailto:'+APP_NAME+'<'+settingsData.settings.email+'>'">{{ settingsData.settings.email }}</a></h1><br>
+                <h1><a :href="'mailto:'+APP_NAME+'<'+settingsData.settings.email+'>'">{{ settingsData.settings.email }}</a></h1>
                 <h1><a :href="'tel:'+settingsData.settings.phone">{{ settingsData.settings.phone }}</a></h1>
             </div>
         </div>
@@ -144,16 +144,20 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
 
         transition: var(--color-change-transition);
         background-color: var(--background-color);
+
+        h1{ 
+            font-size: 40px; 
+            margin: 1ch;
+        }
         
         @media(max-width: 800px){
             display: block;
+
+            h1{
+                font-size: 25px;
+            }
         }
 
-        h1 
-        { 
-            font-size: 40px; 
-            margin: 1ch;
-        } 
     }
 }
 
