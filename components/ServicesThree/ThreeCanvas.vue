@@ -26,8 +26,8 @@ const hidden = ref(true);
 const canvasWrapper = ref<HTMLDivElement>();
 
 const carousel = ref(new Carousel({
-    inertia: 0.1,
-    drag: 0.1,
+    inertia: 0.01,
+    drag: 0.8,
     radius: 15,
     arms: props.numberOfServices,
     offset: new THREE.Vector3(0, 15, 0),

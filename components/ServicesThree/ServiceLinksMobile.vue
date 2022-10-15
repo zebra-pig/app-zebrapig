@@ -64,11 +64,11 @@ onMounted(() =>
             <h1 
                 class="arrow-left"
                 @click="goLast()"
-            >{{ "<" }}</h1>
+            ><span class="material-symbols-outlined">chevron_left</span></h1>
             <h1 
                 class="arrow-right"
                 @click="goNext()"
-            >{{ ">" }}</h1>
+            ><span class="material-symbols-outlined">chevron_right</span></h1>
         </div>
     </div> 
 </template>

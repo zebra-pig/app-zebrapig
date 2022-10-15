@@ -142,6 +142,10 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
 
         transition: var(--color-change-transition);
         background-color: var(--background-color);
+        
+        @media(max-width: 800px){
+            display: block;
+        }
 
         h1 
         { 
