@@ -1,3 +1,4 @@
+import { toDisplayString } from 'nuxt/dist/app/compat/capi';
 import * as THREE from 'three';
 
 function mod(a: number, n: number)
@@ -46,11 +47,12 @@ export class Carousel
 
         const { inertia, drag } = this.options;
 
-        const angularAcceleration = phi / inertia;
+        let movementForce = phi;
+        let dragForce = Math.sign(-this.angularVelocity) * Math.abs(drag * this.angularVelocity * inertia);
+        let totalForce = movementForce + dragForce;
 
-        this.angularVelocity += angularAcceleration * _dt;
-        this.angularVelocity *= 1 - drag;
-        this.angle += this.angularVelocity * _dt;
+        this.angularVelocity += _dt * totalForce / inertia;
+        this.angle += _dt * this.angularVelocity;
     }
 
     getArms()

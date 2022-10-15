@@ -26,8 +26,8 @@ const hidden = ref(true);
 const canvasWrapper = ref<HTMLDivElement>();
 
 const carousel = ref(new Carousel({
-    inertia: 0.01,
-    drag: 0.8,
+    inertia: 0.15,
+    drag: 5,
     radius: 15,
     arms: props.numberOfServices,
     offset: new THREE.Vector3(0, 15, 0),
@@ -108,7 +108,6 @@ onMounted(() =>
 onUnmounted(() =>
 {
     document.removeEventListener('mousemove', captureCursor);
-    // window.removeEventListener('resize', resize);
 });
 
 watch(activeService, newService =>
