@@ -47,7 +47,7 @@ const emit = defineEmits<{
 .spacer
 {
     width: 100%;
-    height: 90vh;
+    height: 75vh;
     position: relative;
     
     .service-links-desktop
