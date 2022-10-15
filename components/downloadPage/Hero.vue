@@ -55,7 +55,7 @@ const { t } = useI18n();
         }
 
         .spacer{
-            height: 20vh;
+            height: 40vh;
             width: 100%;
         }
     }
