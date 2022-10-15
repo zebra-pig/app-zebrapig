@@ -53,7 +53,12 @@ onMounted(async () => {
         },
 
         sources: sources.value,
-        poster: mediaData.value.poster.url
+        poster: mediaData.value.poster.url,
+        keyboard: {
+            focused: true,
+            global: true
+        },
+        duration: media.duration
     }
 
     console.log(settings)
