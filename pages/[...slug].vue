@@ -9,7 +9,7 @@ import { ref } from 'vue';
 
 const route = useRoute()
 
-const data = usePages(route.params.slug.join("/")).result
+const data = usePages(route.params.slug.join("/")).data
 
 const title = computed(() => {
     return data.value ? data.value.pages[0].translations[0]?.title : ''

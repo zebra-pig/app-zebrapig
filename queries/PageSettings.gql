@@ -1,0 +1,10 @@
+query PageSettings {
+  settings {
+    street
+    city
+    zip
+    country
+    email
+    phone
+  }
+}

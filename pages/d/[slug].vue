@@ -1,6 +1,8 @@
 <template>
-    <theme-style :theme="theme" />
-    <download-page-hero v-if="downloadPage" :download-page="downloadPage" />
+    <div>
+        <theme-style :theme="theme" />
+        <download-page-hero v-if="downloadPage" :download-page="downloadPage" />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -14,14 +16,14 @@ const theme = ref({
     accentColor: "#ffffff"
 })
 
-const data = useDownloadPages(route.params.hash).result
+const { data } = useDownloadPages(route.params.slug)
 
 const title = computed(() => {
-    return data.value?.download_pages[0] ? data.value.download_pages[0].title : ''
+    return data?.value?.download_pages[0] ? data.value.download_pages[0].title : ''
 })
 
 const downloadPage = computed(() => {
-    return data.value?.download_pages[0]
+    return data?.value?.download_pages[0]
 })
 
 useHead({

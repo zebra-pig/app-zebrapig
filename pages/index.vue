@@ -17,6 +17,8 @@ const onScroll = () => clipHeight.value = `${window.scrollY}px`
 onMounted(() => window.addEventListener('scroll', onScroll));
 onUnmounted(() => window.removeEventListener('scroll', onScroll));
 
+const settingsData = useSettings().data
+
 /**
  * SERVICES
  */
@@ -87,13 +89,14 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                 :activeService="activeService"
                 @setActive="setActive"
             />
-            <div class="quote-container">
-                <h1>Lorem ipsum dolor</h1>
+            <div class="quote-container" v-if="settingsData">
+                <h1><a :href="'mailto:'+APP_NAME+'<'+settingsData.settings.email+'>'">{{ settingsData.settings.email }}</a></h1>
+                <h1><a :href="'tel:'+settingsData.settings.phone">{{ settingsData.settings.phone }}</a></h1>
             </div>
         </div>
-        <section class="wrapper">
+        <!-- <section class="wrapper">
             <project-grid />
-        </section>
+        </section> -->
     </div>
 </template>
 
@@ -142,11 +145,19 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
         transition: var(--color-change-transition);
         background-color: var(--background-color);
 
-        h1 
-        { 
+        h1{ 
             font-size: 40px; 
             margin: 1ch;
-        } 
+        }
+        
+        @media(max-width: 800px){
+            display: block;
+
+            h1{
+                font-size: 25px;
+            }
+        }
+
     }
 }
 
