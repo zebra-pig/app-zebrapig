@@ -15,6 +15,8 @@
     color: var(--background-color);
     outline: 0px;
     vertical-align: middle;
+    width: 400px;
+    text-align: center;
 }
 </style>
 <script setup>

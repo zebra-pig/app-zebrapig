@@ -1,5 +1,5 @@
 <template>
-    <video ref="playerElement" class="player" playsinline controls v-if="mediaData">
+    <video ref="playerElement" class="player" playsinline :data-poster="mediaData.poster.url" controls v-if="mediaData">
         <source :src="source.src" v-for="source in sources" :type="source.type"/>
     </video>
     <!-- {{ playbacks }} -->

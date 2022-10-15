@@ -5,28 +5,37 @@
         </div> -->
         <download-page-preview :download-page="downloadPage" />
         <div class="title">{{ downloadPage.title }}</div>
+        <btn class="download-btn" v-if="downloadPage.download" target="_blank" :to="downloadPage.download_url">{{ t("download") }}</btn>
         <div class="spacer"></div>
     </div>
 </template>
 
 <script setup>
 const { downloadPage } = defineProps(["downloadPage"])
-
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 </script>
 
 <style lang="scss" scoped>
+    .download-btn{
+        font-size: 15px;
+        margin-top: 20px;
+        text-transform: uppercase;
+    }
+
     .download-page-hero{
         align-items: center;
         display: flex;
         flex-direction: column;
         height: 80vh;
-        justify-content: flex-end;
+        justify-content: flex-start;
         width: 100vw;
 
         .title{
             font-weight: bold;
             font-size: 30px;
+            margin-top: 20px;
         }
 
         .hero-media{
