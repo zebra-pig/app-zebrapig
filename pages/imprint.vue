@@ -1,5 +1,5 @@
 <template>
-    <section class="wrapper" v-if="data.settings">
+    <section class="wrapper" v-if="data?.settings">
         <h1>{{ t("imprint") }}</h1>
         {{ APP_NAME }}<br>
         {{ data.settings.street }}<br>
@@ -17,7 +17,7 @@ const { t } = useI18n();
 const { public: { APP_NAME } } = useRuntimeConfig();
 
 
-const data = useSettings().data;
+const { data } = useSettings();
 
 const title = computed(() => {
     return t("imprint")
