@@ -60,15 +60,16 @@ function captureCursor(e: MouseEvent)
 onMounted(() =>
 {
     document.addEventListener('mousemove', captureCursor);
-
     const clock = new THREE.Clock();
 
     const troisRenderer = renderer.value;
     if (!troisRenderer) return;
 
+
     renderer.value.onBeforeRender(() =>
     {
         const dt = clock.getDelta();
+        window.dispatchEvent(new Event('resize'));
 
         carousel.value.update(dt);
         const arms = carousel.value.getArms();
@@ -103,6 +104,7 @@ onMounted(() =>
             w, h 
         );
     })
+
 });
 
 onUnmounted(() =>
