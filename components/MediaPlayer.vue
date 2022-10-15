@@ -53,7 +53,12 @@ onMounted(async () => {
         },
 
         sources: sources.value,
-        poster: mediaData.value.poster.url
+        poster: mediaData.value.poster.url,
+        keyboard: {
+            focused: true,
+            global: true
+        },
+        duration: media.duration
     }
 
     console.log(settings)
@@ -133,6 +138,9 @@ ${fileUrl}#xywh=${crow*w},${ccol*h + cutX},${w},${h - cutX*2}
 
 .plyr, .player{
     width: 90vw;
+    @media(max-width: 800px){
+        width: 100vw;
+    }
 
     --plyr-color-main: #888888;
 }
