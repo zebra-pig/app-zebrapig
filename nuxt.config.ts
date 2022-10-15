@@ -38,6 +38,17 @@ export default defineNuxtConfig({
             APP_NAME: process.env.APP_NAME,
             // API_BEARER_TOKEN: process.env.API_BEARER_TOKEN,
             CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
+           
+            'graphql-client': {
+                clients: {
+                    default: {
+                        host: process.env.GQL_HOST,
+                        token: process.env.GQL_TOKEN,
+                        retainToken: true
+                    },
+                    
+                }
+            }
         },
     },
 });

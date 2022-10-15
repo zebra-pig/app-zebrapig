@@ -108,7 +108,7 @@ onMounted(() =>
 onUnmounted(() =>
 {
     document.removeEventListener('mousemove', captureCursor);
-    window.removeEventListener('resize', resize);
+    // window.removeEventListener('resize', resize);
 });
 
 watch(activeService, newService =>

@@ -17,6 +17,8 @@ const onScroll = () => clipHeight.value = `${window.scrollY}px`
 onMounted(() => window.addEventListener('scroll', onScroll));
 onUnmounted(() => window.removeEventListener('scroll', onScroll));
 
+const settingsData = useSettings().data
+
 /**
  * SERVICES
  */
@@ -87,9 +89,9 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                 :activeService="activeService"
                 @setActive="setActive"
             />
-            <div class="quote-container">
-                <h1><a href="mailto:info@zebrapig.com">info@zebrapig.com</a></h1><br>
-                <h1><a href="tel:+41 61 563 12 70">+41 61 563 12 70</a></h1>
+            <div class="quote-container" v-if="settingsData">
+                <h1><a :href="'mailto:'+APP_NAME+'<'+settingsData.settings.email+'>'">{{ settingsData.settings.email }}</a></h1><br>
+                <h1><a :href="'tel:'+settingsData.settings.phone">{{ settingsData.settings.phone }}</a></h1>
             </div>
         </div>
         <!-- <section class="wrapper">
