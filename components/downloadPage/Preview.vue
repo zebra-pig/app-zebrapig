@@ -1,6 +1,7 @@
 <template>
     <div>
-        <iframe :src="previewUrl" allowfullscreen="true"></iframe>
+        <iframe v-if="!downloadPage.preview_media" :src="previewUrl" allowfullscreen="true"></iframe>
+        <media-player v-else :media="downloadPage.preview_media" />
     </div>
 </template>
 

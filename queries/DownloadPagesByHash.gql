@@ -11,5 +11,8 @@ query DownloadPagesByHash($hash: String)
     hero {
       id
     }
+    preview_media{
+      external_id
+    }
   }
 }
