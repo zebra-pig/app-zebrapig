@@ -15,7 +15,7 @@ const { showreelItem } = defineProps(["showreelItem"])
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .showreel-comment{
     margin-bottom: 0px;
     padding-bottom: 15px;
@@ -40,7 +40,7 @@ const { showreelItem } = defineProps(["showreelItem"])
     align-items: center;
     flex-direction: column;
     margin-bottom: 40px;
-}
+
 
 .showreel-item-content{
     max-width: 1000px;
@@ -54,5 +54,10 @@ const { showreelItem } = defineProps(["showreelItem"])
         border-left: 0px;
         border-right: 0px;
     }
+
+    .plyr__poster{
+        border: solid 2px var(--text-color);
+    }
+}
 }
 </style>

@@ -17,6 +17,7 @@ const { showreel } = defineProps(["showreel"])
         flex-direction: column;
         justify-content: flex-end;
         align-items: center;
+        border-bottom: 2px solid var(--text-color);
 
         h2{
             text-align: center;
@@ -26,7 +27,7 @@ const { showreel } = defineProps(["showreel"])
             width: 100%;
             height: 100%;
             position: absolute;
-            opacity: .7;
+            opacity: .6;
             object-fit: cover;
             z-index: -1;
         }
