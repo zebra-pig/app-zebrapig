@@ -28,6 +28,7 @@ const { showreel } = defineProps(["showreel"])
             position: absolute;
             opacity: .7;
             object-fit: cover;
+            z-index: -1;
         }
     }
 </style>
