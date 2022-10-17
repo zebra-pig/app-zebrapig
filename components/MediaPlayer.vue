@@ -71,7 +71,7 @@ function generateThumbnailVtt(media){
     h = 129,
     row = 10,
     interval = media.duration/100,
-    aspect = 1920/900
+    aspect = 1920/1080
 
     function secondsToSMPTE(seconds, framerate) {
         var f = Math.floor((seconds % 1) * framerate);
@@ -137,7 +137,7 @@ ${fileUrl}#xywh=${crow*w},${ccol*h + cutX},${w},${h - cutX*2}
 
 
 .plyr, .player{
-    width: 100vw;
+    width: 100%;
 
     --plyr-color-main: #888888;
 }

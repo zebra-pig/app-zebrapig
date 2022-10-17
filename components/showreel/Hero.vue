@@ -12,7 +12,7 @@ const { showreel } = defineProps(["showreel"])
 
 <style lang="scss">
     .showreel-hero{
-        height: 200px;
+        height: 400px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
