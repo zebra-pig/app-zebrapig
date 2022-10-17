@@ -17,6 +17,7 @@ const styleHtml = computed(() => {
                 --text-color-semi-transparent: ${theme.textColor ? theme.textColor + "90" : "var(--default-text-color-semi-transparent)"};
                 --text-color-transparent: ${theme.textColor ? theme.textColor + "00" : "var(--default-text-color-transparent)"};
                 --accent-color: ${theme.accentColor ? theme.accentColor : "var(--default-accent-color)"};
+                --plyr-color-main: ${theme.accentColor ? (theme.accentColor == "#ffffff" ? "#555555" : theme.accentColor) : "#000000"};
             }
         </style>`.replaceAll("\n", "").replaceAll("   ", "")
     }

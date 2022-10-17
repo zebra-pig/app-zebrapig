@@ -13,8 +13,14 @@ import Hls from "hls.js";
 const { media } = defineProps(["media"])
 
 const playerElement = ref()
-const {data: mediaData} = useFetch("https://api.vod2.infomaniak.com/res/media/"+media.external_id+".json")
+const {data: mediaData} = await useFetch(() => `https://api.vod2.infomaniak.com/res/media/${media.external_id}.json`, {
+    key: "vod-"+media.external_id
+})
 
+
+watch(mediaData, () => {
+    initPlayer()
+})
 
 const playbacks = computed(() => {
     var data = mediaData?.value?.playbacks[Object.keys(mediaData.value.playbacks)[0]]
@@ -39,6 +45,10 @@ const sources = computed(() => {
 })
 
 onMounted(async () => {
+    initPlayer()
+})
+
+async function initPlayer(){
     if (Hls.isSupported()) {
         var hls = new Hls();
         hls.loadSource(playbacks.value.hls_canonical.url);
@@ -64,7 +74,7 @@ onMounted(async () => {
     console.log(settings)
 
     const player = new Plyr(playerElement.value, settings);
-})
+}
 
 function generateThumbnailVtt(media){
     const w = 172,
@@ -138,7 +148,5 @@ ${fileUrl}#xywh=${crow*w},${ccol*h + cutX},${w},${h - cutX*2}
 
 .plyr, .player{
     width: 100%;
-
-    --plyr-color-main: #888888;
 }
 </style>

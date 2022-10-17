@@ -6,6 +6,9 @@ query ShowreelsByHash($hash: String)
     hash
     title
     comment
+    background_color
+    accent_color
+    text_color
     hero {
       id
     }

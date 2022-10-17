@@ -3,9 +3,9 @@
 <div class="showreel-item-content">
     <div class="wrapper showreel-comment">
         <h2>{{ showreelItem.media.title }}</h2>
-        <p>{{ showreelItem.comment }}</p>
+        <p v-if="showreelItem.comment">{{ showreelItem.comment }}</p>
     </div>
-    <media-player :media="showreelItem.media"/>
+    <media-player class="media-player" :media="showreelItem.media"/>
 </div>
 </div>
 </template>
@@ -20,8 +20,14 @@ const { showreelItem } = defineProps(["showreelItem"])
     margin-bottom: 0px;
     padding-bottom: 15px;
 
+    @media(min-width: 1000px){
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
     h2{
         margin-top: 0px;
+        margin-bottom: 0px;
     }
 
     p{
@@ -33,12 +39,20 @@ const { showreelItem } = defineProps(["showreelItem"])
     display: flex;
     align-items: center;
     flex-direction: column;
-    border-bottom: solid 2px var(--text-color);
-    border-top: solid 2px var(--text-color);
+    margin-bottom: 40px;
 }
 
 .showreel-item-content{
     max-width: 1000px;
     width: 100%;
+}
+
+.media-player{
+    border: solid 2px var(--text-color);
+
+    @media(max-width: 1002px){
+        border-left: 0px;
+        border-right: 0px;
+    }
 }
 </style>
