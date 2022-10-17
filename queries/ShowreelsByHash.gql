@@ -1,0 +1,20 @@
+query ShowreelsByHash($hash: String) 
+{
+  showreels(filter: { hash: {_eq: $hash} })
+  {
+    id
+    hash
+    title
+    comment
+    hero {
+      id
+    }
+    showreel_items {
+      comment
+      media {
+        external_id
+        title
+      }
+    }
+  }
+}
