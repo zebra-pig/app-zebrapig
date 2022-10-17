@@ -1,6 +1,6 @@
 <template>
     <div>
-        <theme-style :theme="theme" />
+        <theme-style v-if="showreel" :theme="theme" />
         <showreel-content v-if="showreel" :showreel="showreel" />
     </div>
 </template>
@@ -10,10 +10,19 @@ import { ref } from 'vue';
 
 const route = useRoute()
 
-const theme = ref({
-    textColor: "#ffffff",
-    backgroundColor: "#000000",
-    accentColor: "#ffffff"
+const theme = computed(() => {
+    if(showreel){
+        return {
+            textColor: showreel.value.text_color,
+            backgroundColor: showreel.value.background_color,
+            accentColor: showreel.value.accent_color,
+        }
+    }
+    return {
+        textColor: "#ffffff",
+        backgroundColor: "#000000",
+        accentColor: "#ffffff"
+    }
 })
 
 const { data } = useShowreels(route.params.slug)

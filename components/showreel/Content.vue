@@ -11,6 +11,10 @@ type Showreel = {
     title: string
     comment: string
     showreel_items: ShowreelItem[]
+
+    text_color: string,
+    background_color: string,
+    accent_color: string,
 }
 
 type ShowreelItem = {
