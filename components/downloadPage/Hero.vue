@@ -28,7 +28,6 @@ const { t } = useI18n();
         align-items: center;
         display: flex;
         flex-direction: column;
-        height: 80vh;
         justify-content: flex-start;
         width: 100vw;
 
@@ -55,7 +54,6 @@ const { t } = useI18n();
         }
 
         .spacer{
-            height: 40vh;
             width: 100%;
         }
     }
