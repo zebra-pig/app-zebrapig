@@ -36,7 +36,6 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             APP_NAME: process.env.APP_NAME,
-            // API_BEARER_TOKEN: process.env.API_BEARER_TOKEN,
             CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
            
             'graphql-client': {
