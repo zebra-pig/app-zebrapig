@@ -2,7 +2,8 @@
     <div class="showreel-hero">
         <img v-if="showreel.hero" :src="useFile(showreel.hero).url + '?width=1000'"/>
         <h1>{{ showreel.title }}</h1>
-        <p>{{ showreel.comments }}</p>
+        <p>{{ showreel.comment }}</p>
+        <signature :signature="showreel.signature" v-if="showreel.signature"/>
     </div>
 </template>
 
@@ -21,6 +22,10 @@ const { showreel } = defineProps(["showreel"])
 
         h2{
             text-align: center;
+        }
+
+        p{
+            margin-bottom: 30px;
         }
 
         img{
