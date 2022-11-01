@@ -12,6 +12,10 @@ query ShowreelsByHash($hash: String)
     hero {
       id
     }
+    signature {
+      name
+      content
+    }
     showreel_items {
       comment
       media {

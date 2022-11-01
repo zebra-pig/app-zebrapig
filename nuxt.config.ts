@@ -14,6 +14,9 @@ export default defineNuxtConfig({
     css: [
         '@/styles/globals.scss',
     ],
+    experimental: {
+        writeEarlyHints: false,
+    },
     // build: {
     //     transpile: [ 
     //         'graphql',
