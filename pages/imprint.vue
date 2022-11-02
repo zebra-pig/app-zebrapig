@@ -17,7 +17,7 @@ const { t } = useI18n();
 const { public: { APP_NAME } } = useRuntimeConfig();
 
 
-const { data } = useSettings();
+const { data } = await useSettings();
 
 const title = computed(() => {
     return t("imprint")
