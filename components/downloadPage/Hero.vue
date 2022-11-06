@@ -34,7 +34,7 @@ const { t } = useI18n();
         .title{
             font-weight: bold;
             font-size: 30px;
-            margin-top: 20px;
+            margin: 20px 10px;
         }
 
         .hero-media{

@@ -24,6 +24,7 @@
         "dashjs": "^4.5.0",
         "hls.js": "^1.2.4",
         "nuxt-graphql-client": "^0.1.19",
+        "nuxt-matomo": "^1.2.4",
         "omggif": "^1.0.10",
         "plyr": "^3.7.2",
         "sass": "^1.52.3",
