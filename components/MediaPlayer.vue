@@ -1,5 +1,5 @@
 <template>
-    <video ref="playerElement" class="player" playsinline :data-poster="mediaData.poster.url" controls v-if="mediaData">
+    <video ref="playerElement" class="player" @play="startMediaSession" @pause="onPause" playsinline :data-poster="mediaData.poster.url" :poster="mediaData.poster.url" controls v-if="mediaData">
         <source :src="source.src" v-for="source in sources" :type="source.type"/>
     </video>
     <!-- {{ playbacks }} -->
@@ -21,6 +21,52 @@ const {data: mediaData} = await useFetch(() => `https://api.vod2.infomaniak.com/
 watch(mediaData, () => {
     initPlayer()
 })
+
+function startMediaSession(){
+    if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: media.title,
+            artist: "Zebra & Pig",
+            artwork: [
+                { src: mediaData.value.poster.url, size: '1920x1080', type: 'image/jpeg' },
+            ]
+        });
+    }
+
+    navigator.mediaSession.playbackState = 'playing';
+
+    navigator.mediaSession.setActionHandler('play', async () => {
+        await playerElement.value.play();
+    });
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+        playerElement.value.pause();
+    });
+
+    const defaultSkipTime = 10; /* Time to skip in seconds by default */
+
+    navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+        const skipTime = details.seekOffset || defaultSkipTime;
+        playerElement.value.currentTime = Math.max(playerElement.value.currentTime - skipTime, 0);
+    });
+
+    navigator.mediaSession.setActionHandler('seekforward', (details) => {
+        const skipTime = details.seekOffset || defaultSkipTime;
+        playerElement.value.currentTime = Math.min(playerElement.value.currentTime + skipTime, playerElement.value.duration);
+    });
+
+    navigator.mediaSession.setActionHandler('seekto', (details) => {
+        if (details.fastSeek && 'fastSeek' in playerElement.value) {
+            playerElement.value.fastSeek(details.seekTime);
+            return;
+        }
+        playerElement.value.currentTime = details.seekTime;
+    });
+}
+
+function onPause(){
+    navigator.mediaSession.playbackState = 'paused';
+}
 
 const playbacks = computed(() => {
     var data = mediaData?.value?.playbacks[Object.keys(mediaData.value.playbacks)[0]]
