@@ -1,7 +1,7 @@
 <template>
     <div class="preview">
         <iframe v-if="!downloadPage.preview_media" :src="previewUrl" allowfullscreen="true"></iframe>
-        <media-player v-else :media="downloadPage.preview_media" />
+        <media-player v-else :media="downloadPage.preview_media" class="player" />
     </div>
 </template>
 
@@ -21,8 +21,13 @@
     }
 
     .preview{
+        display: flex;
         transition: var(--color-change-transition);
         border-bottom: 2px solid var(--text-color);
+    }
+
+    .player{
+        width: 100vw;
     }
 
 </style>

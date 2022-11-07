@@ -73,7 +73,9 @@ async function initPlayer(){
 
     console.log(settings)
 
-    const player = new Plyr(playerElement.value, settings);
+    if(!navigator.userAgent.match(/ipad|ipod|iphone/i)){
+        const player = new Plyr(playerElement.value, settings);
+    }
 }
 
 function generateThumbnailVtt(media){
