@@ -27,6 +27,7 @@
     }
 
     .player{
+        margin-top: 2px;
         width: 100vw;
     }
 
