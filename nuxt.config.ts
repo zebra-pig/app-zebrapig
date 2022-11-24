@@ -40,6 +40,8 @@ export default defineNuxtConfig({
         public: {
             APP_NAME: process.env.APP_NAME,
             CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
+            GQL_HOST: process.env.GQL_HOST,
+            GQL_TOKEN: process.env.GQL_TOKEN,
            
             'graphql-client': {
                 clients: {
