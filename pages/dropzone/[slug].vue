@@ -1,5 +1,6 @@
 <template>
     <h1 class="title">{{ dropzone.title }}</h1>
+    <p class="comment" v-if="dropzone.comment">{{ dropzone.comment }}</p>
     <div class="container">
         <div class="upload-form dropzone" :ref="uploadForm" id="upload-form"></div>
     </div>
@@ -49,6 +50,16 @@ onMounted(() => {
     text-align: center;
     padding: 20px;
     width: 100%;
+}
+
+
+.comment{
+    white-space: pre-wrap;
+    text-align: center;
+    padding: 20px;
+    margin: auto;
+    max-width: 800px;
+    text-align: center;
 }
 
 .container{
