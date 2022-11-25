@@ -34,6 +34,7 @@ onMounted(() => {
     let dropzoneElement = new Dropzone("#upload-form", {
         url: "/api/dropzone/"+dropzone.value.hash,
         maxFilesize: 5000,
+        parallelUploads: 20,
         dictDefaultMessage: `<span class="material-symbols-outlined upload-icon">cloud_upload</span><div>${t('drag_and_drop')}</div>`
     });
 
