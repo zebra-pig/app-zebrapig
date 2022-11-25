@@ -5,6 +5,7 @@ query DropzonesByHash($hash: String)
     id
     hash
     title
+    comment
     folder_id
   }
 }

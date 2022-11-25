@@ -52,7 +52,7 @@ async function getDropzone(hash){
   return dropzone
 }
 
-async function uploadFile(file, folderId){
+async function uploadFile(file, folderId, event){
   const auth = getGoogleAuth()
 
   const service = google.drive({version: 'v3', auth});
@@ -73,8 +73,10 @@ async function uploadFile(file, folderId){
     console.log('File Id:', file.data.id);
     return file.data.id;
   } catch (err) {
-    // TODO(developer) - Handle error
-    throw err;
+    sendError(event, createError({
+      statusCode: 500,
+      statusMessage: "Upload failed"
+    }))
   }
 }
 
@@ -83,12 +85,10 @@ export default defineEventHandler(async (event) => {
 
   const dropzone = await getDropzone(hash)
   if(!dropzone.folder_id){
-    return {
-      status: "Error",
-      error: {
-        message: "No destination folder id was provided"
-      }
-    }
+    sendError(event, createError({
+      statusCode: 500,
+      statusMessage:  "No upload target for the file found"
+    }))
   }
 
   const form = formidable({ multiples: true })
@@ -96,8 +96,16 @@ export default defineEventHandler(async (event) => {
 
   return new Promise(async (resolve) => {
     form.parse(event.req, async (err, fields, files) => {
-      const uploadStatus = await uploadFile(files.file, dropzone.folder_id)
-      resolve(uploadStatus)
+      if(files.file == undefined){
+        sendError(event, createError({
+          statusCode: 422,
+          statusMessage: "No file found"
+        }))
+      }
+      const uploadStatus = await uploadFile(files.file, dropzone.folder_id, event)
+      resolve({
+        id: uploadStatus
+      })
     })
   })
 })
