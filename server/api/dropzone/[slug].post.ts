@@ -1,3 +1,6 @@
+// This script uploads a file to google drive using information provided by a dropzone entry on content.zebrapig.com
+// The a .google_auth_key.json for a service account is required
+
 import stream  from "stream"
 import multer from "multer"
 import formidable from 'formidable'
@@ -51,7 +54,6 @@ async function getDropzone(hash){
 
 async function uploadFile(file, folderId){
   const auth = getGoogleAuth()
-  console.log(folderId)
 
   const service = google.drive({version: 'v3', auth});
   const fileMetadata = {
@@ -80,13 +82,20 @@ export default defineEventHandler(async (event) => {
   const hash = event.context.params.slug
 
   const dropzone = await getDropzone(hash)
+  if(!dropzone.folder_id){
+    return {
+      status: "Error",
+      error: {
+        message: "No destination folder id was provided"
+      }
+    }
+  }
 
   const form = formidable({ multiples: true })
   const upload = multer();
 
   return new Promise(async (resolve) => {
     form.parse(event.req, async (err, fields, files) => {
-      console.log(files.file.filepath)
       const uploadStatus = await uploadFile(files.file, dropzone.folder_id)
       resolve(uploadStatus)
     })

@@ -30,7 +30,8 @@ useHead({
 
 onMounted(() => {
     let dropzoneElement = new Dropzone("#upload-form", {
-        url: "/api/dropzone/"+dropzone.value.hash
+        url: "/api/dropzone/"+dropzone.value.hash,
+        maxFilesize: 5000
     });
 
     dropzoneElement.on("addedfile", file => {
