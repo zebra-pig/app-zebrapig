@@ -1,0 +1,10 @@
+query DropzonesByHash($hash: String) 
+{
+  dropzones(filter: { hash: {_eq: $hash} })
+  {
+    id
+    hash
+    title
+    folder_id
+  }
+}
