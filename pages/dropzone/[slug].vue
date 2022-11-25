@@ -41,8 +41,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@use "dropzone/dist/dropzone.css";
-
 .title{
     text-align: center;
     padding: 20px;
@@ -65,6 +63,8 @@ onMounted(() => {
 </style>
 
 <style lang="scss">
+@use "dropzone/dist/dropzone.css";
+
 .upload-form{
 
 

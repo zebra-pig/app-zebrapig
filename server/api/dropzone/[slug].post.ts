@@ -1,54 +1,94 @@
-const stream = require('stream');
-const express = require('express');
-const multer = require('multer');
-const { google } = require('googleapis');
+import stream  from "stream"
+import multer from "multer"
+import formidable from 'formidable'
+import { file } from "googleapis/build/src/apis/file";
+import fs from 'fs';
+import { google } from 'googleapis';
+import { GoogleAuth } from 'google-auth-library';
 
-const uploadRouter = express.Router();
-const upload = multer();
 
-const uploadFile = async (fileObject, folderId) => {
-  const bufferStream = new stream.PassThrough();
-  bufferStream.end(fileObject.buffer);
-  const { data } = await google.drive({ version: 'v3' }).files.create({
-    media: {
-      mimeType: fileObject.mimeType,
-      body: bufferStream,
-    },
-    requestBody: {
-      name: fileObject.originalname,
-      parents: [folderId],
-    },
-    fields: 'id,name',
+function getGoogleAuth (){
+  const SCOPES = ['https://www.googleapis.com/auth/drive'];
+  const auth = new google.auth.GoogleAuth({
+    scopes: SCOPES,
+    keyFile: ".google_auth_key.json"
   });
-  console.log(`Uploaded file ${data.name} ${data.id}`);
+
+  return auth;
 };
 
-
-
-
-export default defineEventHandler(async (event) => {
+async function getDropzone(hash){
   const config = useRuntimeConfig().public
-  const hash = event.context.params.slug
-
-  var auth = { "Authorization" : `Bearer ${config.GQL_TOKEN}` };
-  const dropzoneData = await fetch(config.GQL_HOST, {
-    headers: auth
+  const dropzoneQuery = await fetch(config.GQL_HOST, {
+    method: "POST",
+    headers: {
+      "Authorization" : `Bearer ${config.GQL_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `query Dropzones($filter: dropzones_filter) {
+          dropzones(filter: $filter) {
+            status
+            title
+            hash
+            folder_id
+          }
+        }`,
+        variables: {
+          "filter": {
+            "hash": {
+              "_eq": hash
+            }
+          }
+        }
+    })
   })
 
+  const dropzoneResponse = await dropzoneQuery.json()
+  const dropzone = dropzoneResponse.data.dropzones[0]
+  return dropzone
+}
+
+async function uploadFile(file, folderId){
+  const auth = getGoogleAuth()
+  console.log(folderId)
+
+  const service = google.drive({version: 'v3', auth});
+  const fileMetadata = {
+    name: file.originalFilename,
+    parents: [folderId]
+  };
+  const media = {
+    mimeType: file.mimetype,
+    body: fs.createReadStream(file.filepath),
+  };
   try {
-    const { body, files } = req;
-
-    for (let f = 0; f < files.length; f += 1) {
-      await uploadFile(files[f], '1ZmM3nM8gsz5nccy5NZ6bAKUSJzPKbw5t');
-    }
-
-    console.log(body);
-    return {
-      status: "Success"
-    }
-  } catch (f) {
-    return {
-      status: "Error"
-    }
+    const file = await service.files.create({
+      resource: fileMetadata,
+      media: media,
+      fields: 'id,name',
+    });
+    console.log('File Id:', file.data.id);
+    return file.data.id;
+  } catch (err) {
+    // TODO(developer) - Handle error
+    throw err;
   }
+}
+
+export default defineEventHandler(async (event) => {
+  const hash = event.context.params.slug
+
+  const dropzone = await getDropzone(hash)
+
+  const form = formidable({ multiples: true })
+  const upload = multer();
+
+  return new Promise(async (resolve) => {
+    form.parse(event.req, async (err, fields, files) => {
+      console.log(files.file.filepath)
+      const uploadStatus = await uploadFile(files.file, dropzone.folder_id)
+      resolve(uploadStatus)
+    })
+  })
 })
