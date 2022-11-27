@@ -9,6 +9,58 @@ import fs from 'fs';
 import { google } from 'googleapis';
 import { GoogleAuth } from 'google-auth-library';
 
+function sendNotification(webhookUrl: string, file, dropzone) {
+  const data = JSON.stringify({
+    cardsV2: [
+      {
+        cardId: "unique-card-id",
+        card: {
+          header: {
+            title: "File uploaded",
+            subtitle: file.name,
+            imageUrl: file.thumbnailLink,
+            imageAltText: "Thumbnail",
+          },
+          sections: [
+            {
+              header: "Dropzone: "+dropzone.title,
+              widgets: [
+                {
+                  buttonList: {
+                    buttons: [
+                      {
+                        text: "View",
+                        onClick: {
+                          openLink: {
+                            url: file.webViewLink,
+                          }
+                        }
+                      },
+                    ],
+                  }
+                },
+              ],
+            },
+          ],
+        },
+      }
+    ],
+  });
+  
+  let resp;
+  fetch(webhookUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: data,
+  }).then((response) => {
+    resp = response;
+    console.log(response);
+  });
+  return resp;
+}
+
 
 function getGoogleAuth (){
   const SCOPES = ['https://www.googleapis.com/auth/drive'];
@@ -20,35 +72,47 @@ function getGoogleAuth (){
   return auth;
 };
 
-async function getDropzone(hash){
-  const config = useRuntimeConfig().public
-  const dropzoneQuery = await fetch(config.GQL_HOST, {
+async function gql({query, variables}){
+  const config = useRuntimeConfig()
+  const q = await fetch(config.public.GQL_HOST, {
     method: "POST",
     headers: {
-      "Authorization" : `Bearer ${config.GQL_TOKEN}`,
+      "Authorization" : `Bearer ${config.GQL_PRIVATE_TOKEN}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      query: `query Dropzones($filter: dropzones_filter) {
+      query,
+      variables
+    })
+  })
+
+  return q.json()
+}
+
+async function getDropzone(hash){
+  const config = useRuntimeConfig()
+  const dropzoneQuery = await gql({
+    query: `query Dropzones($filter: dropzones_filter) {
           dropzones(filter: $filter) {
             status
             title
             hash
             folder_id
-          }
-        }`,
-        variables: {
-          "filter": {
-            "hash": {
-              "_eq": hash
+            webhook {
+              url
             }
           }
+        }`,
+    variables: {
+      "filter": {
+        "hash": {
+          "_eq": hash
         }
-    })
+      }
+    }
   })
 
-  const dropzoneResponse = await dropzoneQuery.json()
-  const dropzone = dropzoneResponse.data.dropzones[0]
+  const dropzone = dropzoneQuery.data.dropzones[0]
   return dropzone
 }
 
@@ -68,10 +132,10 @@ async function uploadFile(file, folderId, event){
     const file = await service.files.create({
       resource: fileMetadata,
       media: media,
-      fields: 'id,name',
+      fields: 'id,name,thumbnailLink,webViewLink',
     });
     console.log('File Id:', file.data.id);
-    return file.data.id;
+    return file.data;
   } catch (err) {
     sendError(event, createError({
       statusCode: 500,
@@ -102,9 +166,12 @@ export default defineEventHandler(async (event) => {
           statusMessage: "No file found"
         }))
       }
-      const uploadStatus = await uploadFile(files.file, dropzone.folder_id, event)
+      const file = await uploadFile(files.file, dropzone.folder_id, event)
+      if(file && dropzone.webhook?.url){
+        sendNotification(dropzone.webhook.url, file, dropzone)
+      }
       resolve({
-        id: uploadStatus
+        id: file.id
       })
     })
   })
