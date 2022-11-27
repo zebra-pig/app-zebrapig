@@ -37,6 +37,7 @@ export default defineNuxtConfig({
         }
     },
     runtimeConfig: {
+        GQL_PRIVATE_TOKEN: process.env.GQL_PRIVATE_TOKEN,
         public: {
             APP_NAME: process.env.APP_NAME,
             CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
