@@ -12,6 +12,11 @@ query DownloadPagesByHash($hash: String)
     hero {
       id
     }
+    project {
+      background_color
+      text_color
+      accent_color
+    }
     preview_media{
       external_id
       title
