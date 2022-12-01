@@ -66,7 +66,7 @@ function getGoogleAuth (){
   const SCOPES = ['https://www.googleapis.com/auth/drive'];
   const auth = new google.auth.GoogleAuth({
     scopes: SCOPES,
-    keyFile: ".google_auth_key.json"
+    keyFile: "./.keys/google_auth_uploader.json"
   });
 
   return auth;
