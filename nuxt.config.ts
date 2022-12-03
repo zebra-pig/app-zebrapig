@@ -17,12 +17,6 @@ export default defineNuxtConfig({
     experimental: {
         writeEarlyHints: false,
     },
-    // build: {
-    //     transpile: [ 
-    //         'graphql',
-    //         'troisjs', 
-    //     ],
-    // },
     components: {
         global: true,
         dirs: ['~/components']
@@ -40,7 +34,6 @@ export default defineNuxtConfig({
         public: {
             APP_NAME: process.env.APP_NAME,
             CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
-           
             'graphql-client': {
                 clients: {
                     default: {
