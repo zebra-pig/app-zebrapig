@@ -17,12 +17,6 @@ export default defineNuxtConfig({
     experimental: {
         writeEarlyHints: false,
     },
-    // build: {
-    //     transpile: [ 
-    //         'graphql',
-    //         'troisjs', 
-    //     ],
-    // },
     components: {
         global: true,
         dirs: ['~/components']

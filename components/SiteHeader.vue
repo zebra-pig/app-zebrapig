@@ -33,11 +33,9 @@ const navigation = useNavigation('header').data
 
 <style scoped lang='scss'>
 
-$header-height: 65px;
-
 .header-spacer
 {
-    height: $header-height;
+    height: var(--header-footer-height);
 }
 
 .logo-link{
@@ -48,7 +46,7 @@ $header-height: 65px;
 .site-header 
 {
     width: 100%;
-    height: $header-height;
+    height: var(--header-footer-height);
     padding: 10px 0;
     z-index: 1000;
     position: fixed;

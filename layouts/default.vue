@@ -1,9 +1,6 @@
 <template>
     <div class="layout">
         <site-header />
-        <!-- <client-only>
-            <background-base />
-        </client-only> -->
         <div class="container">
             <slot/>
         </div>
@@ -16,6 +13,7 @@
 </script>
 
 <style scoped>
+
 .header-spacer{
     height: 60px;
 }

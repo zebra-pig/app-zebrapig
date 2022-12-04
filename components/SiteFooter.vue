@@ -1,11 +1,9 @@
 <template>
-    <footer class="footer">
-        <div class="wrapper">
-            <div class="copyright">© {{ APP_NAME }} {{ new Date().getFullYear() }}</div>
-            <div class="links">
-                <language-switcher/>
-                <navigation-link :link="link" v-for="link in navigation?.navigation_links" :key="link.id" />
-            </div>
+    <footer class="wrapper footer">
+        <div class="copyright">© {{ APP_NAME }} {{ new Date().getFullYear() }}</div>
+        <div class="links">
+            <language-switcher/>
+            <navigation-link :link="link" v-for="link in navigation?.navigation_links" :key="link.id" />
         </div>
     </footer>
 </template>
@@ -19,10 +17,18 @@ const navigation = useNavigation("footer").data;
 <style scoped lang="scss">
 .footer {
     width: 100%;
+    height: var(--header-footer-height);
     text-transform: uppercase;
     font-size: .8em;
     color: var(--text-color);
     transition: var(--color-change-transition);
+
+    padding-top: 0;
+    padding-bottom: 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .copyright{

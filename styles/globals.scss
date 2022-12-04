@@ -27,6 +27,8 @@
 
 :root
 {
+    --header-footer-height: 65px;
+
     --color-change-transition: 
         color .4s ease, 
         background .4s ease, 
@@ -37,7 +39,17 @@
 
     font-size: 16px;
     line-height: 1.7;
+}
 
+// @media screen and (max-width: 680px) {
+//     :root {
+//         --header-footer-height: 55px;
+//     }
+// }
+
+.center-layout-height
+{
+    height: calc(100vh - 2 * var(--header-footer-height))
 }
 
 h1 {
