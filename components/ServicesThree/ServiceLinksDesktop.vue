@@ -12,7 +12,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div class="spacer">
+    <div class="spacer center-layout-height">
         <div
             class="service-links-desktop"
             v-if="serviceLinks"
@@ -47,7 +47,6 @@ const emit = defineEmits<{
 .spacer
 {
     width: 100%;
-    height: 75vh;
     position: relative;
     
     .service-links-desktop
@@ -55,7 +54,7 @@ const emit = defineEmits<{
         position: absolute;
     
         left: 3rem;
-        bottom: 3rem;
+        bottom: calc(130px + 3rem);
     
         width: max(450px, 25vw);
     

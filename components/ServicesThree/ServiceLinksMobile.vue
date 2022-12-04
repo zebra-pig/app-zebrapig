@@ -46,7 +46,7 @@ onMounted(() =>
 </script>
 
 <template>
-    <div class="spacer">
+    <div class="spacer center-layout-height">
         <div 
             v-if="serviceLinks"
             class="links"
@@ -78,24 +78,23 @@ onMounted(() =>
 .spacer
 {
     width: 100%;
-    height: calc(100vh - 250px);
 
     position: relative;
 
     .links
     {
         position: absolute;
-        bottom: 0;
+        top: 0;
         left: 0;
         width: 100%;
-        height: 70px;
+        height: var(--header-footer-height);
     
         overflow: hidden;
     
         color: var(--text-color);
         background-color: var(--background-color);
     
-        border-top: var(--border-style);
+        border-bottom: var(--border-style);
     
         .arrow-left,
         .arrow-right

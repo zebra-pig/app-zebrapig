@@ -10,12 +10,12 @@ useHead({
     title: APP_NAME,
 })
 
-const clipHeight = ref('0px');
+// const clipHeight = ref('0px');
 
-const onScroll = () => clipHeight.value = `${window.scrollY}px`
+// const onScroll = () => clipHeight.value = `${window.scrollY}px`
 
-onMounted(() => window.addEventListener('scroll', onScroll));
-onUnmounted(() => window.removeEventListener('scroll', onScroll));
+// onMounted(() => window.addEventListener('scroll', onScroll));
+// onUnmounted(() => window.removeEventListener('scroll', onScroll));
 
 const settingsData = useSettings().data
 
@@ -63,16 +63,15 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
 
 <template>
     <div>
-        <div class="scroll-container">
+        <div class="scroll-container center-layout-height">
             <div 
-                class="fixed-three"
-                :style="{ '--clip-height': clipHeight }"
+                class="fixed-three center-layout-height"
             >
                 <client-only>
                     <three-canvas
                         :activeService="activeService"
-                        :marginLeft="isMobile ? 0 : 400"
-                        :fov="isMobile ? 45 : 35"
+                        :marginLeft="isMobile ? 0 : 0.3"
+                        :fov="isMobile ? 55 : 35"
                         :numberOfServices="numberServices"
                     />
                 </client-only>
@@ -114,10 +113,9 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
         position: fixed;
         
         width: 100%;
-        height: 90vh;
         z-index: -1;
 
-        --clip-height: 0px;
+        /* --clip-height: 0px;
 
         $h: calc(90vh - var(--clip-height));
 
@@ -126,11 +124,13 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
             0    $h,
             100% $h,
             100% 0
-        );
+        ); */
     }
 
     .quote-container
     {
+        position: absolute;
+        bottom: 0;
         z-index: 1;
 
         width: 100%;

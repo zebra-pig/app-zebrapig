@@ -1,11 +1,10 @@
 <script setup lang='ts'>
 
 import * as THREE from 'three';
-import { AmbientLight, Camera, DirectionalLight, EffectComposer, GltfModel, Renderer, RendererPublicInterface, RenderPass, Scene } from 'troisjs';
+import { AmbientLight, Camera, DirectionalLight, EffectComposer, GltfModel, Renderer, RendererPublicInterface, Scene } from 'troisjs';
 import { glbToThree } from 'zebrapig-three-utils';
 import GifLoader from '../../workarounds/three-gif-loader/gif-loader.js';
 import { Carousel } from './Carousel';
-import TroisOutlinePass from './TroisOutlinePass';
 
 const props = defineProps<{
     activeService: number;
@@ -47,8 +46,6 @@ const models = ref<{
     }
 }>({});
 
-const outlineObjects = ref([]);
-
 function captureCursor(e: MouseEvent)
 {
     cursorTarget.value.set(
@@ -65,11 +62,22 @@ onMounted(() =>
     const troisRenderer = renderer.value;
     if (!troisRenderer) return;
 
-
-    renderer.value.onBeforeRender(() =>
+    troisRenderer.onBeforeRender(() =>
     {
         const dt = clock.getDelta();
-        window.dispatchEvent(new Event('resize'));
+
+        /**
+         * RESIZE
+         */
+        const size = canvasWrapper.value.getBoundingClientRect();
+        const width = Math.floor(size.width);
+        const height = Math.floor(size.height);
+        troisRenderer.renderer.setPixelRatio(window.devicePixelRatio);
+        troisRenderer.renderer.setSize(width, height);
+
+        // const cam = camera.value.camera as THREE.PerspectiveCamera;
+        // cam.aspect = width / height;
+        // cam.updateProjectionMatrix();
 
         carousel.value.update(dt);
         const arms = carousel.value.getArms();
@@ -96,12 +104,10 @@ onMounted(() =>
         cam.up.set(0, 0, 1);
         cam.lookAt(0, 0, 0);
 
-        const w = renderer.value.size.width;
-        const h = renderer.value.size.height;
         cam.setViewOffset(
-            props.marginLeft + w, h, 
+            width * (1 + props.marginLeft), height, 
             0, 0, 
-            w, h 
+            width, height, 
         );
     })
 
@@ -120,23 +126,21 @@ watch(activeService, newService =>
 
 const url = (path: TemplateStringsArray) => CONTENT_ENDPOINT + path[ 0 ];
 const txtLoader = new THREE.TextureLoader();
-const colorMap = txtLoader.load(url`/32f10b23-4298-4f55-a5a7-f9cf57211f45.png`);
-colorMap.magFilter = THREE.NearestFilter;
-colorMap.flipY = false;
+
+const oldColorMap = txtLoader.load(url`/32f10b23-4298-4f55-a5a7-f9cf57211f45.png`);
+const newColorMap = txtLoader.load(url`/c9b235a7-da9b-443c-b5b8-f049bdf422bd.png`);
+newColorMap.magFilter = oldColorMap.magFilter = THREE.NearestFilter;
+newColorMap.flipY = oldColorMap.flipY = false;
 
 const onCamera = (gltf: any) =>
 {
-    const { root, foreground } = glbToThree(gltf, [
+    const { root } = glbToThree(gltf, [
         {
             glob: '/camera/**/*',
             material: new THREE.MeshToonMaterial({
-                map: colorMap,
+                map: oldColorMap,
                 side: THREE.DoubleSide,
             }),
-        },
-        {
-            glob: '/camera',
-            eject: 'foreground',
         },
         {
             glob: '/shapes',
@@ -146,8 +150,6 @@ const onCamera = (gltf: any) =>
             }),
         },
     ]);
-
-    outlineObjects.value = [ ...outlineObjects.value, foreground ];
 
     const mixer = new THREE.AnimationMixer(root);
 
@@ -162,7 +164,6 @@ const onCamera = (gltf: any) =>
     };
 }
 
-
 const onComputer = (gltf: any) =>
 {
     const gifPath = url`/edb0840c-8505-4b3c-a119-dc2d5dc63d4f.gif`;
@@ -170,11 +171,11 @@ const onComputer = (gltf: any) =>
     const gif = new GifLoader().load(gifPath, () => {});
     gif.flipY = false;
 
-    const { root, foreground } = glbToThree(gltf, [
+    const { root } = glbToThree(gltf, [
         {
             glob: '/computer/**/*',
             material: new THREE.MeshToonMaterial({
-                map: colorMap,
+                map: oldColorMap,
                 side: THREE.DoubleSide,
             }),
             eject: 'foreground',
@@ -194,35 +195,38 @@ const onComputer = (gltf: any) =>
         },
     ]);
 
-    outlineObjects.value = [ ...outlineObjects.value, foreground ];
-
     models.value[ Models.Computer ] =
     {
         model: root,
     };
 }
 
-const onPlanetModel = (gltf: any) =>
+function onGlobe(gltf: any)
 {
-    const { root, foreground } = glbToThree(gltf, [
+    const { root } = glbToThree(gltf, [
         {
-            glob: '/gyro/**/*',
+            glob: '/**/*',
             material: new THREE.MeshToonMaterial({
-                map: colorMap,
-                side: THREE.DoubleSide,
+                color: 0xc3bdff,
+                map: newColorMap,
+                side: THREE.FrontSide,
             }),
-            eject: 'foreground',
+        },
+        {
+            glob: '/**/*_out',
+            material: new THREE.MeshBasicMaterial({
+                color: 0,
+                side: THREE.FrontSide,
+            }),
         },
         {
             glob: '/shapes',
             material: new THREE.MeshBasicMaterial({
-                color: 0x576DFF,
-                side: THREE.DoubleSide,
+                color: 0x1d915f,
+                side: THREE.FrontSide,
             })
         },
     ]);
-
-    outlineObjects.value = [ ...outlineObjects.value, foreground ];
 
     const mixer = new THREE.AnimationMixer(root);
 
@@ -248,24 +252,32 @@ const onPlanetModel = (gltf: any) =>
             :alpha="true" 
             :resize="true"
         >
-            <Camera ref="camera" :look-at="new THREE.Vector3()" :fov="props.fov" />
+            <Camera 
+                ref="camera" 
+                :look-at="new THREE.Vector3()" 
+                :fov="props.fov" 
+            />
             <Scene>
-                <DirectionalLight :color="'#fffebf'" :intensity="1.0" :position="new THREE.Vector3(8, -10, 12)"
-                    :look-at="new THREE.Vector3()" />
+                <DirectionalLight 
+                    :color="'#eddd93'" 
+                    :intensity="1.0" 
+                    :position="new THREE.Vector3(8, -10, 12)"
+                    :look-at="new THREE.Vector3()" 
+                />
                 <AmbientLight :color="'#abd7f5'" :intensity=".4" />
                 <!-- CAMERA -->
-                <GltfModel :src="url`/05451335-f84f-41fd-a516-725a72051c61.glb`" @load="onCamera" />
-                <!-- COMPUTER -->
-                <GltfModel :src="url`/89007a80-55e6-4ea3-a12e-1aa644adddf1.glb`" @load="onComputer" />
-                <!-- PLANET MODEL -->
-                <GltfModel :src="url`/dc96a54b-f2f4-46e7-8e8b-be0f7ae8a2f4.glb`" @load="onPlanetModel" />
-            </Scene>
-            <EffectComposer>
-                <RenderPass />
-                <TroisOutlinePass 
-                    :selectedObjects="outlineObjects"
+                <GltfModel 
+                    :src="url`/05451335-f84f-41fd-a516-725a72051c61.glb`" @load="onCamera" 
                 />
-            </EffectComposer>
+                <!-- COMPUTER -->
+                <GltfModel 
+                    :src="url`/89007a80-55e6-4ea3-a12e-1aa644adddf1.glb`" @load="onComputer" 
+                />
+                <!-- GLOBE -->
+                <GltfModel 
+                    :src="url`/eaa57964-332a-4f79-8331-8a7e8a592b52.glb`" @load="onGlobe" 
+                />
+            </Scene>
         </Renderer>
     </div>
 </template>
