@@ -130,6 +130,7 @@ async function uploadFile(file, folderId, event){
   };
   try {
     const file = await service.files.create({
+      supportsAllDrives: true,
       resource: fileMetadata,
       media: media,
       fields: 'id,name,thumbnailLink,webViewLink',
