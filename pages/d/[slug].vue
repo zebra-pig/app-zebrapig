@@ -11,17 +11,19 @@ import { ref } from 'vue';
 const route = useRoute()
 
 const theme = computed(() => {
-    if(downloadPage?.value?.project){
-        return {
-            textColor: downloadPage.value.project.text_color,
-            backgroundColor: downloadPage.value.project.background_color,
-            accentColor: downloadPage.value.project.accent_color,
-        }
-    }
+    var textColor = "#ffffff", 
+    backgroundColor = "#000000",
+    accentColor = "#ffffff"
+
+
+    textColor = downloadPage.value?.text_color || downloadPage.value?.project?.text_color || "#ffffff"
+    backgroundColor = downloadPage.value?.background_color || downloadPage.value?.project?.background_color || "#000000"
+    accentColor = downloadPage.value?.accent_color || downloadPage.value?.project?.accent_color || "#ffffff"
+
     return {
-        textColor: "#ffffff",
-        backgroundColor: "#000000",
-        accentColor: "#ffffff"
+        textColor,
+        backgroundColor,
+        accentColor
     }
 })
 

@@ -21,5 +21,9 @@ query DownloadPagesByHash($hash: String)
       external_id
       title
     }
+
+    background_color
+    text_color
+    accent_color
   }
 }
