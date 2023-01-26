@@ -21,7 +21,7 @@
     "dependencies": {
         "@intlify/nuxt3": "^0.2.4",
         "@nuxtjs/i18n": "^8.0.0-beta.3",
-        "nuxt-matomo": "^1.2.4",
+        "vue-matomo": "^4.1.0",
         "animejs": "^3.2.1",
         "dashjs": "^4.5.0",
         "dropzone": "^6.0.0-beta.2",
