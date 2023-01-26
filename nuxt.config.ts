@@ -10,6 +10,7 @@ export default defineNuxtConfig({
         '@intlify/nuxt3',
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
+        ['nuxt-matomo', { matomoUrl: 'https://analytics.zebrapig.com/', siteId: 1 }],
     ],
     css: [
         '@/styles/globals.scss',
