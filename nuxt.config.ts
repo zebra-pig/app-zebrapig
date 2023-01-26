@@ -11,9 +11,6 @@ export default defineNuxtConfig({
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
     ],
-    plugins: [
-        { src: '~/plugins/matomo.client', ssr: false }
-    ],
     css: [
         '@/styles/globals.scss',
     ],
