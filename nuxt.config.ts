@@ -21,9 +21,6 @@ export default defineNuxtConfig({
         global: true,
         dirs: ['~/components']
     },
-    router: {
-        mode: "history",
-    },
     i18n: {
         baseUrl: process.env.BASE_URL,
         strategy: 'prefix_except_default',
@@ -32,18 +29,18 @@ export default defineNuxtConfig({
             {
                 code: "de",
                 iso: "de-CH",
-                file: "de.json"
+                file: "de-DE.json"
             },
             {
                 code: "en",
-                iso: "en-GB",
-                file: "en.json"
+                iso: "en-US",
+                file: "en-US.json"
             }
         ],
         detectBrowserLanguage: {
             useCookie: true,
             cookieKey: 'i18n_redirected',
-            redirectOn: 'root',  // recommended
+            redirectOn: 'root',
         },
         langDir: "./lang",
     },
