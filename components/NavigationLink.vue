@@ -3,12 +3,17 @@
     <nuxt-link v-else :to="fullLink" rel="referrer" :target="linkTarget" :class="class">{{ linkTitle }}</nuxt-link>
 </template>
 
-<script setup>
+<script setup lang="ts">
+const localePath = useLocalePath();
+
+
 const props = defineProps(['link', 'class'])
+const { locale } = useI18n()
 
 const linkTitle = computed(() => {
     if(props.link.translations){
-        return props.link.translations[0]?.title
+        const title = props.link.translations.filter((a: any) => a.language_code.code == locale.value)[0]?.title
+        return title
     }
     return props.link.title
 })
@@ -21,7 +26,7 @@ const fullLink = computed(() => {
     if(props.link.route.startsWith("mailto:")){
         return props.link.route
     }
-    return '/'+props.link.route
+    return localePath('/'+props.link.route)
 })
 
 const elementType = computed(() => {

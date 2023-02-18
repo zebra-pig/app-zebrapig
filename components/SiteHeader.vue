@@ -24,7 +24,7 @@ const navigation = useNavigation('header').data
             <i class="fa-solid fa-bars menu-icon"></i>
             <nuxt-link :to="localePath('/')" class="logo-link"><logo/></nuxt-link>
             <div class="list">
-                <navigation-link :key="link.id" v-for="link in navigation?.navigation_links" :link="link" />
+                <navigation-link class="nav-link" :key="link.id" v-for="link in navigation?.navigation_links" :link="link" />
             </div>
         </label>
     </header>
@@ -41,6 +41,27 @@ const navigation = useNavigation('header').data
 .logo-link{
     display: flex;
     align-items: center;
+}
+
+.nav-link{
+    animation: fadeIn .4s ease;
+    animation-fill-mode: backwards;
+}
+
+@for $i from 1 through 10 {
+  .nav-link:nth-child(#{$i}) {
+    animation-delay: #{$i*.1}s;
+  }
+}
+
+@keyframes fadeIn {
+    from{
+        opacity: 0;
+        transform: translateY(20%);
+    }
+    to{
+        opacity: 1;
+    }
 }
 
 .site-header 
