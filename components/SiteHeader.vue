@@ -22,7 +22,7 @@ const navigation = useNavigation('header').data
         <label>
             <input type="checkbox" v-model="checkbox"/>
             <i class="fa-solid fa-bars menu-icon"></i>
-            <nuxt-link :to="{name: 'index'}" class="logo-link"><logo/></nuxt-link>
+            <nuxt-link :to="localePath('/')" class="logo-link"><logo/></nuxt-link>
             <div class="list">
                 <navigation-link :key="link.id" v-for="link in navigation?.navigation_links" :link="link" />
             </div>

@@ -1,10 +1,11 @@
 import { useI18n } from 'vue-i18n';
 
 export default function (location: string) {
-    const { locale } = useI18n();
+    const i18n = useI18n();
+    console.log(i18n)
 
     return useAsyncGql('NavigationLinkList', {
-        lang: locale.value,
+        lang: i18n.locale.value,
         location: location,
     });
 }

@@ -8,7 +8,7 @@ const props = defineProps(['link', 'class'])
 
 const linkTitle = computed(() => {
     if(props.link.translations){
-        return props.link.translations[0].title
+        return props.link.translations[0]?.title
     }
     return props.link.title
 })

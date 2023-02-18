@@ -7,7 +7,7 @@ export default defineNuxtConfig({
         titleTemplate: '%s – ' + process.env.APP_NAME,
     },
     modules: [
-        '@intlify/nuxt3',
+        '@nuxtjs/i18n',
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
     ],
@@ -21,14 +21,28 @@ export default defineNuxtConfig({
         global: true,
         dirs: ['~/components']
     },
-    router: {
-        mode: "history",
-    },
-    intlify: {
-        localeDir: 'lang',
-        vueI18n: {
-            locale: 'de-DE',
-        }
+    i18n: {
+        baseUrl: process.env.BASE_URL,
+        strategy: 'prefix_except_default',
+        defaultLocale: "en",
+        locales: [
+            {
+                code: "de",
+                iso: "de-CH",
+                file: "de-DE.json"
+            },
+            {
+                code: "en",
+                iso: "en-US",
+                file: "en-US.json"
+            }
+        ],
+        detectBrowserLanguage: {
+            useCookie: true,
+            cookieKey: 'i18n_redirected',
+            //redirectOn: 'root',
+        },
+        langDir: "./lang",
     },
     runtimeConfig: {
         GQL_PRIVATE_TOKEN: process.env.GQL_PRIVATE_TOKEN,

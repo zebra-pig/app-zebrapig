@@ -18,9 +18,9 @@ const emit = defineEmits<{
             v-if="serviceLinks"
         >
             <div class="container">
-                <div 
-                    class="backdrop" 
-                />
+                <div class="backdrop">
+                    <span class="material-symbols-outlined icon">chevron_right</span>
+                </div>
                 <nuxt-link
                     class="card"
                     v-for="(link, index) of serviceLinks"
@@ -52,13 +52,14 @@ const emit = defineEmits<{
     .service-links-desktop
     {
         position: absolute;
+        color: white;
     
         left: 3rem;
         bottom: calc(130px + 3rem);
     
-        width: max(450px, 25vw);
+        width: max(400px, 25vw);
     
-        overflow: hidden;
+        // overflow: hidden;
     
         .container
         {
@@ -74,7 +75,7 @@ const emit = defineEmits<{
         
             mix-blend-mode: difference;
             
-            animation: 1s slidein;
+            animation: .75s slidein cubic-bezier(0, 0.22, 0, 0.96);
         
             .backdrop
             {
@@ -87,8 +88,16 @@ const emit = defineEmits<{
         
                 transition: top $link-transition-duration;
         
-                background-color: var(--text-color);
+                border: 4px solid var(--background-color);
                 z-index: 0;
+                display: flex;
+                align-items: center;
+                justify-content: end;
+
+                .icon{
+                    font-size: 100px;
+                    font-variation-settings: 'wght' 300;
+                }
             }
         
             .card
