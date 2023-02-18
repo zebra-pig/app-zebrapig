@@ -9,6 +9,8 @@ const emit = defineEmits<{
   (e: 'setActive', index: number): void
 }>()
 
+const { locale } = useI18n()
+
 </script>
 
 <template>
@@ -29,7 +31,7 @@ const emit = defineEmits<{
                     @mousemove="emit('setActive', index)"
                     :to="localePath(link.route)"
                 >
-                    <h1>{{ link.translations[0]?.title }}</h1>
+                    <h1>{{ link.translations.filter((a: any) => a.language_code.code == locale)[0]?.title }}</h1>
                 </nuxt-link>
             </div>
         </div>

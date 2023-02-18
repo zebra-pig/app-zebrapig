@@ -77,13 +77,13 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                 </client-only>
             </div>
             <service-links-mobile 
-                v-if="isMobile"
+                class="mobile-service-links"
                 :serviceLinks="serviceLinks"
                 :activeService="activeService"
                 @setActive="setActive"
             />
             <service-links-desktop
-                v-else
+                class="desktop-service-links"
                 :serviceLinks="serviceLinks"
                 :activeService="activeService"
                 @setActive="setActive"
@@ -100,6 +100,19 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
 </template>
 
 <style scoped lang='scss'>
+
+@media (max-width: 768px){
+    .desktop-service-links{
+        display: none;
+    }
+}
+
+
+@media (min-width: 769px){
+    .mobile-service-links{
+        display: none;
+    }
+}
 
 .scroll-container
 {
@@ -127,11 +140,21 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
         ); */
     }
 
+    @keyframes fadeSlide {
+        from{
+            transform: translateY(50%);
+            opacity: 0;
+        }
+    }
+
     .quote-container
     {
         position: absolute;
         bottom: 0;
         z-index: 1;
+        animation-delay: 5s;
+        animation-fill-mode: forwards;
+        animation: fadeSlide 1s cubic-bezier(0, 0.61, 0, 0.93);
 
         width: 100%;
 
