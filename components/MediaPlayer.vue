@@ -117,8 +117,6 @@ async function initPlayer(){
         duration: media.duration
     }
 
-    console.log(settings)
-
     if(!navigator.userAgent.match(/ipad|ipod|iphone/i)){
         const player = new Plyr(playerElement.value, settings);
     }
@@ -157,9 +155,7 @@ function generateThumbnailVtt(media){
     }
 
     const thumbAspect = w/h
-    var cutX = (h - (1/aspect)*w)/2
-    console.log(cutX)
-    
+    var cutX = (h - (1/aspect)*w)/2    
 
     var fileUrl = media.preview.video.url
 

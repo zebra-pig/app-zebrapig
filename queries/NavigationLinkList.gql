@@ -1,15 +1,15 @@
-query NavigationLinkList($location: String $lang: String) 
-{
-  navigation_links(sort: [ "sort" ] filter: { location: {_eq: $location}})
-  {
+query NavigationLinkList($location: String) {
+  navigation_links(sort: ["sort"], filter: { location: { _eq: $location } }) {
     id
     route
     display_tag
     target
     button
-    translations(filter: { language_code: {code: {_eq: $lang} }}) 
-    {
+    translations {
       title
+      language_code {
+        code
+      }
     }
   }
 }

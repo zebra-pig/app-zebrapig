@@ -11,6 +11,9 @@ export default defineNuxtConfig({
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
     ],
+    content: {
+        dev: process.env.APP_ENV == 'local'
+    },
     css: [
         '@/styles/globals.scss',
     ],
@@ -29,12 +32,12 @@ export default defineNuxtConfig({
             {
                 code: "de",
                 iso: "de-CH",
-                file: "de-DE.json"
+                file: "de.json"
             },
             {
                 code: "en",
                 iso: "en-US",
-                file: "en-US.json"
+                file: "en.json"
             }
         ],
         detectBrowserLanguage: {

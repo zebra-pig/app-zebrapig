@@ -56,7 +56,6 @@ function sendNotification(webhookUrl: string, file, dropzone) {
     body: data,
   }).then((response) => {
     resp = response;
-    console.log(response);
   });
   return resp;
 }
@@ -135,7 +134,6 @@ async function uploadFile(file, folderId, event){
       media: media,
       fields: 'id,name,thumbnailLink,webViewLink',
     });
-    console.log('File Id:', file.data.id);
     return file.data;
   } catch (err) {
     sendError(event, createError({

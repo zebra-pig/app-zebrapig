@@ -4,7 +4,7 @@
 <style scoped lang="scss">
 
 .button{
-    padding: 10px;
+    padding: 5px 15px;
     font-weight: bold;
     display: block;
     font-size: 0.8em;
@@ -15,7 +15,6 @@
     color: var(--background-color);
     outline: 0px;
     vertical-align: middle;
-    width: 400px;
     max-width: 80vw;
     text-align: center;
 }

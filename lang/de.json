@@ -7,5 +7,7 @@
 
     "error": "Fehler",
     "download": "Herunterladen",
-    "drag_and_drop": "Ziehen Sie Dateien hierhin, um sie hochzuladen"
+    "drag_and_drop": "Ziehen Sie Dateien hierhin, um sie hochzuladen",
+
+    "video_introduction": ""
 }

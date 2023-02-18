@@ -2,6 +2,7 @@
     <theme-style :theme="theme" />
     <div class="video-landing">
         <video-heading/>
+        <div>{{ t('video_introduction') }}</div>
     </div>
 </template>
 
@@ -11,6 +12,7 @@
 
     const theme = ref({
         backgroundColor: "#000000",
-        textColor: "#ffffff"
+        textColor: "#ffffff",
+        accentColor: "#ffffff"
     })
 </script>

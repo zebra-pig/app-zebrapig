@@ -27,7 +27,7 @@ const emit = defineEmits<{
                     :key="link.id"
                     :class="{ active: index === activeService }"
                     @mousemove="emit('setActive', index)"
-                    :to="link.route"
+                    :to="localePath(link.route)"
                 >
                     <h1>{{ link.translations[0]?.title }}</h1>
                 </nuxt-link>
@@ -92,7 +92,7 @@ const emit = defineEmits<{
                 z-index: 0;
                 display: flex;
                 align-items: center;
-                justify-content: end;
+                justify-content: flex-end;
 
                 .icon{
                     font-size: 100px;
