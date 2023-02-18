@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { localePath } from 'vue-i18n-routing';
-
 
 const checkbox = ref(false);
 
