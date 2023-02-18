@@ -64,6 +64,10 @@ const navigation = useNavigation('header').data
     }
 }
 
+@keyframes borderEnter {
+    from{transform: scaleX(0)}
+}
+
 .site-header 
 {
     width: 100%;
@@ -76,6 +80,8 @@ const navigation = useNavigation('header').data
     
     &::before {
         content: "";
+        animation: borderEnter .8s cubic-bezier(1, 0.42, 0.21, 0.92);
+        transform-origin: left center;
         position: absolute;
         height: 100%;
         border-bottom: var(--border-style);

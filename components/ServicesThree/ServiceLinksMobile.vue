@@ -78,8 +78,14 @@ onMounted(() =>
 .spacer
 {
     width: 100%;
-
     position: relative;
+
+    animation: fadeIn 1s;
+    animation-delay: .5s;
+    animation-fill-mode: backwards;
+    @keyframes fadeIn {
+        from{opacity: 0}
+    }
 
     .links
     {
