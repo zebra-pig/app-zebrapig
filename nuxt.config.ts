@@ -10,7 +10,6 @@ export default defineNuxtConfig({
         '@nuxtjs/i18n',
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
-        ["@nuxtjs/prismic", {endpoint: "zebrapig"}]
     ],
     content: {
         dev: process.env.APP_ENV == 'local'
@@ -18,9 +17,6 @@ export default defineNuxtConfig({
     css: [
         '@/styles/globals.scss',
     ],
-    build: {
-        transpile: ['@prismicio/vue']
-    },
     experimental: {
         writeEarlyHints: false,
     },

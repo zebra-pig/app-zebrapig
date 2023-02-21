@@ -1624,7 +1624,7 @@
     unimport "^2.0.1"
     untyped "^1.2.2"
 
-"@nuxt/kit@3.2.2", "@nuxt/kit@^3.0.0", "@nuxt/kit@^3.0.0-rc.12", "@nuxt/kit@^3.2.0", "@nuxt/kit@latest":
+"@nuxt/kit@3.2.2", "@nuxt/kit@^3.0.0-rc.12", "@nuxt/kit@^3.2.0", "@nuxt/kit@latest":
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/@nuxt/kit/-/kit-3.2.2.tgz#5b369122ce853f99ecaf8cddc950ad8c4ca47e58"
   integrity sha512-T3UeLxGSNl7dQgKzmtBbPEkUiiBYgXI+KkemmpkYbQK/l+bWy2f9VQw/Rl0HkQLfRTE2fS8q8jhsOedFiEnHQQ==
@@ -1813,16 +1813,6 @@
     vue-i18n "^9.3.0-beta.6"
     vue-i18n-routing "^0.8.1"
 
-"@nuxtjs/prismic@^3.0.0-rc.2":
-  version "3.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/prismic/-/prismic-3.0.0-rc.2.tgz#270651237632902457961c51bb3844c95388b52b"
-  integrity sha512-cRx1raQqFVAggFFs/b9+PVSEMPXXgh+9usHopJxVwa99XxuPvSPDF8gpV/nhUiAKQHxJCt9JkKft0eOi0d+qZQ==
-  dependencies:
-    "@nuxt/kit" "^3.0.0"
-    "@prismicio/client" "^6.7.1"
-    "@prismicio/vue" "^3.1.1"
-    consola "^2.15.3"
-
 "@peculiar/asn1-schema@^2.1.6", "@peculiar/asn1-schema@^2.3.0":
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@peculiar/asn1-schema/-/asn1-schema-2.3.3.tgz#21418e1f3819e0b353ceff0c2dad8ccb61acd777"
@@ -1869,7 +1859,7 @@
     tslib "^2.3.1"
     uuid "^8.3.2"
 
-"@prismicio/client@^6.6", "@prismicio/client@^6.7.1", "@prismicio/client@^6.7.2":
+"@prismicio/client@^6.6":
   version "6.7.3"
   resolved "https://registry.yarnpkg.com/@prismicio/client/-/client-6.7.3.tgz#a9744f523507334de86c6bad98417b3dd4f4b6d2"
   integrity sha512-zQVZhuQDYIgdaY636u+QNk2tvvbtpkaKsEiLT0Ef51nFW/y5fqpOG5U0eU3cVsikZaYNlZ17x6O1wmvVCLdimQ==
@@ -1949,7 +1939,7 @@
     react-easy-crop "4.6.1"
     tslib "2.4.0"
 
-"@prismicio/helpers@^2.3.7", "@prismicio/helpers@^2.3.8":
+"@prismicio/helpers@^2.3.8":
   version "2.3.9"
   resolved "https://registry.yarnpkg.com/@prismicio/helpers/-/helpers-2.3.9.tgz#dd2513a429644ed2d7a6fbc8955de6b2e9659fc0"
   integrity sha512-p7Y1sG83A2YPZvptfAzuZA8xH1bdM2wGRjqSKW9Qa0rAnBq2OfVKRvwl9OMCZML4eLUMxSEUAEWRVSoKpQnJvA==
@@ -1988,31 +1978,6 @@
   dependencies:
     "@prismicio/types" "^0.2.7"
 
-"@prismicio/slice-simulator-com@^0.4.1":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@prismicio/slice-simulator-com/-/slice-simulator-com-0.4.2.tgz#19c2a0e76812ff879ba144f04fea88a5a1dc3106"
-  integrity sha512-9N3oWhKDoVMbBC1SnOUyTuKXbYVx6YZ8kuny39b6DwV+u1DTykZmdOLRl6voDfFw0hlcf3h4xQ+9HBRmzuvoFQ==
-  dependencies:
-    "@prismicio/types" "^0.2.7"
-    statuses "^2.0.1"
-
-"@prismicio/slice-simulator-core@^0.2.7":
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/@prismicio/slice-simulator-core/-/slice-simulator-core-0.2.7.tgz#dbe720ba206e22797c03c22590daad129848b944"
-  integrity sha512-rrAkcg8VZi8Ut4dpPLP11npIK75VYII1DxgUiThrq+1VpCWMTd3ojQbDA9bAoIAIBCXFQJwfxe/8WlcvXfWJXQ==
-  dependencies:
-    "@prismicio/slice-simulator-com" "^0.4.1"
-    "@prismicio/types" "^0.2.7"
-    fp-ts "^2.13.1"
-    io-ts "^2.2.19"
-
-"@prismicio/slice-simulator-vue@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@prismicio/slice-simulator-vue/-/slice-simulator-vue-0.2.2.tgz#d8cde4afbbd7307fe126b1ef53f55b1c7a137540"
-  integrity sha512-Wa6zL3y3FF3fgr5tnD230XpwPfLdJTn8tDD/hIm9WvCn67/9WyPzx4ll3GCNsF1UGqDt55HfguhWK3gzNjNWBA==
-  dependencies:
-    "@prismicio/slice-simulator-core" "^0.2.7"
-
 "@prismicio/types-internal@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@prismicio/types-internal/-/types-internal-1.1.1.tgz#34ed2aca0abf74e641fececbc6f0244e8b04aa73"
@@ -2035,17 +2000,6 @@
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/@prismicio/types/-/types-0.2.7.tgz#4091136fa198b366d3fefb49d1dd31d336522540"
   integrity sha512-xHPBWg+lPcl8U97VB/2oYK3MJlQoVPZq91hbeQO8WRyvq+zgpNST3xFOTk8SkQpgoH6wd50AxGZELvPrpojajQ==
-
-"@prismicio/vue@^3.1.1":
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/@prismicio/vue/-/vue-3.1.2.tgz#4b4d24e6e6ef1feae575ec3713918fd7a055e876"
-  integrity sha512-ft0a4Q7eF/+9JRgZCPC170xetsY8HvCCoQgC6Ntlb6S4OvPINk4UueLobkPwxZPcUc9Ec1Vg3OjYyetJfJLoWA==
-  dependencies:
-    "@prismicio/client" "^6.7.2"
-    "@prismicio/helpers" "^2.3.7"
-    "@prismicio/types" "^0.2.7"
-    isomorphic-unfetch "^3.1.0"
-    vue-router "^4.1.6"
 
 "@radix-ui/number@1.0.0":
   version "1.0.0"
@@ -5635,7 +5589,7 @@ fp-ts@2.12.3:
   resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.12.3.tgz#d991b1e8467d325dadbb6b0ab9524f773e9c3c49"
   integrity sha512-8m0XvW8kZbfnJOA4NvSVXu95mLbPf4LQGwQyqVukIYS4KzSNJiyKSmuZUmbVHteUi6MGkAJGPb0goPZqI+Tsqg==
 
-fp-ts@^2.11.5, fp-ts@^2.11.8, fp-ts@^2.13.1:
+fp-ts@^2.11.5, fp-ts@^2.11.8:
   version "2.13.1"
   resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.13.1.tgz#1bf2b24136cca154846af16752dc29e8fa506f2a"
   integrity sha512-0eu5ULPS2c/jsa1lGFneEFFEdTbembJv8e4QKXeVJ3lm/5hyve06dlKZrpxmMwJt6rYen7sxmHHK2CLaXvWuWQ==
@@ -6579,7 +6533,7 @@ io-ts@2.2.18:
   resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-2.2.18.tgz#dfb41aded5f0e598ccf2a25a483c205444210173"
   integrity sha512-3JxUUzRtPQPs5sOwB7pW0+Xb54nOzqA6M1sRB1hwgsRmkWMeGTjtOrCynGTJhIj+mBLUj2S37DAq2+BrPh9kTQ==
 
-io-ts@^2.2.16, io-ts@^2.2.19:
+io-ts@^2.2.16:
   version "2.2.20"
   resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-2.2.20.tgz#be42b75f6668a2c44f706f72ee6e4c906777c7f5"
   integrity sha512-Rq2BsYmtwS5vVttie4rqrOCIfHCS9TgpRLFpKQCM1wZBBRY9nWVGmEvm2FnDbSE2un1UE39DvFpTR5UL47YDcA==
@@ -7008,14 +6962,6 @@ isomorphic-fetch@^3.0.0:
   dependencies:
     node-fetch "^2.6.1"
     whatwg-fetch "^3.4.1"
-
-isomorphic-unfetch@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/isomorphic-unfetch/-/isomorphic-unfetch-3.1.0.tgz#87341d5f4f7b63843d468438128cb087b7c3e98f"
-  integrity sha512-geDJjpoZ8N0kWexiwkX8F9NkTsXhetLPVbZFQ+JTW239QNOwvB0gniuR1Wc6f0AMTn7/mFGyXvHTifrCp/GH8Q==
-  dependencies:
-    node-fetch "^2.6.1"
-    unfetch "^4.2.0"
 
 isomorphic-ws@5.0.0, isomorphic-ws@^5.0.0:
   version "5.0.0"
@@ -10859,7 +10805,7 @@ static-extend@^0.1.1:
     define-property "^0.2.5"
     object-copy "^0.1.0"
 
-statuses@2.0.1, statuses@^2.0.1:
+statuses@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-2.0.1.tgz#55cb000ccf1d48728bd23c685a063998cf1a1b63"
   integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
@@ -11407,11 +11353,6 @@ unenv@^1.2.0:
     mime "^3.0.0"
     node-fetch-native "^1.0.1"
     pathe "^1.1.0"
-
-unfetch@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-4.2.0.tgz#7e21b0ef7d363d8d9af0fb929a5555f6ef97a3be"
-  integrity sha512-F9p7yYCn6cIW9El1zi0HI6vqpeIvBsr3dSuRO6Xuppb1u5rXpCPmMvLSyECLhybr9isec8Ohl0hPekMVrEinDA==
 
 unhead@1.0.22, unhead@^1.0.22:
   version "1.0.22"
