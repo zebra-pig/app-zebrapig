@@ -1,47 +1,52 @@
 {
-    "name": "@zebrapig/app-zebrapig",
-    "version": "1.0.0",
-    "private": true,
-    "scripts": {
-        "build": "nuxt build",
-        "dev": "nuxt dev",
-        "generate": "nuxt generate",
-        "preview": "nuxt preview",
-        "gql-gen": "node scripts/gql-gen.js",
-        "start": "node --es-module-specifier-resolution=node .output/server/index.mjs"
-    },
-    "devDependencies": {
-        "@nuxt/content": "^2.4.3",
-        "@types/animejs": "^3.1.5",
-        "@types/three": "^0.143.0",
-        "@types/three-gif-loader": "^1.1.0",
-        "dotenv": "^16.0.1",
-        "nuxt": "^3.2.0",
-        "typescript": "^4.8.3"
-    },
-    "dependencies": {
-        "@nuxtjs/content": "^0.3.0",
-        "@nuxtjs/i18n": "8.0.0-beta.3",
-        "animejs": "^3.2.1",
-        "dashjs": "^4.5.0",
-        "dropzone": "^6.0.0-beta.2",
-        "formidable": "^2.0.1",
-        "google-auth-library": "^8.7.0",
-        "googleapis": "^109.0.1",
-        "hls.js": "^1.2.4",
-        "multer": "^1.4.5-lts.1",
-        "nuxt-graphql-client": "^0.2.25",
-        "nuxt-matomo": "^1.2.4",
-        "omggif": "^1.0.10",
-        "plyr": "^3.7.2",
-        "sass": "^1.52.3",
-        "stream": "^0.0.2",
-        "three": "^0.143.0",
-        "troisjs": "^0.3.4",
-        "vue-matomo": "^4.1.0",
-        "zebrapig-three-utils": "^1.0.0"
-    },
-    "resolutions": {
-        "ts-invariant": "0.10.3"
-    }
+  "name": "@zebrapig/app-zebrapig",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "gql-gen": "node scripts/gql-gen.js",
+    "start": "node --es-module-specifier-resolution=node .output/server/index.mjs",
+    "slicemachine": "start-slicemachine"
+  },
+  "devDependencies": {
+    "@nuxt/content": "^2.4.3",
+    "@prismicio/types": "^0.2.7",
+    "@types/animejs": "^3.1.5",
+    "@types/three": "^0.143.0",
+    "@types/three-gif-loader": "^1.1.0",
+    "dotenv": "^16.0.1",
+    "nuxt": "^3.2.0",
+    "slice-machine-ui": "^0.7.0",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "@nuxtjs/content": "^0.3.0",
+    "@nuxtjs/i18n": "8.0.0-beta.3",
+    "@nuxtjs/prismic": "^3.0.0-rc.2",
+    "@prismicio/slice-simulator-vue": "^0.2.2",
+    "animejs": "^3.2.1",
+    "dashjs": "^4.5.0",
+    "dropzone": "^6.0.0-beta.2",
+    "formidable": "^2.0.1",
+    "google-auth-library": "^8.7.0",
+    "googleapis": "^109.0.1",
+    "hls.js": "^1.2.4",
+    "multer": "^1.4.5-lts.1",
+    "nuxt-graphql-client": "^0.2.25",
+    "nuxt-matomo": "^1.2.4",
+    "omggif": "^1.0.10",
+    "plyr": "^3.7.2",
+    "sass": "^1.52.3",
+    "stream": "^0.0.2",
+    "three": "^0.143.0",
+    "troisjs": "^0.3.4",
+    "vue-matomo": "^4.1.0",
+    "zebrapig-three-utils": "^1.0.0"
+  },
+  "resolutions": {
+    "ts-invariant": "0.10.3"
+  }
 }
