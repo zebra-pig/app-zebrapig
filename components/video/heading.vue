@@ -77,7 +77,6 @@ const sources = computed(() => {
         padding: 0;
         animation: h1Fade 1s cubic-bezier(0.34, 0.59, 0, 1.01);
         animation-fill-mode: backwards;
-        animation-delay: .5s;
     }
 
     @keyframes h1Fade {
