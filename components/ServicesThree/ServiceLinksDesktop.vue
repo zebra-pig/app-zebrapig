@@ -54,7 +54,7 @@ const { locale } = useI18n()
     .service-links-desktop
     {
         position: absolute;
-        color: white;
+        color: var(--text-color);
     
         left: 3rem;
         bottom: calc(130px + 3rem);
@@ -74,9 +74,7 @@ const { locale } = useI18n()
             position: relative;
         
             $link-transition-duration: 0.5s;
-        
-            mix-blend-mode: difference;
-            
+                    
             animation: .75s slidein cubic-bezier(0, 0.22, 0, 0.96);
         
             .backdrop
@@ -90,7 +88,7 @@ const { locale } = useI18n()
         
                 transition: top $link-transition-duration;
         
-                border: 4px solid var(--background-color);
+                border: 4px solid var(--text-color);
                 z-index: 0;
                 display: flex;
                 align-items: center;
@@ -122,7 +120,7 @@ const { locale } = useI18n()
         
                 &.active > h1
                 {
-                    color: var(--background-color);
+                    color: var(--text-color);
                 }
             }
         }
