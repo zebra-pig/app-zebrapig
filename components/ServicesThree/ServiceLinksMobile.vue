@@ -61,7 +61,7 @@ const { locale } = useI18n()
                     '--pos': index - activeService,
                 }"
             >
-                {{ link.translations.filter((a) => a.language_code.code == locale.value)[0].title }}
+                {{ link.translations.filter((a) => a.language_code.code == locale)[0].title }}
             </h1>
             <h1 
                 class="arrow-left"
