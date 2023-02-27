@@ -43,6 +43,11 @@ export default defineNuxtConfig({
                 code: "fr",
                 iso: "fr-CH",
                 file: "fr.json"
+            },
+            {
+                code: "zh",
+                iso: "zh-CN",
+                file: "zh.json"
             }
         ],
         detectBrowserLanguage: {
