@@ -54,7 +54,8 @@ const { locale } = useI18n()
             class="links"
             ref="links"
         >
-            <h1
+            <nuxt-link
+                :to="localePath(link.route)"
                 class="title"
                 v-for="(link, index) in serviceLinks"
                 :style="{
@@ -62,7 +63,7 @@ const { locale } = useI18n()
                 }"
             >
                 {{ link.translations.filter((a) => a.language_code.code == locale)[0].title }}
-            </h1>
+            </nuxt-link>
             <h1 
                 class="arrow-left"
                 @click="goLast()"
@@ -130,6 +131,7 @@ const { locale } = useI18n()
             height: 100%;
             top: 0;
             left: 0;
+            font-weight: bold;
     
             margin: 0;
     
