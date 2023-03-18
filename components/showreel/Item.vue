@@ -58,6 +58,7 @@ const { showreelItem } = defineProps(["showreelItem"])
     .plyr__poster{
         border: solid 2px var(--text-color);
     }
+
 }
 }
 </style>
