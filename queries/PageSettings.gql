@@ -6,5 +6,6 @@ query PageSettings {
     country
     email
     phone
+    company_uid
   }
 }

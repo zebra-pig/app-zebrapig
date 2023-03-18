@@ -5,6 +5,8 @@
         {{ data.settings.street }}<br>
         {{ data.settings.zip }} {{ data.settings.city }}<br>
         {{ data.settings.country }}<br><br>
+        UID: {{ data.settings.company_uid }}
+        <br><br>
         <a :href="'mailto:'+APP_NAME+'<'+data.settings.email+'>'">{{ data.settings.email }}</a><br>
         <a :href="'tel:'+data.settings.phone">{{ data.settings.phone }}</a><br>
     </section>
