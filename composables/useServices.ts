@@ -1,13 +1,11 @@
 
 
-export default function useServices()
-{
-    const SERVICES = [ 'video', 'development', '3d-design' ];
+export default function useServices() {
+    const SERVICES = ['video', 'development', 'design'];
 
     const navigation = useNavigation('header').data;
 
-    const serviceLinks = computed(() =>
-    {
+    const serviceLinks = computed(() => {
         if (!navigation.value?.navigation_links)
             return;
 
