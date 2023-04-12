@@ -31,7 +31,7 @@ onMounted(async () => {
 async function initPlayer() {
     if (Hls.isSupported()) {
         var hls = new Hls();
-        hls.loadSource(playbacks.value.hls_canonical.url);
+        //hls.loadSource(playbacks.value.hls_canonical.url);
         //hls.attachMedia(playerElement.value);
     }
 
@@ -48,11 +48,16 @@ const sources = computed(() => {
 
     var i = 0
     for (var playback of playbacks.value.single) {
-        sources.push({
+        var source = {
             src: playback.url,
             type: playback.mimetype,
             size: mediaData.value.encoded_medias[i]?.encoding_stream.video_height
-        })
+        }
+
+        if(source.size > 720){
+            sources.push(source)
+        }
+
 
         i++
     }

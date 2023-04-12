@@ -2,7 +2,7 @@
     <theme-style :theme="theme" />
     <div class="video-landing">
         <video-heading/>
-        <div>{{ t('video_introduction') }}</div>
+        <video-introduction/>
     </div>
 </template>
 
