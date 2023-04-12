@@ -1,8 +1,8 @@
 <template>
 
     <div class="video-introduction">
-        <b>{{ t('video_introduction_bold') }}</b>
-        {{ t('video_introduction') }}
+        <!-- <b>{{ t('video_introduction_bold') }}</b>
+        {{ t('video_introduction') }} -->
     </div>
 </template>
 
