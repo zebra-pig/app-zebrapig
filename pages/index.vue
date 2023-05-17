@@ -3,6 +3,7 @@
 const { public: { APP_NAME } } = useRuntimeConfig();
 useHead({
     title: APP_NAME,
+    titleTemplate: '%s' // removes -
 })
 const settingsData = useSettings().data
 
@@ -35,8 +36,8 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
 
 <template>
     <div>
-        <div class="scroll-container center-layout-height">
-            <div class="fixed-three center-layout-height">
+        <div class="scroll-container">
+            <div class="fixed-three">
                 <client-only>
                     <service-three-backdrop :selected-service="serviceLinks?.[activeService]?.display_tag!"
                         :center-x="isMobile ? 0.5 : 0.65" :fov="isMobile ? 50 : 35"/>
@@ -53,9 +54,6 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                 <h1><a :href="'tel:' + settingsData.settings.phone">{{ settingsData.settings.phone }}</a></h1>
             </div>
         </div>
-        <!-- <section class="wrapper">
-            <project-grid />
-        </section> -->
     </div>
 </template>
 
@@ -81,6 +79,7 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
     .fixed-three {
         position: fixed;
         width: 100%;
+        height: 100%;
         z-index: -1;
     }
 

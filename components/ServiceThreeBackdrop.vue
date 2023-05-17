@@ -170,7 +170,7 @@ watch(selectedModel, newSelectedModel => {
     width: 100%;
     height: 100%;
 
-    overflow: none;
+    overflow: hidden;
 
     transition: clip-path 500ms;
     clip-path: circle(0% at calc(100% * var(--center-x)) 50%);
@@ -179,8 +179,10 @@ watch(selectedModel, newSelectedModel => {
         clip-path: circle(100% at calc(100% * var(--center-x)) 50%);
     }
 
-    /* &:not(.initialShutter) {
-        transition: clip-path 500ms;
-    } */
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 }
 </style>

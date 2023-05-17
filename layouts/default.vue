@@ -1,8 +1,8 @@
 <template>
     <div class="layout">
         <site-header />
-        <div class="container">
-            <slot/>
+        <div class="container center-layout-height">
+            <slot />
         </div>
         <site-footer />
     </div>
