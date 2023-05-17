@@ -1,0 +1,16 @@
+query TeamMembers {
+  team_member {
+    id
+    name
+    portrait {
+        id  
+    }
+    translations {
+      languages_code {
+        code
+      }
+      description
+    }
+    email
+  }
+}
