@@ -6,7 +6,6 @@
 <script setup lang="ts">
 const localePath = useLocalePath();
 
-
 const props = defineProps(['link', 'class'])
 const { locale } = useI18n()
 

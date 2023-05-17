@@ -2,7 +2,6 @@
 
 const checkbox = ref(false);
 
-
 const uncheck = (e: MouseEvent) => checkbox.value = false;
 
 onMounted(() =>
