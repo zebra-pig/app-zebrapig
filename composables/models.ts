@@ -66,9 +66,9 @@ export function initCamera(gltf: any) {
 
     const mixer = new THREE.AnimationMixer(root);
 
-    gltf.animations.forEach((a: THREE.AnimationClip) =>
+    gltf.animations.forEach((a: THREE.AnimationClip) => {
         mixer.clipAction(a).play()
-    );
+    });
 
     return { model: root, mixer };
 }

@@ -71,6 +71,7 @@ onMounted(() => {
             }
             model.content.model.position.set(0, 0, 0);
             model.content.model.visible = model.display || false;
+            model.content.mixer?.update(dt);
         }
 
         cursor.value.lerp(cursorTarget.value, Math.min(1, 3 * dt));
@@ -156,7 +157,7 @@ watch(selectedModel, newSelectedModel => {
                 <GltfModel :src="useAsset(`/89007a80-55e6-4ea3-a12e-1aa644adddf1.glb`)"
                     @load="gltf => models.computer.content = initComputer(gltf)" />
                 <!-- GLOBE -->
-                <GltfModel :src="useAsset(`/eaa57964-332a-4f79-8331-8a7e8a592b52.glb`)"
+                <GltfModel :src="useAsset(`/c075261a-b48f-46d1-8718-f1be79ffdff4.glb`)"
                     @load="gltf => models.globe.content = initGlobe(gltf)" />
             </Scene>
         </Renderer>
