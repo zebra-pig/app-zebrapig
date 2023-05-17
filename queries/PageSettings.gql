@@ -5,6 +5,7 @@ query PageSettings {
     zip
     country
     email
+    email_domain
     phone
     company_uid
   }
