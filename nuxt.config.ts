@@ -2,15 +2,18 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 
 export default defineNuxtConfig({
-    meta: {
-        title: process.env.APP_NAME,
-        titleTemplate: '%s – ' + process.env.APP_NAME,
+    app: {
+        head: {
+            title: process.env.APP_NAME,
+            titleTemplate: '%s – ' + process.env.APP_NAME,
+        }
     },
     modules: [
         '@nuxtjs/i18n',
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
     ],
+    // @ts-ignore
     content: {
         dev: process.env.APP_ENV == 'local'
     },
@@ -68,7 +71,7 @@ export default defineNuxtConfig({
             'graphql-client': {
                 clients: {
                     default: {
-                        host: process.env.GQL_HOST,
+                        host: process.env.GQL_HOST!,
                         token: process.env.GQL_TOKEN,
                         retainToken: true
                     },

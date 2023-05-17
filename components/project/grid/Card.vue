@@ -12,7 +12,7 @@
         <div style="display: none">{{ projectPage.translations[0]?.title }}</div>
         <theme-style :theme="theme" v-if="hover"/>
         <div class="image-wrapper">
-            <img v-if="projectPage.cover" :src="useFile(projectPage.cover).url + '?width=1000'" 
+            <img v-if="projectPage.cover" :src="useFile(projectPage.cover) + '?width=1000'" 
             :alt="projectPage.translations[0]?.title" :title="projectPage.translations[0]?.title" />
             <div class="background-overlay"></div>
             <div class="project-info">

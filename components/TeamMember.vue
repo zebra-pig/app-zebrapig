@@ -16,7 +16,7 @@ const email = [ member.email, settings.settings?.email_domain ].join('@');
 
 <template>
     <div class="team-member-card">
-        <img class="portrait" :src="useFile(member.portrait || {}).url" />
+        <img class="portrait" :src="useFile(member.portrait)" />
         <h3 class="name">{{ member.name }}</h3>
         <p class="desc">{{ translation?.description }}</p>
         <a class="email" :href="`mailto:${email}`">{{ email }}</a>
