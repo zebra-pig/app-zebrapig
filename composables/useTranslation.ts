@@ -17,7 +17,7 @@ export default function useTranslation<T extends Translation>(translationsArray?
     const preferredLocales = [locale.value, 'en'];
 
     while (preferredLocales.length) {
-        const currLocale = preferredLocales.pop()!;
+        const currLocale = preferredLocales.shift()!;
         const currTrans = grabTranslation(translationsArray, currLocale);
         if (currTrans != null) {
             return currTrans;
