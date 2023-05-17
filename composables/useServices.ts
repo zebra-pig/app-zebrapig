@@ -1,21 +1,15 @@
 
+const SERVICES = ['video', 'development', 'design'];
 
-export default function useServices() {
-    const SERVICES = ['video', 'development', 'design'];
-
-    const navigation = useNavigation('header').data;
-
+export default async function useServices() {
+    const navigation = await GqlNavigationLinkList({ location: 'header' });
     const serviceLinks = computed(() => {
-        if (!navigation.value?.navigation_links)
+        if (!navigation?.navigation_links)
             return;
-
         return SERVICES.map(service =>
-            navigation.value?.navigation_links.find(link => link.display_tag === service)
+            navigation?.navigation_links.find((link: any) => link.display_tag === service)
         );
     });
 
-    return {
-        serviceLinks,
-        numberServices: SERVICES.length,
-    }
+    return serviceLinks;
 }

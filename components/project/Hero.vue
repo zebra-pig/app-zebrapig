@@ -1,6 +1,6 @@
 <template>
     <div class="project-hero">
-        <img :src="useFile(file).url"/>
+        <img :src="useFile(file)"/>
     </div>
 </template>
 

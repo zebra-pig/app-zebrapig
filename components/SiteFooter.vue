@@ -10,7 +10,7 @@
 
 <script setup>
 const { public: { APP_NAME } } = useRuntimeConfig();
-const navigation = useNavigation("footer").data;
+const navigation = await GqlNavigationLinkList({ location: 'footer' });
 
 </script>
 
