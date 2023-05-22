@@ -67,7 +67,7 @@ export default defineNuxtConfig({
             CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
             GQL_HOST: process.env.GQL_HOST,
             GQL_TOKEN: process.env.GQL_TOKEN,
-           
+
             'graphql-client': {
                 clients: {
                     default: {
@@ -75,7 +75,7 @@ export default defineNuxtConfig({
                         token: process.env.GQL_TOKEN,
                         retainToken: true
                     },
-                    
+
                 }
             }
         },
