@@ -24,6 +24,7 @@
   "dependencies": {
     "@nuxtjs/content": "^0.3.0",
     "@nuxtjs/i18n": "8.0.0-beta.3",
+    "@plasmicapp/loader-vue": "^0.1.259",
     "animejs": "^3.2.1",
     "dashjs": "^4.5.0",
     "dropzone": "^6.0.0-beta.2",
