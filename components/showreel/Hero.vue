@@ -1,6 +1,6 @@
 <template>
     <div class="showreel-hero">
-        <img v-if="showreel.hero" :src="useFile(showreel.hero).url + '?width=1000'"/>
+        <img v-if="showreel.hero" :src="useFile(showreel.hero) + '?width=1000'"/>
         <h1>{{ showreel.title }}</h1>
         <p class="comment">{{ showreel.comment }}</p>
         <signature :signature="showreel.signature" v-if="showreel.signature"/>

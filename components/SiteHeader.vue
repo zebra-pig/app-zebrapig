@@ -2,7 +2,6 @@
 
 const checkbox = ref(false);
 
-
 const uncheck = (e: MouseEvent) => checkbox.value = false;
 
 onMounted(() =>
@@ -13,7 +12,7 @@ onUnmounted(() =>
     document.removeEventListener('click', uncheck)
 );
 
-const navigation = useNavigation('header').data
+const navigation = await GqlNavigationLinkList({ location: 'header' });
 
 </script>
 
@@ -22,7 +21,7 @@ const navigation = useNavigation('header').data
         <label>
             <input type="checkbox" v-model="checkbox"/>
             <i class="fa-solid fa-bars menu-icon"></i>
-            <nuxt-link :to="localePath('/')" class="logo-link"><logo/></nuxt-link>
+            <nuxt-link :to="useLocalePath()('/')" class="logo-link"><logo/></nuxt-link>
             <div class="list">
                 <navigation-link class="nav-link" :key="link.id" v-for="link in navigation?.navigation_links" :link="link" />
             </div>

@@ -6,7 +6,6 @@
 <script setup lang="ts">
 const localePath = useLocalePath();
 
-
 const props = defineProps(['link', 'class'])
 const { locale } = useI18n()
 
@@ -22,12 +21,7 @@ const linkTarget = computed(() => {
     return "_" + (props.link.target ?? "self")
 })
 
-const fullLink = computed(() => {
-    if(props.link.route.startsWith("mailto:")){
-        return props.link.route
-    }
-    return localePath('/'+props.link.route)
-})
+const fullLink = useFullLink(props.link);
 
 const elementType = computed(() => {
     if(props.link.button){
