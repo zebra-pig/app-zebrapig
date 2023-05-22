@@ -22,6 +22,7 @@ const navigation = useNavigation("footer").data;
     font-size: .8em;
     color: var(--text-color);
     transition: var(--color-change-transition);
+    z-index: 10000;
 
     padding-top: 0;
     padding-bottom: 0;
@@ -40,6 +41,7 @@ const navigation = useNavigation("footer").data;
     display: flex;
     justify-content: flex-end;
     float: right;
+    z-index: 10000;
 
     a{
         text-decoration: none;
