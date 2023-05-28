@@ -1,6 +1,6 @@
 <template>
     <btn v-if="elementType == 'btn'" rel="referrer" :to="fullLink" :target="linkTarget" :class="class">{{ linkTitle }}</btn>
-    <nuxt-link v-else :to="fullLink" rel="referrer" :target="linkTarget" :class="class">{{ linkTitle }}</nuxt-link>
+    <nuxt-link v-else :to="localePath(fullLink)" rel="referrer" :target="linkTarget" :class="class">{{ linkTitle }}</nuxt-link>
 </template>
 
 <script setup lang="ts">
