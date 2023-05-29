@@ -1,4 +1,5 @@
-import { initPlasmicLoader } from "@plasmicapp/loader-vue";
+import pkg from '@plasmicapp/loader-vue';
+const { initPlasmicLoader } = pkg
 
 export const PLASMIC = initPlasmicLoader({
     projects: [
