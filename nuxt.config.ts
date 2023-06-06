@@ -79,11 +79,5 @@ export default defineNuxtConfig({
                 }
             }
         },
-    },
-
-    vite: {
-        define: {
-            'process.env.PLASMIC_QUIET': 'true',
-        }
     }
 });

@@ -2070,88 +2070,6 @@
   resolved "https://registry.npmjs.org/@planetscale/database/-/database-1.5.0.tgz"
   integrity sha512-Qwh7Or1W5dB5mZ9EQqDkgvkDKhBBmQe58KIVUy0SGocNtr5fP4JAWtvZ6EdLAV6C6hVpzNlCA2xIg9lKTswm1Q==
 
-"@plasmicapp/data-sources-context@0.1.11":
-  version "0.1.11"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/data-sources-context/-/data-sources-context-0.1.11.tgz#30765e1eff677ac06d0ec6e8d0cecdbf8759f9bc"
-  integrity sha512-JFrtPCjdLIRnmZujWFuh025Id4bgd2fwllOOm2qMo4yoSm4oGDg6/2rRpD0qRC6DiN47RGt8tDR+ancYboxPjw==
-
-"@plasmicapp/host@1.0.143":
-  version "1.0.143"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/host/-/host-1.0.143.tgz#de6a46b21bd648988d97ff96c219d1043a4d9760"
-  integrity sha512-KHHNkCv+vBedbwb/r80cYAVKwjnv1qf492BaY1Q4nkwERlhvE7qwUfSj8VApn9CE+EyQPNw9jxfdCuvCWQZqPQ==
-  dependencies:
-    "@plasmicapp/query" "0.1.64"
-    window-or-global "^1.0.1"
-
-"@plasmicapp/isomorphic-unfetch@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/isomorphic-unfetch/-/isomorphic-unfetch-1.0.1.tgz#e2dfdc8d23d9d1c82f5596986fe8c09013ec8eec"
-  integrity sha512-V1PBEQjypQ47zO0ggI7B46o0WL2I4y5nmv4rdCGVA9oVCAHHPt7kcOxDak9cj/ryQocLEU8YC6Uwqz+hYL5YAw==
-  dependencies:
-    node-fetch "^2.6.1"
-    unfetch "^4.2.0"
-
-"@plasmicapp/loader-core@1.0.103":
-  version "1.0.103"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/loader-core/-/loader-core-1.0.103.tgz#c147f9dbf5a92da45374e7573134b4c75cd22ec1"
-  integrity sha512-vYly7UQAhFkZoWVMvrZPKv3IKMW6YZW2lVHon1xgts/HOxkNe0NKeTvfdoPTK2k0h8qZx03tBgAm2b5JFdih+g==
-  dependencies:
-    "@plasmicapp/isomorphic-unfetch" "^1.0.1"
-    "@plasmicapp/loader-fetcher" "1.0.26"
-
-"@plasmicapp/loader-fetcher@1.0.26":
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/loader-fetcher/-/loader-fetcher-1.0.26.tgz#15cdf15431b513605984e4a23ce71e8f0ab1e5d0"
-  integrity sha512-+iOg9I6ntNEvl5tPCSZi3+t8cT/J/CayR9ybaTnZ7DNwSG24IwnqhANvAKwQkCFQiD73W0iLAWQbrV9SRLde/w==
-  dependencies:
-    "@plasmicapp/isomorphic-unfetch" "^1.0.1"
-
-"@plasmicapp/loader-react@1.0.265":
-  version "1.0.265"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/loader-react/-/loader-react-1.0.265.tgz#61f74ad9415a1f24f9de3328a3d84d66b47f1540"
-  integrity sha512-D03OD466O88tOUVWQTDGx1ULjuj/paJpyPVO5pIkAMJl7PO/Osy3HJNIaa7lzVTpPeSbTsbLzMVMvJVS6gJF7w==
-  dependencies:
-    "@plasmicapp/data-sources-context" "0.1.11"
-    "@plasmicapp/host" "1.0.143"
-    "@plasmicapp/loader-core" "1.0.103"
-    "@plasmicapp/loader-splits" "1.0.31"
-    "@plasmicapp/query" "0.1.64"
-    "@plasmicapp/react-ssr-prepass" "2.0.1"
-    pascalcase "^1.0.0"
-    react-is "^17.0.2"
-    server-only "0.0.1"
-
-"@plasmicapp/loader-splits@1.0.31":
-  version "1.0.31"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/loader-splits/-/loader-splits-1.0.31.tgz#ad515e2e5dd090a8296b40778f7b694858553865"
-  integrity sha512-VXshnLmtTJJVF7SCehjmvm6kSetkGk5Deep7/63avKe5MSUFM4SD46gCRyt5lszJaoxo8iR9C/hTDj20N6FEpQ==
-  dependencies:
-    "@plasmicapp/loader-fetcher" "1.0.26"
-    json-logic-js "^2.0.2"
-
-"@plasmicapp/loader-vue@^0.1.259":
-  version "0.1.259"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/loader-vue/-/loader-vue-0.1.259.tgz#dbd29f13802364dd8e2aa87f2404129b26c697ad"
-  integrity sha512-Wb/9tqwqDg6nrXnPOqDzzeGxQDZSisr0LxXjfGpIcGeJCBDJj0QoSm9DgTNhbXR7Pg5+SIKI9khvqbOsu+eL9A==
-  dependencies:
-    "@plasmicapp/loader-react" "1.0.265"
-    core-js "^3.6.5"
-    react ">=16.8.0"
-    react-dom ">=16.8.0"
-    vue-demi "^0.11.3"
-
-"@plasmicapp/query@0.1.64":
-  version "0.1.64"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/query/-/query-0.1.64.tgz#cb2def03bdcd87d6201dcd077cd4a130239c67ec"
-  integrity sha512-lydAn7a1jnGqgqKjJ3RHkROcWN1X4MMsRBMqQaXiOpHlFMolYZXZ7nYazukpTbLY8w5oiOGFHCq0p7G7rUz3KQ==
-  dependencies:
-    swr "^1.0.0"
-
-"@plasmicapp/react-ssr-prepass@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@plasmicapp/react-ssr-prepass/-/react-ssr-prepass-2.0.1.tgz#087265d755fc493039bd7a0d2f24166675dedc6c"
-  integrity sha512-imV4VOVz/8TptOCvNfg3bbwLvQMEaJvrvxHSfUzKl4uHJyvC2pAGkuLAOBiDOxhdD+sn73aaZEVMskG/6G5qxw==
-
 "@popperjs/core@^2.9.0":
   version "2.11.6"
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz"
@@ -4816,11 +4734,6 @@ core-js@^3.26.1:
   version "3.28.0"
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.28.0.tgz"
   integrity sha512-GiZn9D4Z/rSYvTeg1ljAIsEqFm0LaN9gVtwDCrKL80zHtS31p9BAjmTxVqTQDMpwlMolJZOFntUG2uwyj7DAqw==
-
-core-js@^3.6.5:
-  version "3.30.2"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.30.2.tgz#6528abfda65e5ad728143ea23f7a14f0dcf503fc"
-  integrity sha512-uBJiDmwqsbJCWHAwjrx3cvjbMXP7xD72Dmsn5LOJpiRmE3WbBbN5rCqQ2Qh6Ek6/eOrjlWngEynBWo4VxerQhg==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -7537,11 +7450,6 @@ json-bigint@^1.0.0:
   dependencies:
     bignumber.js "^9.0.0"
 
-json-logic-js@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/json-logic-js/-/json-logic-js-2.0.2.tgz#b613e095f5e598cb78f7b9a2bbf638e74cf98158"
-  integrity sha512-ZBtBdMJieqQcH7IX/LaBsr5pX+Y5JIW+EhejtM3Ffg2jdN9Iwf+Ht6TbHnvAZ/YtwyuhPaCBlnvzrwVeWdvGDQ==
-
 json-parse-even-better-errors@^2.3.0:
   version "2.3.1"
   resolved "https://registry.npmjs.org/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz"
@@ -9681,11 +9589,6 @@ pascalcase@^0.1.1:
   resolved "https://registry.npmjs.org/pascalcase/-/pascalcase-0.1.1.tgz"
   integrity sha512-XHXfu/yOQRy9vYOtUDVMN60OEJjW013GoObG1o+xwQTpB9eYJX/BjXMsdW13ZDPruFhYYn0AG22w0xgQMwl3Nw==
 
-pascalcase@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-1.0.0.tgz#d2fd7d73f2969606d2b56e17f5261be41c43c381"
-  integrity sha512-BSExi0rRnCHReJys6NocaK+cfTXNinAegfWBvr0JD3hiaEG7Nuc7r0CIdOJunXrs8gU/sbHQ9dxVAtiVQisjmg==
-
 path-browserify@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/path-browserify/-/path-browserify-1.0.1.tgz"
@@ -10400,14 +10303,6 @@ rc9@^2.1.0:
     destr "^1.2.2"
     flat "^5.0.2"
 
-react-dom@>=16.8.0:
-  version "18.2.0"
-  resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
-  integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
-  dependencies:
-    loose-envify "^1.1.0"
-    scheduler "^0.23.0"
-
 react-easy-crop@4.6.1:
   version "4.6.1"
   resolved "https://registry.npmjs.org/react-easy-crop/-/react-easy-crop-4.6.1.tgz"
@@ -10415,11 +10310,6 @@ react-easy-crop@4.6.1:
   dependencies:
     normalize-wheel "^1.0.1"
     tslib "2.0.1"
-
-react-is@^17.0.2:
-  version "17.0.2"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
-  integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
 react-remove-scroll-bar@^2.3.3:
   version "2.3.4"
@@ -10449,7 +10339,7 @@ react-style-singleton@^2.2.1:
     invariant "^2.2.4"
     tslib "^2.0.0"
 
-react@>=16.8.0, react@^18.2.0:
+react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
@@ -10990,13 +10880,6 @@ sax@1.2.1:
   resolved "https://registry.npmjs.org/sax/-/sax-1.2.1.tgz"
   integrity sha512-8I2a3LovHTOpm7NV5yOyO8IHqgVsfK4+UuySrXU8YXkSRX7k6hCV9b3HrkKCr3nMpgj+0bmocaJJWpvp1oc7ZA==
 
-scheduler@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.23.0.tgz"
-  integrity sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==
-  dependencies:
-    loose-envify "^1.1.0"
-
 scuid@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/scuid/-/scuid-1.1.0.tgz"
@@ -11085,11 +10968,6 @@ serve-static@1.15.0, serve-static@^1.14.1, serve-static@^1.15.0:
     escape-html "~1.0.3"
     parseurl "~1.3.3"
     send "0.18.0"
-
-server-only@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/server-only/-/server-only-0.0.1.tgz#0f366bb6afb618c37c9255a314535dc412cd1c9e"
-  integrity sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==
 
 set-blocking@^2.0.0:
   version "2.0.0"
@@ -11644,11 +11522,6 @@ swap-case@^2.0.2:
   dependencies:
     tslib "^2.0.3"
 
-swr@^1.0.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/swr/-/swr-1.3.0.tgz#c6531866a35b4db37b38b72c45a63171faf9f4e8"
-  integrity sha512-dkghQrOl2ORX9HYrMDtPa7LTVHJjCTeZoB1dqTbnnEDlSvN8JEKpYIYurDfvbQFUUS8Cg8PceFVZNkW0KNNYPw==
-
 tapable@^1.0.0:
   version "1.1.3"
   resolved "https://registry.npmjs.org/tapable/-/tapable-1.1.3.tgz"
@@ -12044,11 +11917,6 @@ unenv@^1.4.1, unenv@^1.5.1:
     mime "^3.0.0"
     node-fetch-native "^1.1.1"
     pathe "^1.1.0"
-
-unfetch@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-4.2.0.tgz#7e21b0ef7d363d8d9af0fb929a5555f6ef97a3be"
-  integrity sha512-F9p7yYCn6cIW9El1zi0HI6vqpeIvBsr3dSuRO6Xuppb1u5rXpCPmMvLSyECLhybr9isec8Ohl0hPekMVrEinDA==
 
 unhead@1.1.27:
   version "1.1.27"
@@ -12707,11 +12575,6 @@ vue-bundle-renderer@^1.0.3:
   dependencies:
     ufo "^1.1.1"
 
-vue-demi@^0.11.3:
-  version "0.11.4"
-  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.11.4.tgz#6101992fe4724cf5634018a16e953f3052e94e2a"
-  integrity sha512-/3xFwzSykLW2HiiLie43a+FFgNOcokbBJ+fzvFXd0r2T8MYohqvphUyDQ8lbAwzQ3Dlcrb1c9ykifGkhSIAk6A==
-
 vue-demi@^0.13.11, vue-demi@^0.13.5:
   version "0.13.11"
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.11.tgz"
@@ -12869,11 +12732,6 @@ widest-line@^3.1.0:
   integrity sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==
   dependencies:
     string-width "^4.0.0"
-
-window-or-global@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/window-or-global/-/window-or-global-1.0.1.tgz#dbe45ba2a291aabc56d62cf66c45b7fa322946de"
-  integrity sha512-tE12J/NenOv4xdVobD+AD3fT06T4KNqnzRhkv5nBIu7K+pvOH2oLCEgYP+i+5mF2jtI6FEADheOdZkA8YWET9w==
 
 wrap-ansi@^6.0.1, wrap-ansi@^6.2.0:
   version "6.2.0"
