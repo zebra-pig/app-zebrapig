@@ -22,6 +22,7 @@
     "typescript": "^4.8.3"
   },
   "dependencies": {
+    "@nuxthq/studio": "^0.13.2",
     "@nuxtjs/content": "^0.3.0",
     "@nuxtjs/i18n": "8.0.0-beta.3",
     "animejs": "^3.2.1",

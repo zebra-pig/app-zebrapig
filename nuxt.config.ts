@@ -12,6 +12,7 @@ export default defineNuxtConfig({
         '@nuxtjs/i18n',
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
+        '@nuxthq/studio'
     ],
     // @ts-ignore
     content: {
