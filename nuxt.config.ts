@@ -8,6 +8,11 @@ export default defineNuxtConfig({
             titleTemplate: '%s – ' + process.env.APP_NAME,
         }
     },
+    nitro: {
+        prerender: {
+            crawlLinks: true
+        }
+    },
     modules: [
         '@nuxthq/studio',
         '@nuxtjs/i18n',
