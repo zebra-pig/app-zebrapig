@@ -1,9 +1,17 @@
 <script setup lang='ts'>
 
 const { public: { APP_NAME } } = useRuntimeConfig();
+const { t } = useI18n();
+
 useHead({
     title: APP_NAME,
-    titleTemplate: '%s' // removes -
+    titleTemplate: '%s', // removes -
+    meta: [
+        {
+            name: "description",
+            content: t('meta.description.index')
+        }
+    ]
 })
 const settingsData = useSettings().data
 
