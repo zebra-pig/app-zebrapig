@@ -13,5 +13,11 @@
     "video_introduction": "Unsere Videoproduktionen",
 
     "portraits": "Porträts",
-    "portraits_description": "Einblck in das Leben und Schaffen"
+    "portraits_description": "Einblck in das Leben und Schaffen",
+
+    "meta": {
+        "description": {
+            "index": "Multimediaproduktion"
+        }
+    }
 }

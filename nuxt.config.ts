@@ -60,9 +60,10 @@ export default defineNuxtConfig({
             }
         ],
         detectBrowserLanguage: {
+            alwaysRedirect: true,
             useCookie: true,
-            cookieKey: 'i18n_redirected',
-            //redirectOn: 'root',
+            cookieKey: 'selectedLocale',
+            fallbackLocale: 'de'
         },
         langDir: "./lang",
     },

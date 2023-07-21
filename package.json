@@ -17,14 +17,13 @@
     "@types/three": "^0.143.0",
     "@types/three-gif-loader": "^1.1.0",
     "dotenv": "^16.0.1",
-    "nuxt": "3.5.2",
-    "slice-machine-ui": "^0.7.0",
+    "nuxt": "^3.6.5",
     "typescript": "^4.8.3"
   },
   "dependencies": {
     "@nuxthq/studio": "^0.13.2",
     "@nuxtjs/content": "^0.3.0",
-    "@nuxtjs/i18n": "8.0.0-beta.3",
+    "@nuxtjs/i18n": "8.0.0-beta.11",
     "animejs": "^3.2.1",
     "dashjs": "^4.5.0",
     "dropzone": "^6.0.0-beta.2",
