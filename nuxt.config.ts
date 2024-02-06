@@ -33,6 +33,10 @@ export default defineNuxtConfig({
         global: true,
         dirs: ['~/components']
     },
+
+    build: {
+        transpile: ['wide-align']
+    },
     i18n: {
         baseUrl: process.env.BASE_URL,
         strategy: 'prefix_except_default',
