@@ -1,23 +1,20 @@
 {
-    "home": "Home",
-    "video": "Video",
-    "development": "Entwicklung",
-    "imprint": "Impressum",
-    "contact": "Kontakt",
-
-    "error": "Fehler",
-    "download": "Herunterladen",
-    "drag_and_drop": "Ziehen Sie Dateien hierhin, um sie hochzuladen",
-
-    "video_introduction_bold": "Bewegtes Bild, bleibende Erinnerung.",
-    "video_introduction": "Unsere Videoproduktionen",
-
-    "portraits": "Porträts",
-    "portraits_description": "Einblck in das Leben und Schaffen",
-
-    "meta": {
-        "description": {
-            "index": "Multimediaproduktion"
-        }
+  "home": "Home",
+  "video": "Video",
+  "development": "Entwicklung",
+  "imprint": "Impressum",
+  "contact": "Kontakt",
+  "error": "Fehler",
+  "download": "Herunterladen",
+  "drag_and_drop": "Ziehen Sie Dateien hierhin, um sie hochzuladen",
+  "video_introduction_bold": "Bewegtes Bild, bleibende Erinnerung.",
+  "video_introduction": "Unsere Videoproduktionen",
+  "portraits": "Porträts",
+  "portraits_description": "Einblck in das Leben und Schaffen",
+  "meta": {
+    "description": {
+      "index": "Multimediaproduktion"
     }
+  },
+  "projects": "Projekte"
 }

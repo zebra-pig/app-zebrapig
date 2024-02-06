@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import * as THREE from 'three';
-import { AmbientLight, Camera, DirectionalLight, GltfModel, Renderer, RendererPublicInterface, Scene } from 'troisjs';
+import { AmbientLight, Camera, DirectionalLight, GltfModel, Renderer, type RendererPublicInterface, Scene } from 'troisjs';
 
 type ModelNames = 'computer' | 'camera' | 'globe';
 const props = defineProps<{

@@ -55,17 +55,37 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                 @setActive="setActive" />
             <service-links-desktop class="desktop-service-links" :serviceLinks="serviceLinks" :activeService="activeService"
                 @setActive="setActive" />
-            <div class="quote-container" v-if="settingsData">
-                <h1><a :href="'mailto:' + APP_NAME + '<' + settingsData.settings.email + '>'">{{ settingsData.settings.email
-                }}</a>
-                </h1>
-                <h1><a :href="'tel:' + settingsData.settings.phone">{{ settingsData.settings.phone }}</a></h1>
+            <div class="page-content">
+                <div class="quote-container" v-if="settingsData">
+                    <h1><a :href="'mailto:' + APP_NAME + '<' + settingsData.settings.email + '>'">{{ settingsData.settings.email
+                    }}</a>
+                    </h1>
+                    <h1><a :href="'tel:' + settingsData.settings.phone">{{ settingsData.settings.phone }}</a></h1>
+                </div>
+
+                <section class="wrapper">
+                    <h2>{{ t('projects') }}</h2>
+                    <project-grid/>
+                </section>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped lang='scss'>
+
+.page-content{
+    background-color: var(--background-color);
+    transition: var(--color-change-transition);
+    border-top: var(--border-style);
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
 @media (max-width: 768px) {
     .desktop-service-links {
         display: none;
@@ -79,8 +99,6 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
 }
 
 .scroll-container {
-    background-color: var(--background-color);
-
     position: relative;
     z-index: 0;
 
@@ -99,7 +117,6 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
     }
 
     .quote-container {
-        position: absolute;
         bottom: 0;
         z-index: 1;
         animation-delay: 5s;
@@ -112,11 +129,7 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
         align-items: center;
         justify-content: center;
 
-        border-top: var(--border-style);
         border-bottom: var(--border-style);
-
-        transition: var(--color-change-transition);
-        background-color: var(--background-color);
 
         h1 {
             font-size: 40px;

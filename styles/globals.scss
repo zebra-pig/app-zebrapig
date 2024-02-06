@@ -33,9 +33,9 @@
     --header-footer-height: 65px;
 
     --color-change-transition:
-        color .4s ease,
-        background .4s ease,
-        fill .4s ease;
+        color .6s ease,
+        background-color .6s ease,
+        fill .6s ease;
 
     --border-style: 2px solid var(--text-color);
 
@@ -50,7 +50,7 @@
 // }
 
 .center-layout-height {
-    min-height: calc(100dvh - 2 * var(--header-footer-height))
+    min-height: calc(100dvh - 2 * var(--header-footer-height) - 100px)
 }
 
 h1 {
@@ -87,6 +87,19 @@ html {
 body {
     margin: 0;
     padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: var(--color-change-transition);
+}
+
+.default-container{
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+}
+
+.default-container-wrapper{
+    padding: 20px;
 }
 
 .material-symbols-outlined {

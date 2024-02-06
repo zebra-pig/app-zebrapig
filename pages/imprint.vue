@@ -18,6 +18,15 @@ const { t } = useI18n();
 
 const { public: { APP_NAME } } = useRuntimeConfig();
 
+defineI18nRoute({
+    paths: {
+        de: '/impressum',
+        en: '/imprint',
+        fr: '/empreinte',
+        zh: '/imprint',
+    }
+})
+
 
 const { data } = await useSettings();
 

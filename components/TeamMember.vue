@@ -35,6 +35,7 @@ const email = [ member.email, settings.settings?.email_domain ].join('@');
         width: 300px;
         height: 300px;
         object-fit: cover;
+        filter: grayscale(100%);
 
         border-radius: 20px;
     }

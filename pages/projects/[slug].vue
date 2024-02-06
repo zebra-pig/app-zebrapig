@@ -1,7 +1,22 @@
 <template>
 <div v-if="projectPage" class="project-page">
 <theme-style :theme="theme"/>
-<project-hero v-if="projectPage.hero" :file="projectPage.hero"/>
+<div class="project-page-hero">
+    <img :src="useFile(projectPage.hero)"/>
+    <div class="project-page-hero-text">
+        <div class="default-container-wrapper">
+            <div class="default-container">
+                <h1>{{ translatedContent.title }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="default-container-wrapper">
+    <div class="default-container">
+        <div class="main-text-container" v-html="translatedContent.content"></div>
+    </div>
+</div>
 </div>
 </template>
 
@@ -10,6 +25,16 @@
 
 <script setup>
 const route = useRoute()
+
+defineI18nRoute({
+    paths: {
+        de: '/projekte/[slug]',
+        en: '/projects/[slug]',
+        zh: '/projects/[slug]',
+        fr: '/projets/[slug]',
+    }
+})
+
 const { data } = useProjectPages(route.params.slug)
 
 const theme = computed(() => {
@@ -22,6 +47,10 @@ const theme = computed(() => {
 
 const projectPage = computed(() => {
     return data.value?.project_pages[0]
+})
+
+const translatedContent = computed(() => {
+    return projectPage.value?.translations[0]
 })
 
 const title = computed(() => {
@@ -65,5 +94,11 @@ definePageMeta({
             transform: scale(.8);
             transition: all .5s cubic-bezier(0.45, 0.15, 0.63, 0.17);
         }
+    }
+
+    .main-text-container{
+        font-size: 1.1em;
+        line-height: 160%;
+        width: 100%;
     }
 </style>

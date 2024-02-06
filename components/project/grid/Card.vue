@@ -1,8 +1,8 @@
 <template>
     <nuxt-link 
         :style="transformations"
-        :to="'/projects/'+projectPage.slug" 
-        class="project-grid-card"
+        :to="localePath('/projects/'+ projectPage.slug)" 
+        :class="{'project-grid-card': true, 'grid-highlighted': gridHighlighted && !hover}"
         @mousemove="onMouseMove" 
         @mouseup="onMouseUp" 
         @mousedown="onMouseDown" 
@@ -12,7 +12,9 @@
         <div style="display: none">{{ projectPage.translations[0]?.title }}</div>
         <theme-style :theme="theme" v-if="hover"/>
         <div class="image-wrapper">
-            <img v-if="projectPage.cover" :src="useFile(projectPage.cover) + '?width=1000'" 
+            <img class="standard-image" v-if="projectPage.cover" :src="useFile(projectPage.cover) + '?width=1000'" 
+                :alt="projectPage.translations[0]?.title" :title="projectPage.translations[0]?.title" />
+            <img class="luminosity-image" v-if="projectPage.cover" :src="useFile(projectPage.cover) + '?width=1000'" 
             :alt="projectPage.translations[0]?.title" :title="projectPage.translations[0]?.title" />
             <div class="background-overlay"></div>
             <div class="project-info">
@@ -25,9 +27,23 @@
 </template>
 
 <script setup lang="ts">
-const { projectPage } = defineProps(['projectPage'])
+const props = withDefaults(defineProps<{
+    projectPage: any,
+    gridHighlighted: boolean
+}>(), {
+    projectPage: null,
+    gridHighlighted: false
+})
+
+const $emit = defineEmits(['highlighted', 'blurred'])
+
+const projectPage = toRef(props.projectPage)
+
+const {t} = useI18n()
 const hover = ref(false)
-const transformFactor = ref(8)
+const transformFactor = ref(2)
+
+const localePath = useLocalePath()
 
 const transformations = ref({
     '--rotate-x': '0', 
@@ -56,6 +72,7 @@ function onMouseMove(e: MouseEvent)
 
 function onHover() {
     hover.value = true
+    $emit('highlighted')
 }
 
 function onMouseDown(e: MouseEvent) {
@@ -69,6 +86,7 @@ function onMouseUp(e: MouseEvent) {
 
 function onMouseLeave() {
     hover.value = false
+    $emit('blurred')
 }
 
 onBeforeUnmount(() => {
@@ -79,8 +97,8 @@ onBeforeUnmount(() => {
 const worktypes = computed(() => {
     var wtypes = []
     if(projectPage){
-        for(var worktypeConnection of projectPage.worktypes){
-            wtypes.push(worktypeConnection.worktype.translations[0].title)
+        for(var worktypeConnection of projectPage.value.worktypes){
+            wtypes.push(worktypeConnection.worktype.translations[0]?.title)
         }
     }
     return wtypes
@@ -88,9 +106,9 @@ const worktypes = computed(() => {
 
 const theme = computed(() => {
     return {
-        backgroundColor: projectPage.background_color || "#ffffff",
-        textColor: projectPage.text_color || "#000000",
-        accentColor: projectPage.accent_color || "#000000",
+        backgroundColor: projectPage.value.background_color || "#ffffff",
+        textColor: projectPage.value.text_color || "#000000",
+        accentColor: projectPage.value.accent_color || "#000000",
     }
 })
 
@@ -106,6 +124,7 @@ const theme = computed(() => {
 </script>
 
 <style scoped lang="scss">
+
 
 @keyframes cardFadeIn {
     0%{
@@ -125,7 +144,7 @@ const theme = computed(() => {
     }
 
     &:not(:hover){
-        transition: transform .8s ease;
+        transition: transform .8s ease, opacity .8s ease;
     }
 
     width: 100%;
@@ -160,7 +179,7 @@ const theme = computed(() => {
         aspect-ratio: 3/4;
         overflow: hidden;
         position: relative;
-        transition: transform 0.8s cubic-bezier(0.075, 0.82, 0.165, 1);
+        transition: transform 0.8s cubic-bezier(0.075, 0.82, 0.165, 1), opacity .8s ease;
     }
 
     .project-info{
@@ -273,4 +292,22 @@ const theme = computed(() => {
         }
     }
 }
+
+.grid-highlighted{
+    transform: scale(0.95);
+    opacity: 0.7;
+    mix-blend-mode: luminosity;
+
+    .default-image{
+        opacity: 0;
+    }
+}
+
+.luminosity-image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    mix-blend-mode: luminosity;
+}
+
 </style>
