@@ -1,13 +1,10 @@
 // This script uploads a file to google drive using information provided by a dropzone entry on content.zebrapig.com
 // The a .google_auth_key.json for a service account is required
 
-import stream  from "stream"
-import multer from "multer"
-import formidable from 'formidable'
-import { file } from "googleapis/build/src/apis/file";
+// import multer from "multer"
+// import formidable from 'formidable'
 import fs from 'fs';
 import { google } from 'googleapis';
-import { GoogleAuth } from 'google-auth-library';
 
 function sendNotification(webhookUrl: string, file, dropzone) {
   const data = JSON.stringify({
