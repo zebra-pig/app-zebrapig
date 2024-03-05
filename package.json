@@ -42,5 +42,6 @@
   },
   "resolutions": {
     "ts-invariant": "0.10.3"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }

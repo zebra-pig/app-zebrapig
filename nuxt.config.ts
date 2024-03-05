@@ -14,7 +14,6 @@ export default defineNuxtConfig({
         }
     },
     modules: [
-        '@nuxthq/studio',
         '@nuxtjs/i18n',
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
