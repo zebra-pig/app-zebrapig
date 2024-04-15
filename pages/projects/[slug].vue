@@ -1,5 +1,5 @@
 <template>
-<div v-if="projectPage" class="project-page">
+<div class="project-page">
 <theme-style :theme="theme"/>
 <div class="project-page-hero">
     <img :src="useFile(projectPage.hero)"/>
@@ -35,7 +35,7 @@ defineI18nRoute({
     }
 })
 
-const { data } = useProjectPages(route.params.slug)
+const { data } = await useProjectPages(route.params.slug)
 
 const theme = computed(() => {
     return {
