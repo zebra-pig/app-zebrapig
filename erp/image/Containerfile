@@ -165,7 +165,10 @@ RUN --mount=type=secret,id=apps_json,target=/opt/frappe/apps.json,uid=1000,gid=1
 # bench migrate / install-app.
 COPY --chown=frappe:frappe gear /home/frappe/frappe-bench/apps/gear
 RUN cd /home/frappe/frappe-bench \
-    && ./env/bin/pip install --no-cache-dir -e apps/gear
+    && ./env/bin/pip install --no-cache-dir -e apps/gear \
+    # Bake gear into apps.txt so `install-app gear` works even without the
+    # compose configurator regenerating it (prod does, but be self-consistent).
+    && ls -1 apps > sites/apps.txt
 
 FROM base AS backend
 
