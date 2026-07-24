@@ -1,25 +1,32 @@
 # syntax=docker/dockerfile:1
 #
-# Custom Zebra & Pig ERPNext image.
+# Custom Zebra & Pig ERPNext image (version-16 stable).
 #
 # The site's apps on version-16 stable (Frappe + ERPNext + HRMS + Payments) plus
 # the local `gear` app injected from this monorepo.
 #
+# Adapted from frappe/frappe_docker images/custom/Containerfile (v16/develop):
+# Python 3.14 / bookworm / Node 24, apps.json passed as a build secret, assets
+# baked into an image layer and linked into the sites volume by entrypoint.sh.
+# The only local change is the `gear` injection in the builder stage.
+#
 # Build context is the `erp/` directory:
 #   docker build -f erp/image/Containerfile \
-#     --build-arg APPS_JSON_BASE64=$(base64 -w0 erp/image/apps.json) erp
-#
-# Adapted from frappe/frappe_docker images/custom/Containerfile, bumped to the
-# Python/Node versions Frappe v15 expects.
+#     --secret id=apps_json,src=erp/image/apps.json erp
 
-ARG PYTHON_VERSION=3.11.9
-FROM python:${PYTHON_VERSION}-slim-bullseye AS base
+ARG PYTHON_VERSION=3.14.2
+ARG DEBIAN_BASE=bookworm
+FROM python:${PYTHON_VERSION}-slim-${DEBIAN_BASE} AS base
 
-COPY image/resources/nginx-template.conf /templates/nginx/frappe.conf.template
-COPY image/resources/nginx-entrypoint.sh /usr/local/bin/nginx-entrypoint.sh
+COPY image/resources/core/nginx/nginx-template.conf /templates/nginx/frappe.conf.template
+COPY image/resources/core/nginx/nginx-entrypoint.sh /usr/local/bin/nginx-entrypoint.sh
+COPY image/resources/core/nginx/security_headers.conf /etc/nginx/snippets/security_headers.conf
 
-ARG WKHTMLTOPDF_VERSION=0.12.6-1
-ARG NODE_VERSION=20.19.4
+ARG WKHTMLTOPDF_VERSION=0.12.6.1-3
+ARG WKHTMLTOPDF_DISTRO=bookworm
+ARG INSTALL_CHROMIUM=true
+
+ARG NODE_VERSION=24.13.0
 ENV NVM_DIR=/home/frappe/.nvm
 ENV PATH=${NVM_DIR}/versions/node/v${NODE_VERSION}/bin/:${PATH}
 
@@ -31,6 +38,7 @@ RUN useradd -ms /bin/bash frappe \
     vim \
     nginx \
     gettext-base \
+    file \
     # weasyprint dependencies
     libpango-1.0-0 \
     libharfbuzz0b \
@@ -38,21 +46,26 @@ RUN useradd -ms /bin/bash frappe \
     libpangocairo-1.0-0 \
     # For backups
     restic \
+    gpg \
     # MariaDB
     mariadb-client \
+    less \
     # Postgres
     libpq-dev \
     postgresql-client \
     # For healthcheck
     wait-for-it \
     jq \
+    # For MIME type detection
+    media-types \
     # NodeJS
     && mkdir -p ${NVM_DIR} \
-    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash \
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash \
     && . ${NVM_DIR}/nvm.sh \
     && nvm install ${NODE_VERSION} \
     && nvm use v${NODE_VERSION} \
     && npm install -g yarn \
+    && corepack enable pnpm \
     && nvm alias default v${NODE_VERSION} \
     && rm -rf ${NVM_DIR}/.cache \
     && echo 'export NVM_DIR="/home/frappe/.nvm"' >>/home/frappe/.bashrc \
@@ -61,13 +74,19 @@ RUN useradd -ms /bin/bash frappe \
     # Install wkhtmltopdf with patched qt
     && if [ "$(uname -m)" = "aarch64" ]; then export ARCH=arm64; fi \
     && if [ "$(uname -m)" = "x86_64" ]; then export ARCH=amd64; fi \
-    && downloaded_file=wkhtmltox_$WKHTMLTOPDF_VERSION.buster_${ARCH}.deb \
+    && downloaded_file=wkhtmltox_${WKHTMLTOPDF_VERSION}.${WKHTMLTOPDF_DISTRO}_${ARCH}.deb \
     && curl -sLO https://github.com/wkhtmltopdf/packaging/releases/download/$WKHTMLTOPDF_VERSION/$downloaded_file \
     && apt-get install -y ./$downloaded_file \
     && rm $downloaded_file \
+    # Chromium
+    && if [ "$INSTALL_CHROMIUM" != "false" ]; then \
+        DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+        chromium-headless-shell; \
+    fi \
     # Clean up
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /etc/nginx/sites-enabled/default \
+    && mkdir -p /etc/nginx/snippets \
     && pip3 install frappe-bench \
     # Fixes for non-root nginx and logs to stdout
     && sed -i '/user www-data/d' /etc/nginx/nginx.conf \
@@ -75,11 +94,13 @@ RUN useradd -ms /bin/bash frappe \
     && touch /run/nginx.pid \
     && chown -R frappe:frappe /etc/nginx/conf.d \
     && chown -R frappe:frappe /etc/nginx/nginx.conf \
+    && chown -R frappe:frappe /etc/nginx/snippets \
     && chown -R frappe:frappe /var/log/nginx \
     && chown -R frappe:frappe /var/lib/nginx \
     && chown -R frappe:frappe /run/nginx.pid \
     && chmod 755 /usr/local/bin/nginx-entrypoint.sh \
     && chmod 644 /templates/nginx/frappe.conf.template
+
 
 FROM base AS builder
 
@@ -87,6 +108,12 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
     # For frappe framework
     wget \
+    #for building arm64 binaries
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev \
     # For psycopg2
     libpq-dev \
     # Other
@@ -97,6 +124,7 @@ RUN apt-get update \
     libsasl2-dev \
     libtiff5-dev \
     libwebp-dev \
+    pkg-config \
     redis-tools \
     rlwrap \
     tk8.6-dev \
@@ -107,21 +135,19 @@ RUN apt-get update \
     libbz2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# apps.json (erpnext + hrms + crm) passed in as a base64 build arg
-ARG APPS_JSON_BASE64
-RUN if [ -n "${APPS_JSON_BASE64}" ]; then \
-    mkdir /opt/frappe && echo "${APPS_JSON_BASE64}" | base64 -d > /opt/frappe/apps.json; \
-  fi
-
 USER frappe
 
 ARG FRAPPE_BRANCH=version-16
 ARG FRAPPE_PATH=https://github.com/frappe/frappe
-RUN export APP_INSTALL_ARGS="" && \
-  if [ -n "${APPS_JSON_BASE64}" ]; then \
+ARG CACHE_BUST=""
+
+RUN --mount=type=secret,id=apps_json,target=/opt/frappe/apps.json,uid=1000,gid=1000 \
+  : "${CACHE_BUST}" && \
+  export APP_INSTALL_ARGS="" && \
+  if [ -f /opt/frappe/apps.json ] && [ -s /opt/frappe/apps.json ]; then \
     export APP_INSTALL_ARGS="--apps_path=/opt/frappe/apps.json"; \
   fi && \
-  bench init ${APP_INSTALL_ARGS} \
+  bench init ${APP_INSTALL_ARGS}\
     --frappe-branch=${FRAPPE_BRANCH} \
     --frappe-path=${FRAPPE_PATH} \
     --no-procfile \
@@ -134,12 +160,12 @@ RUN export APP_INSTALL_ARGS="" && \
   find apps -mindepth 1 -path "*/.git" | xargs rm -fr
 
 # Inject the local `gear` app (lives in this monorepo, not a git URL).
-# Copied into the bench and installed editable; runtime configurator regenerates
-# sites/apps.txt via `ls apps`, so it is picked up on bench migrate/install-app.
+# Copied into the bench and installed editable; the runtime configurator
+# regenerates sites/apps.txt via `ls apps`, so it is picked up on
+# bench migrate / install-app.
 COPY --chown=frappe:frappe gear /home/frappe/frappe-bench/apps/gear
 RUN cd /home/frappe/frappe-bench \
-    && ./env/bin/pip install --no-cache-dir -e apps/gear \
-    && find apps/gear -path "*/.git" -prune -exec rm -rf {} + || true
+    && ./env/bin/pip install --no-cache-dir -e apps/gear
 
 FROM base AS backend
 
@@ -149,21 +175,24 @@ COPY --from=builder --chown=frappe:frappe /home/frappe/frappe-bench /home/frappe
 
 WORKDIR /home/frappe/frappe-bench
 
+# Move assets to image-layer storage
+RUN cp -r /home/frappe/frappe-bench/sites/assets /home/frappe/frappe-bench/assets && \
+  rm -rf /home/frappe/frappe-bench/sites/assets
+
 VOLUME [ \
   "/home/frappe/frappe-bench/sites", \
-  "/home/frappe/frappe-bench/sites/assets", \
   "/home/frappe/frappe-bench/logs" \
 ]
 
-CMD [ \
-  "/home/frappe/frappe-bench/env/bin/gunicorn", \
-  "--chdir=/home/frappe/frappe-bench/sites", \
-  "--bind=0.0.0.0:8000", \
-  "--threads=4", \
-  "--workers=2", \
-  "--worker-class=gthread", \
-  "--worker-tmp-dir=/dev/shm", \
-  "--timeout=120", \
-  "--preload", \
-  "frappe.app:application" \
-]
+USER root
+# This entrypoint script links build assets of the image to the mounted sites volume at container initialization
+COPY image/resources/core/main-entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod 755 /usr/local/bin/entrypoint.sh
+
+COPY image/resources/core/start.sh /usr/local/bin/start.sh
+RUN chmod 755 /usr/local/bin/start.sh
+
+USER frappe
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+CMD ["start.sh"]

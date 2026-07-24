@@ -44,10 +44,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Encode apps.json
-        id: apps
-        run: echo "base64=$(base64 -w0 erp/image/apps.json)" >> "$GITHUB_OUTPUT"
-
       - name: Image metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -68,9 +64,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            APPS_JSON_BASE64=${{ steps.apps.outputs.base64 }}
             FRAPPE_BRANCH=version-16
-            PYTHON_VERSION=3.11.9
-            NODE_VERSION=20.19.4
+          secret-files: |
+            apps_json=erp/image/apps.json
           cache-from: type=gha
           cache-to: type=gha,mode=max

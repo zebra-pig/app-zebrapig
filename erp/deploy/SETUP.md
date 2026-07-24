@@ -42,13 +42,12 @@ Local build (from the monorepo root) for testing:
 ```sh
 docker build \
   -f erp/image/Containerfile \
-  --build-arg APPS_JSON_BASE64=$(base64 -w0 erp/image/apps.json) \
+  --secret id=apps_json,src=erp/image/apps.json \
   --build-arg FRAPPE_BRANCH=version-16 \
-  --build-arg PYTHON_VERSION=3.11.9 \
-  --build-arg NODE_VERSION=20.19.4 \
   -t ghcr.io/zebra-pig/erp-zebrapig:local \
   erp
 ```
+(Python 3.14 / Node 24 / bookworm are baked as Containerfile defaults for v16.)
 
 ---
 
