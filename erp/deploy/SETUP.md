@@ -119,6 +119,38 @@ Management** module and its doctypes appear in the desk.
 > Pin instead of `:latest` for auditable rollouts: build with a tag like
 > `15-gear-0.1.0`, set that in `erpnext-one.yaml`, commit, then pull/up.
 
+### Known v15 → v16 upgrade gotchas (hit on the 2026-07 cutover)
+
+v16 removed some doctypes/modules; stale references to them abort `migrate` or
+crash session boot. Both are the same class of fix — remove the dangling
+reference to the deleted doctype, `clear-cache`, retry. DB name below is the
+hashed name from `sites/erp.zebrapig.com/site_config.json` (`db_name`).
+
+1. **`migrate` fails: `ModuleNotFoundError: No module named 'frappe.social'`.**
+   The removed "Social" module (Energy Points) is still in the DB, so schema sync
+   tries to import its deleted package. Fix:
+   ```sql
+   UPDATE `tabDocType` SET module='Core' WHERE module='Social';
+   DELETE FROM `tabModule Def` WHERE name='Social';
+   ```
+   then `bench --site <site> clear-cache` and re-run `migrate`.
+   (This did NOT reproduce in a fresh new-site+restore test because the test's
+   redis cache was seeded by the fresh v16 site before the v15 restore. Test
+   in-place, or clear cache before the test migrate.)
+
+2. **Login → `SessionBootFailed` / `DocType Blogger not found`.** A leftover
+   User Permission grants access to a doctype v16 deleted (`Blogger`), so boot
+   fails loading user permissions. Fix — delete User Permissions pointing at
+   any non-existent doctype:
+   ```sql
+   DELETE FROM `tabUser Permission` WHERE allow NOT IN (SELECT name FROM `tabDocType`);
+   ```
+   then `clear-cache`.
+
+General recipe for "DocType X not found" after the upgrade: find the dangling
+reference (User Permission, Module Def, Property Setter, Custom Field, Report
+`ref_doctype`, Workspace link…) to the removed doctype and delete/reassign it.
+
 ### Rollback
 
 Set the image back to the previous tag (or `arnadeem/erpnext-hrms:15.47.8`) in
