@@ -1,14 +1,14 @@
 [
   {
     "url": "https://github.com/frappe/erpnext",
-    "branch": "version-15"
+    "branch": "version-16"
   },
   {
     "url": "https://github.com/frappe/hrms",
-    "branch": "version-15"
+    "branch": "version-16"
   },
   {
-    "url": "https://github.com/frappe/crm",
-    "branch": "main"
+    "url": "https://github.com/frappe/payments",
+    "branch": "version-16"
   }
 ]

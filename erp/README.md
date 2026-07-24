@@ -10,10 +10,14 @@ erp/
   deploy/   docker-compose stack, Traefik/MariaDB overrides, SETUP.md rollout guide
 ```
 
-The custom image (`ghcr.io/zebra-pig/erp-zebrapig`) = stock capabilities
-(Frappe + ERPNext + HRMS + CRM) **plus** the local `gear` app baked in. It is
-built by the *Build ERP image* GitHub workflow and deployed per
-[`deploy/SETUP.md`](deploy/SETUP.md).
+The custom image (`ghcr.io/zebra-pig/erp-zebrapig`) = the site's apps on
+**version-16** stable (Frappe + ERPNext + HRMS + Payments) **plus** the local
+`gear` app baked in. It is built by the *Build ERP image* GitHub workflow and
+deployed per [`deploy/SETUP.md`](deploy/SETUP.md).
+
+> Cutting over from the old `arnadeem/erpnext-hrms:15.47.8` image is a **major
+> v15 → v16 upgrade** (the site currently runs frappe/erpnext 15 with an
+> hrms 16.0.0-dev snapshot). Back up and test on a DB copy first — see SETUP.md.
 
 ## The bigger picture
 

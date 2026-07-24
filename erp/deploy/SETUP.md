@@ -43,7 +43,7 @@ Local build (from the monorepo root) for testing:
 docker build \
   -f erp/image/Containerfile \
   --build-arg APPS_JSON_BASE64=$(base64 -w0 erp/image/apps.json) \
-  --build-arg FRAPPE_BRANCH=version-15 \
+  --build-arg FRAPPE_BRANCH=version-16 \
   --build-arg PYTHON_VERSION=3.11.9 \
   --build-arg NODE_VERSION=20.19.4 \
   -t ghcr.io/zebra-pig/erp-zebrapig:local \
@@ -66,15 +66,25 @@ docker exec erpnext-one-backend-1 \
 # copy the backup off the box (sites/erp.zebrapig.com/private/backups)
 ```
 
-`apps.json` ships `erpnext`, `hrms`, `crm`. If `list-apps` shows an app that is
-**not** in the image, add it to `apps.json` and rebuild before cutting over —
-otherwise `bench migrate` fails.
+`apps.json` ships `erpnext`, `hrms`, `payments` (all `version-16`). Every app
+installed on the site (`list-apps`) must be present in the image or `bench
+migrate` fails. Recon (2026-07): installed = frappe, erpnext, hrms, payments —
+`crm` is **not** installed, so it's intentionally omitted.
 
-### Phase 0 — swap to our own image, no functional change
+### Phase 0 — swap to our v16 image (this is a major v15 → v16 upgrade)
 
-Reproduces today's capabilities (Frappe + ERPNext + HRMS + CRM) from an image
-**we** build and control. Built from the tip of `version-15`, so `migrate` runs
-a forward migration from 15.47.8 to current — expected and safe on a backup.
+The old `arnadeem/erpnext-hrms:15.47.8` runs frappe/erpnext 15 with an
+hrms **16.0.0-dev** snapshot. Our image is coherent **version-16 stable**
+(frappe 16.28 / erpnext 16.29 / hrms 16.14 / payments), so `bench migrate` runs
+a real **v15 → v16 major upgrade**. Everything moves forward (incl. hrms dev →
+stable), but major upgrades can break customizations/reports/print formats.
+
+> **Test on a copy first.** Restore the latest backup into a throwaway site on
+> the v16 image and run `migrate` there before touching production. Only cut over
+> production once the copy migrates and spot-checks cleanly.
+
+Disk note: the VPS was ~91% full. Free space (prune dangling images, drop unused
+tags) before pulling the ~3 GB v16 image — see the top of this file.
 
 ```sh
 cd erp/deploy
@@ -147,6 +157,6 @@ docker compose --project-name erpnext-one --env-file ~/gitops/erpnext-one.env \
 docker compose --project-name erpnext-one exec backend \
   bench new-site --mariadb-user-host-login-scope=% \
   --db-root-password <db-pw> \
-  --install-app erpnext --install-app hrms --install-app crm --install-app gear \
+  --install-app erpnext --install-app hrms --install-app payments --install-app gear \
   --admin-password <admin-pw> erp.zebrapig.com
 ```

@@ -2,8 +2,8 @@
 #
 # Custom Zebra & Pig ERPNext image.
 #
-# Same capabilities as the stock erpnext-hrms image (Frappe + ERPNext + HRMS +
-# CRM) plus the local `gear` app injected from this monorepo.
+# The site's apps on version-16 stable (Frappe + ERPNext + HRMS + Payments) plus
+# the local `gear` app injected from this monorepo.
 #
 # Build context is the `erp/` directory:
 #   docker build -f erp/image/Containerfile \
@@ -115,7 +115,7 @@ RUN if [ -n "${APPS_JSON_BASE64}" ]; then \
 
 USER frappe
 
-ARG FRAPPE_BRANCH=version-15
+ARG FRAPPE_BRANCH=version-16
 ARG FRAPPE_PATH=https://github.com/frappe/frappe
 RUN export APP_INSTALL_ARGS="" && \
   if [ -n "${APPS_JSON_BASE64}" ]; then \
