@@ -1,0 +1,104 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-07-24 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "session_status",
+  "checked_out_to",
+  "column_break_head",
+  "start_time",
+  "end_time",
+  "section_break_items",
+  "items",
+  "section_break_notes",
+  "notes"
+ ],
+ "fields": [
+  {
+   "default": "GCS-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "GCS-.#####",
+   "reqd": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "session_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nCommitted\nReturned"
+  },
+  {
+   "fieldname": "checked_out_to",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Checked Out To"
+  },
+  {
+   "fieldname": "column_break_head",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Datetime",
+   "label": "Start Time"
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Datetime",
+   "label": "End Time"
+  },
+  {
+   "fieldname": "section_break_items",
+   "fieldtype": "Section Break",
+   "label": "Units"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Gear Session Item"
+  },
+  {
+   "fieldname": "section_break_notes",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-24 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gear Management",
+ "name": "Gear Checkout Session",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,76 @@
+name: Build ERP image
+
+# Builds the custom Zebra & Pig ERPNext image (Frappe + ERPNext + HRMS + CRM +
+# the local `gear` app) and pushes it to GHCR as a private package.
+#
+# Trigger manually (Actions -> Build ERP image -> Run workflow) or on pushes
+# that touch the ERP sources on main.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Extra image tag (e.g. 15-gear-0.1.0). 'latest' and the git sha are always applied."
+        required: false
+        default: ""
+  push:
+    branches: [main]
+    paths:
+      - "erp/gear/**"
+      - "erp/image/**"
+      - ".github/workflows/erp-image.yml"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/erp-zebrapig
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Encode apps.json
+        id: apps
+        run: echo "base64=$(base64 -w0 erp/image/apps.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=long
+            type=raw,value=${{ github.event.inputs.tag }},enable=${{ github.event.inputs.tag != '' }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: erp
+          file: erp/image/Containerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APPS_JSON_BASE64=${{ steps.apps.outputs.base64 }}
+            FRAPPE_BRANCH=version-15
+            PYTHON_VERSION=3.11.9
+            NODE_VERSION=20.19.4
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

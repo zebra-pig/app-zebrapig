@@ -1,0 +1,11 @@
+# Build context is the erp/ dir. Keep only what the image needs.
+deploy
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/.pytest_cache
+**/node_modules
+**/.git
+**/.DS_Store
+*.md
+!gear/README.md

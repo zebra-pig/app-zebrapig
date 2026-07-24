@@ -1,0 +1,133 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-24 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "category",
+  "model",
+  "manufacturer",
+  "serial_no",
+  "column_break_ident",
+  "tag_token",
+  "status",
+  "column_break_checkout",
+  "checkout_mode",
+  "parent_unit",
+  "section_break_meta",
+  "location",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Category",
+   "options": "Gear Category",
+   "reqd": 1
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Model"
+  },
+  {
+   "fieldname": "manufacturer",
+   "fieldtype": "Data",
+   "label": "Manufacturer"
+  },
+  {
+   "fieldname": "serial_no",
+   "fieldtype": "Data",
+   "label": "Manufacturer Serial No"
+  },
+  {
+   "fieldname": "column_break_ident",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Opaque Crockford Base32 token printed on the label / encoded in the NFC tag. Generated automatically on save.",
+   "fieldname": "tag_token",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Tag Token",
+   "no_copy": 1,
+   "read_only": 1,
+   "set_only_once": 1,
+   "unique": 1
+  },
+  {
+   "default": "Available",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Available\nChecked Out\nIn Repair\nRetired\nLost"
+  },
+  {
+   "fieldname": "column_break_checkout",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "INDEPENDENT",
+   "description": "BOUND units move together with their parent (e.g. a power brick bound to a switcher).",
+   "fieldname": "checkout_mode",
+   "fieldtype": "Select",
+   "label": "Checkout Mode",
+   "options": "INDEPENDENT\nBOUND"
+  },
+  {
+   "depends_on": "eval:doc.checkout_mode=='BOUND'",
+   "fieldname": "parent_unit",
+   "fieldtype": "Link",
+   "label": "Parent Unit",
+   "options": "Gear Unit"
+  },
+  {
+   "fieldname": "section_break_meta",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "label": "Location"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-24 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gear Management",
+ "name": "Gear Unit",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "model,manufacturer,tag_token",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
