@@ -63,10 +63,12 @@ onUnmounted(() => window.removeEventListener('resize', resizeHandler));
                     <h1><a :href="'tel:' + settingsData.settings.phone">{{ settingsData.settings.phone }}</a></h1>
                 </div>
 
+                <!--
                 <section class="wrapper">
                     <h2>{{ t('projects') }}</h2>
                     <project-grid/>
                 </section>
+                !-->
             </div>
         </div>
     </div>

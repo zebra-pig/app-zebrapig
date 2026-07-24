@@ -21,11 +21,12 @@ deployed per [`deploy/SETUP.md`](deploy/SETUP.md).
 
 ## The bigger picture
 
-- `apps/web-client` — public site; will also host the `/t/<token>` resolver.
-- `apps/erp-api` *(later)* — GQLoom + Hono worker holding a Frappe API key,
-  fronting the gear tables for the mobile app (mirrors
-  `onepromise-platform/apps/api`).
+- `apps/web-client` — public site; hosts the `/t/<token>` tag-resolver page.
+- `apps/api` — GQLoom + Hono worker (`zebrapig-api` → api.zebrapig.com) holding
+  a scoped Frappe API key, fronting the gear tables (mirrors `filmkit/apps/api`).
+  Public `resolveGearTag` + bearer-guarded gear reads; per-user auth (Better
+  Auth) lands with the mobile app.
 
 The Frappe app stays deliberately thin: it serves the tables and enforces
 invariants (token generation, bound-child movement); business/API logic lives
-in `erp-api`.
+in `apps/api`.
