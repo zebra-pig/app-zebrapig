@@ -37,8 +37,9 @@
   },
   {
    "fieldname": "manufacturer",
-   "fieldtype": "Data",
-   "label": "Manufacturer"
+   "fieldtype": "Link",
+   "label": "Manufacturer",
+   "options": "Manufacturer"
   },
   {
    "fieldname": "serial_no",

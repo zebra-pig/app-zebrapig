@@ -51,6 +51,70 @@ docker build \
 
 ---
 
+## Updating to a new image (routine — the normal day-to-day flow)
+
+Use this whenever you change the `gear` app or bump an app version. The initial
+v15→v16 cutover below was a one-off; this is the repeatable loop.
+
+**1. Build & get the new image reference.** Push your change to `app-zebrapig`
+`main` (any change under `erp/**` triggers the *Build ERP image* workflow), or
+run the workflow manually. When it's green, grab the immutable reference — the
+**digest** is safest (auditable, can't move):
+
+```sh
+# from your Mac (needs GHCR read; or read it off the Actions run summary)
+docker manifest inspect ghcr.io/zebra-pig/erp-zebrapig:latest \
+  | grep -m1 '"digest"'                      # -> sha256:...
+# the build also tags :sha-<commit>, which you can use instead of :latest
+```
+
+**2. On the VPS — back up first, always.**
+
+```sh
+sudo docker exec erpnext-one-backend-1 \
+  bench --site erp.zebrapig.com backup --with-files
+sudo docker cp erpnext-one-backend-1:/home/frappe/frappe-bench/sites/erp.zebrapig.com/private/backups \
+  /home/ubuntu/backups-$(date +%F)     # copy off the container
+```
+
+**3. Free disk if needed.** The `sites` data volume + MariaDB are untouched by an
+image swap, but the new image layer (~3 GB) must fit. Check `df -h /`; if tight,
+`sudo docker image prune -f` (dangling) and, once you trust the new image, remove
+the previous one. Keep at least one previous image for rollback.
+
+**4. Point the compose at the new image and pull + recreate.** The live stack is
+`/root/gitops/erpnext-one.yaml`; every service uses the same image line.
+
+```sh
+sudo cp /root/gitops/erpnext-one.yaml /root/gitops/erpnext-one.yaml.bak-$(date +%F)
+# replace the image digest (or use :latest). NEW= the sha256:... from step 1:
+sudo sed -i "s|ghcr.io/zebra-pig/erp-zebrapig@sha256:[0-9a-f]*|ghcr.io/zebra-pig/erp-zebrapig@$NEW|g" \
+  /root/gitops/erpnext-one.yaml
+sudo bash -c 'cd /root/gitops && docker compose -f erpnext-one.yaml up -d'
+```
+
+**5. Migrate + verify.** `migrate` applies any doctype/schema changes from the
+new image (and auto-enables maintenance mode for the duration).
+
+```sh
+sudo docker exec erpnext-one-backend-1 bench --site erp.zebrapig.com migrate
+sudo docker exec erpnext-one-backend-1 bench --site erp.zebrapig.com list-apps
+curl -s -o /dev/null -w "%{http_code}\n" https://erp.zebrapig.com/login   # 200
+```
+
+**6. Rollback** if anything's wrong: put the previous digest back in
+`erpnext-one.yaml` (or restore `erpnext-one.yaml.bak-*`), `up -d`, and if a
+migration already ran, `bench … restore` the step-2 backup.
+
+> Notes: (a) The compose pins by **digest** so `up -d` pulls exactly that image.
+> With `:latest` + `pull_policy: always` it pulls whatever `:latest` currently
+> points to — convenient but not auditable. (b) `docker exec … bench …` needs
+> `sudo` (the `ubuntu` user isn't in the docker group). (c) Any new "DocType X
+> not found" during migrate is the removed-doctype pattern — see the gotchas
+> section below.
+
+---
+
 ## Rollout — two phases
 
 ### Pre-flight (always)
