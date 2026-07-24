@@ -80,6 +80,10 @@ export default defineNuxtConfig({
             CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
             GQL_HOST: process.env.GQL_HOST,
             GQL_TOKEN: process.env.GQL_TOKEN,
+            // erp-api GraphQL endpoint (full /graphql URL) for the public
+            // /t/<token> tag-resolver page. resolveGearTag is public, so no
+            // token is sent from here.
+            API_GQL_ENDPOINT: process.env.API_GQL_ENDPOINT,
 
             'graphql-client': {
                 clients: {

@@ -1,0 +1,6 @@
+# Copy to .dev.vars for `wrangler dev` (never commit .dev.vars).
+ENVIRONMENT=local
+ERP_BASE_URL=https://erp.zebrapig.com
+ERP_API_KEY=
+ERP_API_SECRET=
+API_BEARER_TOKEN=

@@ -16,5 +16,13 @@
       "index": "Multimediaproduktion"
     }
   },
-  "projects": "Projekte"
+  "projects": "Projekte",
+  "tag_gear": "Equipment",
+  "tag_manufacturer": "Hersteller",
+  "tag_category": "Kategorie",
+  "tag_status": "Status",
+  "tag_invalid_title": "Ungültiger Tag",
+  "tag_invalid_body": "Dieser Code sieht nicht wie ein gültiger Zebra & Pig Equipment-Tag aus.",
+  "tag_unassigned_title": "Nicht zugewiesener Tag",
+  "tag_unassigned_body": "Dieser Tag ist noch keinem Gerät zugeordnet."
 }

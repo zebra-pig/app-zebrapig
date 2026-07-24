@@ -1,10 +1,17 @@
 {
-"home": "首页",
-"video": "视频",
-"development": "编程",
-"imprint": "版权",
-"contact": "联系我们",
-"download": "下载",
-"video_introduction": ""
+  "home": "首页",
+  "video": "视频",
+  "development": "编程",
+  "imprint": "版权",
+  "contact": "联系我们",
+  "download": "下载",
+  "video_introduction": "",
+  "tag_gear": "Gear",
+  "tag_manufacturer": "Manufacturer",
+  "tag_category": "Category",
+  "tag_status": "Status",
+  "tag_invalid_title": "Invalid tag",
+  "tag_invalid_body": "This code doesn't look like a valid Zebra & Pig gear tag.",
+  "tag_unassigned_title": "Unassigned tag",
+  "tag_unassigned_body": "This tag isn't linked to any equipment yet."
 }
-

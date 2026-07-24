@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "zebrapig-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  // Non-secret config. Secrets are set with `wrangler secret put <NAME>`:
+  //   ERP_API_KEY, ERP_API_SECRET  -> Frappe "API" service user key:secret
+  //   API_BEARER_TOKEN             -> static bearer for privileged (non-public) queries
+  "vars": {
+    "ENVIRONMENT": "production",
+    "ERP_BASE_URL": "https://erp.zebrapig.com"
+  },
+
+  "routes": [{ "pattern": "api.zebrapig.com", "custom_domain": true }]
+}

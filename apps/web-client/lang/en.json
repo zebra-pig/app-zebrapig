@@ -7,5 +7,13 @@
   "download": "Download",
   "video_introduction": "",
   "error": "Error",
-  "projects": "Projects"
+  "projects": "Projects",
+  "tag_gear": "Gear",
+  "tag_manufacturer": "Manufacturer",
+  "tag_category": "Category",
+  "tag_status": "Status",
+  "tag_invalid_title": "Invalid tag",
+  "tag_invalid_body": "This code doesn't look like a valid Zebra & Pig gear tag.",
+  "tag_unassigned_title": "Unassigned tag",
+  "tag_unassigned_body": "This tag isn't linked to any equipment yet."
 }

@@ -6,5 +6,13 @@
   "contact": "Contact",
   "download": "Télécharger",
   "video_introduction": "",
-  "projects": "Projets"
+  "projects": "Projets",
+  "tag_gear": "Matériel",
+  "tag_manufacturer": "Fabricant",
+  "tag_category": "Catégorie",
+  "tag_status": "Statut",
+  "tag_invalid_title": "Étiquette invalide",
+  "tag_invalid_body": "Ce code ne ressemble pas à une étiquette de matériel Zebra & Pig valide.",
+  "tag_unassigned_title": "Étiquette non attribuée",
+  "tag_unassigned_body": "Cette étiquette n'est encore associée à aucun équipement."
 }
