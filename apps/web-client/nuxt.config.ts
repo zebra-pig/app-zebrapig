@@ -1,38 +1,39 @@
-
-// https://v3.nuxtjs.org/api/configuration/nuxt.config
+// https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
+    compatibilityDate: '2026-07-24',
+
     app: {
         head: {
             title: process.env.APP_NAME,
             titleTemplate: '%s – ' + process.env.APP_NAME,
         }
     },
+
+    // Deploy target: Cloudflare Workers (worker `zebrapig-web-client-production`).
+    // The `cloudflare_module` preset emits `.output/server/index.mjs` + static
+    // assets in `.output/public`, which `wrangler deploy` ships (see
+    // wrangler.jsonc). Server sourcemaps are the biggest bundle cost and are
+    // never shipped to the edge, so disable them.
     nitro: {
-        prerender: {
-            crawlLinks: true
-        }
+        preset: 'cloudflare_module',
     },
+    sourcemap: {
+        server: false,
+    },
+
     modules: [
         '@nuxtjs/i18n',
         // https://nuxt-graphql-client.web.app/
         'nuxt-graphql-client',
     ],
-    // @ts-ignore
-    content: {
-        dev: process.env.APP_ENV == 'local'
-    },
     css: [
         '@/styles/globals.scss',
     ],
-    experimental: {
-        writeEarlyHints: false,
-    },
     components: {
         global: true,
         dirs: ['~/components']
     },
-
     build: {
         transpile: ['wide-align']
     },
@@ -40,6 +41,9 @@ export default defineNuxtConfig({
         baseUrl: process.env.BASE_URL,
         strategy: 'prefix_except_default',
         defaultLocale: "en",
+        // @nuxtjs/i18n v9 resolves langDir relative to the i18n restructure
+        // dir (<rootDir>/i18n); "../lang" keeps the existing lang/ folder.
+        langDir: "../lang",
         locales: [
             {
                 code: "de",
@@ -68,7 +72,6 @@ export default defineNuxtConfig({
             cookieKey: 'selectedLocale',
             fallbackLocale: 'de'
         },
-        langDir: "./lang",
     },
     runtimeConfig: {
         GQL_PRIVATE_TOKEN: process.env.GQL_PRIVATE_TOKEN,
@@ -85,7 +88,6 @@ export default defineNuxtConfig({
                         token: process.env.GQL_TOKEN,
                         retainToken: true
                     },
-
                 }
             }
         },

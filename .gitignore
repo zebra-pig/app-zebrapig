@@ -4,8 +4,12 @@ node_modules
 .nitro
 .cache
 .output
+.wrangler
 .env
+.env.*
+!.env.example
 dist
 .keys
+.DS_Store
 
 test_models

@@ -1,0 +1,39 @@
+{
+  "name": "web-client",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "deploy": "wrangler deploy",
+    "gql-gen": "node scripts/gql-gen.js"
+  },
+  "devDependencies": {
+    "@types/animejs": "^3.1.5",
+    "@types/three": "^0.143.0",
+    "@types/three-gif-loader": "^1.1.0",
+    "dotenv": "^16.0.1",
+    "nuxt": "4.4.8",
+    "sass-embedded": "^1.85.0",
+    "typescript": "^5.7.3",
+    "wrangler": "^4.114.0"
+  },
+  "dependencies": {
+    "@nuxtjs/i18n": "^9.2.0",
+    "animejs": "^3.2.1",
+    "dashjs": "^4.5.0",
+    "dropzone": "^6.0.0-beta.2",
+    "hls.js": "^1.2.4",
+    "nuxt-graphql-client": "^0.2.46",
+    "omggif": "^1.0.10",
+    "plyr": "^3.7.2",
+    "three": "^0.143.0",
+    "troisjs": "^0.3.4",
+    "vue-matomo": "^4.1.0",
+    "zebrapig-three-utils": "^1.0.0"
+  }
+}
