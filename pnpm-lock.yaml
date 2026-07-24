@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  apps/erp-api:
+  apps/api:
     dependencies:
       '@gqloom/core':
         specifier: ^0.14.2
