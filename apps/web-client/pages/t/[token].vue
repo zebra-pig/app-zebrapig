@@ -1,13 +1,10 @@
 <template>
     <section class="wrapper tag">
-        <template v-if="tag && tag.found">
+        <template v-if="tag && tag.assigned">
             <p class="eyebrow">{{ t('tag_gear') }}</p>
             <h1>{{ tag.name }}</h1>
-            <p v-if="tag.model" class="model">{{ tag.model }}</p>
+            <p v-if="tag.product" class="model">{{ tag.product }}</p>
             <dl class="meta">
-                <template v-if="tag.manufacturer">
-                    <dt>{{ t('tag_manufacturer') }}</dt><dd>{{ tag.manufacturer }}</dd>
-                </template>
                 <template v-if="tag.category">
                     <dt>{{ t('tag_category') }}</dt><dd>{{ tag.category }}</dd>
                 </template>
@@ -41,11 +38,13 @@ interface TagResolution {
     token: string;
     valid: boolean;
     found: boolean;
+    assigned: boolean;
     name: string | null;
+    product: string | null;
+    item: string | null;
     category: string | null;
-    model: string | null;
-    manufacturer: string | null;
     status: string | null;
+    location: string | null;
 }
 
 const rawToken = computed(() => String(route.params.token ?? ''));
@@ -56,7 +55,7 @@ const { data: tag } = await useAsyncData<TagResolution | null>(
         if (!API_GQL_ENDPOINT) return null;
         const query = `query ResolveGearTag($token: String!) {
   resolveGearTag(token: $token) {
-    token valid found name category model manufacturer status
+    token valid found assigned name product item category status location
   }
 }`;
         try {

@@ -12,6 +12,10 @@ export interface ErpListOptions {
 export interface ErpnextService {
   getList<T = Record<string, unknown>>(doctype: string, opts?: ErpListOptions): Promise<T[]>;
   getDoc<T = Record<string, unknown>>(doctype: string, name: string): Promise<T | null>;
+  /** Call a whitelisted Frappe method (GET /api/method/<dotted.path>). Returns
+   * its `message` payload. Used for server-side multi-hop resolution the scoped
+   * key can't do field-by-field over /api/resource. */
+  callMethod<T = unknown>(method: string, params?: Record<string, string>): Promise<T>;
 }
 
 /**
@@ -61,6 +65,17 @@ export function useErpnextService(c: ServiceContext): ErpnextService {
         }
         const json = (await res.json()) as { data?: unknown };
         return (json.data ?? null) as never;
+      },
+
+      async callMethod(method, params = {}) {
+        const qs = new URLSearchParams(params).toString();
+        const res = await get(`/api/method/${method}${qs ? `?${qs}` : ""}`);
+        if (!res.ok) {
+          const body = await res.text().catch(() => "");
+          throw new Error(`ERPNext ${res.status} calling ${method}: ${body.slice(0, 200)}`);
+        }
+        const json = (await res.json()) as { message?: unknown };
+        return (json.message ?? null) as never;
       },
     };
   });

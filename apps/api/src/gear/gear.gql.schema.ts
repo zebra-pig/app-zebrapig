@@ -15,17 +15,18 @@ export type GearCategory = v.InferOutput<typeof GearCategorySchema>;
 
 export const GearUnitSchema = v.pipe(
   v.object({
-    /** ERPNext docname, e.g. "CAM-02". */
+    /** ERPNext docname, e.g. "CAM-02" — what we call it. */
     name: v.string(),
     category: str(),
-    model: str(),
-    manufacturer: str(),
+    /** ERPNext Item code — what it actually is. */
+    item: str(),
     serialNo: str(),
     status: str(),
     checkoutMode: str(),
     parentUnit: str(),
     location: str(),
-    tagToken: str(),
+    /** ERPNext Asset (optional). */
+    asset: str(),
   }),
   asObjectType("GearUnit"),
 );
@@ -39,14 +40,13 @@ export function mapGearUnit(row: Row): GearUnit {
   return {
     name: String(row.name),
     category: s(row.category),
-    model: s(row.model),
-    manufacturer: s(row.manufacturer),
+    item: s(row.item),
     serialNo: s(row.serial_no),
     status: s(row.status),
     checkoutMode: s(row.checkout_mode),
     parentUnit: s(row.parent_unit),
     location: s(row.location),
-    tagToken: s(row.tag_token),
+    asset: s(row.asset),
   };
 }
 

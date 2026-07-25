@@ -11,14 +11,13 @@ import {
 const UNIT_FIELDS = [
   "name",
   "category",
-  "model",
-  "manufacturer",
+  "item",
   "serial_no",
   "status",
   "checkout_mode",
   "parent_unit",
   "location",
-  "tag_token",
+  "asset",
 ];
 const CATEGORY_FIELDS = ["name", "category_name", "abbr", "description"];
 

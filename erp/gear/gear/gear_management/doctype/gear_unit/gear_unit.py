@@ -2,8 +2,6 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 
-from gear.utils.token import is_valid, new_token, normalize
-
 
 class GearUnit(Document):
 	def autoname(self):
@@ -20,20 +18,8 @@ class GearUnit(Document):
 				max_n = max(max_n, int(suffix))
 		self.name = f"{prefix}{max_n + 1:02d}"
 
-	def before_insert(self):
-		if not self.tag_token:
-			self.tag_token = new_token()
-
 	def validate(self):
-		self._validate_token()
 		self._validate_binding()
-
-	def _validate_token(self):
-		if not self.tag_token:
-			return
-		self.tag_token = normalize(self.tag_token)
-		if not is_valid(self.tag_token):
-			frappe.throw(_("Tag Token {0} is not a valid token.").format(self.tag_token))
 
 	def _validate_binding(self):
 		if self.checkout_mode == "BOUND":
@@ -51,4 +37,13 @@ class GearUnit(Document):
 			"Gear Unit",
 			filters={"parent_unit": self.name, "checkout_mode": "BOUND"},
 			pluck="name",
+		)
+
+	@property
+	def active_tags(self):
+		"""Gear Tags currently assigned to this unit."""
+		return frappe.get_all(
+			"Gear Tag",
+			filters={"gear_unit": self.name, "status": "Assigned"},
+			pluck="tag_token",
 		)

@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2026-07-25 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "tag_token",
+  "status",
+  "column_break_main",
+  "gear_unit",
+  "section_break_notes",
+  "notes"
+ ],
+ "fields": [
+  {
+   "default": "GTG-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "GTG-.#####",
+   "reqd": 1
+  },
+  {
+   "description": "Opaque Crockford Base32 token printed on the label / encoded in the NFC tag. Generated automatically.",
+   "fieldname": "tag_token",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tag Token",
+   "no_copy": 1,
+   "read_only": 1,
+   "set_only_once": 1,
+   "unique": 1
+  },
+  {
+   "default": "Unassigned",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Unassigned\nAssigned\nRetired"
+  },
+  {
+   "fieldname": "column_break_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "The gear unit this physical tag is stuck to. Leave empty for a freshly minted, unassigned tag.",
+   "fieldname": "gear_unit",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Gear Unit",
+   "options": "Gear Unit"
+  },
+  {
+   "fieldname": "section_break_notes",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gear Management",
+ "name": "Gear Tag",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
