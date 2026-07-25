@@ -2,24 +2,14 @@ import { asObjectType } from "@gqloom/valibot";
 import * as v from "valibot";
 import { str } from "../graphql/shared.gql.schema";
 
-export const GearCategorySchema = v.pipe(
-  v.object({
-    name: v.string(),
-    categoryName: str(),
-    abbr: str(),
-    description: str(),
-  }),
-  asObjectType("GearCategory"),
-);
-export type GearCategory = v.InferOutput<typeof GearCategorySchema>;
-
 export const GearUnitSchema = v.pipe(
   v.object({
     /** ERPNext docname, e.g. "CAM-02" — what we call it. */
     name: v.string(),
-    category: str(),
     /** ERPNext Item code — what it actually is. */
     item: str(),
+    /** ERPNext Item Group — the category, inherited from the Item. */
+    itemGroup: str(),
     serialNo: str(),
     status: str(),
     checkoutMode: str(),
@@ -39,22 +29,13 @@ const s = (val: unknown): string | null => (val == null || val === "" ? null : S
 export function mapGearUnit(row: Row): GearUnit {
   return {
     name: String(row.name),
-    category: s(row.category),
     item: s(row.item),
+    itemGroup: s(row.item_group),
     serialNo: s(row.serial_no),
     status: s(row.status),
     checkoutMode: s(row.checkout_mode),
     parentUnit: s(row.parent_unit),
     location: s(row.location),
     asset: s(row.asset),
-  };
-}
-
-export function mapGearCategory(row: Row): GearCategory {
-  return {
-    name: String(row.name),
-    categoryName: s(row.category_name),
-    abbr: s(row.abbr),
-    description: s(row.description),
   };
 }

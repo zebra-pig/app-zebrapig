@@ -1,6 +1,6 @@
 import { listSilk, query, resolver } from "@gqloom/core";
 import * as v from "valibot";
-import { GearCategorySchema, GearUnitSchema } from "./gear.gql.schema";
+import { GearUnitSchema } from "./gear.gql.schema";
 import { useGearService } from "./gear.service";
 import { getContext } from "../graphql/graphql.helpers";
 import { bearerGuard } from "../auth/bearerGuard";
@@ -13,11 +13,11 @@ import { bearerGuard } from "../auth/bearerGuard";
 export const gearResolver = resolver(
   {
     gearUnits: query(listSilk(GearUnitSchema))
-      .input({ category: v.nullish(v.string()), status: v.nullish(v.string()) })
-      .resolve(async ({ category, status }, payload) => {
+      .input({ itemGroup: v.nullish(v.string()), status: v.nullish(v.string()) })
+      .resolve(async ({ itemGroup, status }, payload) => {
         const c = getContext(payload);
         return useGearService(c).listUnits({
-          category: category ?? undefined,
+          itemGroup: itemGroup ?? undefined,
           status: status ?? undefined,
         });
       }),
@@ -28,11 +28,6 @@ export const gearResolver = resolver(
         const c = getContext(payload);
         return useGearService(c).getUnit(name);
       }),
-
-    gearCategories: query(listSilk(GearCategorySchema)).resolve(async (_input, payload) => {
-      const c = getContext(payload);
-      return useGearService(c).listCategories();
-    }),
   },
   { middlewares: [bearerGuard()] },
 );

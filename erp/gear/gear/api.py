@@ -44,7 +44,7 @@ def resolve_token(token: str):
 		"name": unit.name,
 		"item": unit.item,
 		"product": product,
-		"category": unit.category,
+		"category": unit.item_group,
 		"status": unit.status,
 		"location": unit.location,
 	}

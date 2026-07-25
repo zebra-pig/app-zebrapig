@@ -5,8 +5,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "category",
   "item",
+  "item_group",
   "serial_no",
   "column_break_ident",
   "status",
@@ -20,16 +20,6 @@
  ],
  "fields": [
   {
-   "description": "Operational grouping; its abbreviation drives the unit name (e.g. CAM-02).",
-   "fieldname": "category",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Category",
-   "options": "Gear Category",
-   "reqd": 1
-  },
-  {
    "description": "What this unit actually is — the ERPNext Item (product). Model, brand and description live on the Item.",
    "fieldname": "item",
    "fieldtype": "Link",
@@ -38,6 +28,17 @@
    "label": "Item / Product",
    "options": "Item",
    "reqd": 1
+  },
+  {
+   "description": "Category, inherited from the Item's Item Group. Its `gear_abbr` drives the unit name (e.g. CAM-02).",
+   "fetch_from": "item.item_group",
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Category (Item Group)",
+   "options": "Item Group",
+   "read_only": 1
   },
   {
    "fieldname": "serial_no",
