@@ -6,17 +6,18 @@ import { type GearUnit, mapGearUnit } from "./gear.gql.schema";
 const UNIT_FIELDS = [
   "name",
   "item",
-  "item_group",
+  "gear_category",
   "serial_no",
   "status",
   "checkout_mode",
   "parent_unit",
   "location",
   "asset",
+  "current_container",
 ];
 
 export interface GearService {
-  listUnits(opts?: { itemGroup?: string; status?: string }): Promise<GearUnit[]>;
+  listUnits(opts?: { gearCategory?: string; status?: string }): Promise<GearUnit[]>;
   getUnit(name: string): Promise<GearUnit | null>;
 }
 
@@ -26,7 +27,7 @@ export function useGearService(c: ServiceContext): GearService {
     return {
       async listUnits(opts = {}) {
         const filters: unknown[][] = [];
-        if (opts.itemGroup) filters.push(["item_group", "=", opts.itemGroup]);
+        if (opts.gearCategory) filters.push(["gear_category", "=", opts.gearCategory]);
         if (opts.status) filters.push(["status", "=", opts.status]);
         const rows = await erp.getList("Gear Unit", { fields: UNIT_FIELDS, filters });
         return rows.map(mapGearUnit);

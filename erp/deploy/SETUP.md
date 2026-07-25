@@ -102,6 +102,18 @@ sudo docker exec erpnext-one-backend-1 bench --site erp.zebrapig.com list-apps
 curl -s -o /dev/null -w "%{http_code}\n" https://erp.zebrapig.com/login   # 200
 ```
 
+**5b. ALWAYS prune old images after a good deploy.** Every deploy pulls a new
+~3 GB image; without this they pile up and fill the disk (which hangs Docker
+*and* sshd — a hard outage). Once you're happy with the new version:
+
+```sh
+sudo docker image prune -a -f   # removes images no running container uses
+df -h /
+```
+
+Note: gear-only changes now rebuild only a thin top layer, so their pulls are a
+few MB — but full-stack rebuilds (Frappe/ERPNext version bumps) are still ~3 GB.
+
 **6. Rollback** if anything's wrong: put the previous digest back in
 `erpnext-one.yaml` (or restore `erpnext-one.yaml.bak-*`), `up -d`, and if a
 migration already ran, `bench … restore` the step-2 backup.

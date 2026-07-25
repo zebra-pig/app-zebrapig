@@ -5,12 +5,15 @@ from frappe.model.document import Document
 
 class GearUnit(Document):
 	def autoname(self):
-		"""Name units ``ABBR-NN`` with a per-category counter (e.g. CAM-01), where
-		ABBR is the Item's Item Group `gear_abbr`."""
-		item_group = frappe.db.get_value("Item", self.item, "item_group")
-		abbr = (frappe.db.get_value("Item Group", item_group, "gear_abbr") if item_group else None) or "GEN"
-		abbr = abbr.upper()
-		prefix = f"{abbr}-"
+		"""Name units ``CODE-NN`` with a per-category counter (e.g. CAM-01), where
+		CODE is the Item's Gear Category (the category record name IS the code)."""
+		code = frappe.db.get_value("Item", self.item, "gear_category")
+		if not code:
+			frappe.throw(
+				_("Item {0} has no Gear Category. Set it on the Item before creating a unit.").format(self.item)
+			)
+		code = code.upper()
+		prefix = f"{code}-"
 		existing = frappe.db.sql_list(
 			"select name from `tabGear Unit` where name like %s", prefix + "%"
 		)

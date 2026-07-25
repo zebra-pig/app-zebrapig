@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "prompt",
+ "creation": "2026-07-25 00:00:00.000000",
+ "description": "Operational gear category. The record name IS the code (e.g. CAM); the label carries the human name (e.g. Kamera).",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "label",
+  "description",
+  "column_break_defaults",
+  "default_item_group",
+  "default_asset_category"
+ ],
+ "fields": [
+  {
+   "description": "Human-readable name shown in the UI, e.g. Kamera.",
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Label",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "column_break_defaults",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Optional: default Item Group prefilled onto gear Items of this category (accounting axis). Autofill hook is future work.",
+   "fieldname": "default_item_group",
+   "fieldtype": "Link",
+   "label": "Default Item Group",
+   "options": "Item Group"
+  },
+  {
+   "description": "Optional: default Asset Category prefilled onto gear Items of this category (depreciation axis). Autofill hook is future work.",
+   "fieldname": "default_asset_category",
+   "fieldtype": "Link",
+   "label": "Default Asset Category",
+   "options": "Asset Category"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-25 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gear Management",
+ "name": "Gear Category",
+ "naming_rule": "Set by user",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "label",
+ "track_changes": 1
+}

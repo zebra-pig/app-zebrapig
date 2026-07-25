@@ -19,6 +19,7 @@ class GearMovement(Document):
 
 	def after_insert(self):
 		self._apply_status()
+		self._apply_container()
 		if not self.flags.from_expansion:
 			self._expand_to_bound_children()
 
@@ -26,6 +27,11 @@ class GearMovement(Document):
 		new_status = _STATUS_BY_TYPE.get(self.movement_type)
 		if new_status:
 			frappe.db.set_value("Gear Unit", self.gear_unit, "status", new_status)
+
+	def _apply_container(self):
+		# Informational "last seen in this case" — set from this movement's
+		# container (empty clears it). The next scan corrects it.
+		frappe.db.set_value("Gear Unit", self.gear_unit, "current_container", self.container)
 
 	def _expand_to_bound_children(self):
 		"""When a parent unit moves, its BOUND children move with it."""
@@ -41,6 +47,7 @@ class GearMovement(Document):
 					"session": self.session,
 					"from_location": self.from_location,
 					"to_location": self.to_location,
+					"container": self.container,
 					"notes": f"Auto: bound to {self.gear_unit}",
 				}
 			)

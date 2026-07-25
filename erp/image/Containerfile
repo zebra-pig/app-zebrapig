@@ -159,17 +159,6 @@ RUN --mount=type=secret,id=apps_json,target=/opt/frappe/apps.json,uid=1000,gid=1
   echo "{}" > sites/common_site_config.json && \
   find apps -mindepth 1 -path "*/.git" | xargs rm -fr
 
-# Inject the local `gear` app (lives in this monorepo, not a git URL).
-# Copied into the bench and installed editable; the runtime configurator
-# regenerates sites/apps.txt via `ls apps`, so it is picked up on
-# bench migrate / install-app.
-COPY --chown=frappe:frappe gear /home/frappe/frappe-bench/apps/gear
-RUN cd /home/frappe/frappe-bench \
-    && ./env/bin/pip install --no-cache-dir -e apps/gear \
-    # Bake gear into apps.txt so `install-app gear` works even without the
-    # compose configurator regenerating it (prod does, but be self-consistent).
-    && ls -1 apps > sites/apps.txt
-
 FROM base AS backend
 
 USER frappe
@@ -178,9 +167,17 @@ COPY --from=builder --chown=frappe:frappe /home/frappe/frappe-bench /home/frappe
 
 WORKDIR /home/frappe/frappe-bench
 
-# Move assets to image-layer storage
+# Move assets to image-layer storage (stable — depends only on the bench copy above)
 RUN cp -r /home/frappe/frappe-bench/sites/assets /home/frappe/frappe-bench/assets && \
   rm -rf /home/frappe/frappe-bench/sites/assets
+
+# The local `gear` app as the THIN FINAL content layer. Placed AFTER the ~3GB
+# bench copy and the asset move, so a gear-only change rebuilds just this small
+# layer (~a few MB) — the VPS pull for a gear iteration is tiny, not 3GB.
+# apps.txt is regenerated to include gear (install-app / migrate then see it).
+COPY --chown=frappe:frappe gear /home/frappe/frappe-bench/apps/gear
+RUN ./env/bin/pip install --no-cache-dir -e apps/gear \
+    && ls -1 apps > sites/apps.txt
 
 VOLUME [ \
   "/home/frappe/frappe-bench/sites", \

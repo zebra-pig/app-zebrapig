@@ -14,6 +14,7 @@
   "session",
   "from_location",
   "to_location",
+  "container",
   "section_break_notes",
   "notes"
  ],
@@ -76,6 +77,14 @@
    "fieldname": "to_location",
    "fieldtype": "Data",
    "label": "To Location"
+  },
+  {
+   "description": "The case (a CAS gear unit) this item was packed into during this movement. Optional. Its value is written to the moved unit's Current Container.",
+   "fieldname": "container",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Container (Case)",
+   "options": "Gear Unit"
   },
   {
    "fieldname": "section_break_notes",

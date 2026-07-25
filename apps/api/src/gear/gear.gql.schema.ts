@@ -8,8 +8,8 @@ export const GearUnitSchema = v.pipe(
     name: v.string(),
     /** ERPNext Item code — what it actually is. */
     item: str(),
-    /** ERPNext Item Group — the category, inherited from the Item. */
-    itemGroup: str(),
+    /** Gear Category code (e.g. CAM), inherited from the Item. */
+    gearCategory: str(),
     serialNo: str(),
     status: str(),
     checkoutMode: str(),
@@ -17,6 +17,8 @@ export const GearUnitSchema = v.pipe(
     location: str(),
     /** ERPNext Asset (optional). */
     asset: str(),
+    /** The case (CAS unit) this was last seen in (informational). */
+    currentContainer: str(),
   }),
   asObjectType("GearUnit"),
 );
@@ -30,12 +32,13 @@ export function mapGearUnit(row: Row): GearUnit {
   return {
     name: String(row.name),
     item: s(row.item),
-    itemGroup: s(row.item_group),
+    gearCategory: s(row.gear_category),
     serialNo: s(row.serial_no),
     status: s(row.status),
     checkoutMode: s(row.checkout_mode),
     parentUnit: s(row.parent_unit),
     location: s(row.location),
     asset: s(row.asset),
+    currentContainer: s(row.current_container),
   };
 }

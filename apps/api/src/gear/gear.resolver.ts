@@ -13,11 +13,11 @@ import { bearerGuard } from "../auth/bearerGuard";
 export const gearResolver = resolver(
   {
     gearUnits: query(listSilk(GearUnitSchema))
-      .input({ itemGroup: v.nullish(v.string()), status: v.nullish(v.string()) })
-      .resolve(async ({ itemGroup, status }, payload) => {
+      .input({ gearCategory: v.nullish(v.string()), status: v.nullish(v.string()) })
+      .resolve(async ({ gearCategory, status }, payload) => {
         const c = getContext(payload);
         return useGearService(c).listUnits({
-          itemGroup: itemGroup ?? undefined,
+          gearCategory: gearCategory ?? undefined,
           status: status ?? undefined,
         });
       }),
