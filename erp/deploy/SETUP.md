@@ -10,11 +10,82 @@ image is built from [`../image`](../image) and the `gear` app from
 
 - `erpnext-one.yaml` — the app stack, pointed at `ghcr.io/zebra-pig/erp-zebrapig:latest`.
 - `overrides/` — Traefik (+ SSL) and shared-MariaDB compose overrides.
+- `egress-v6` — external docker network that gives the containers outbound
+  internet access (see *Host networking* below). Must exist before `up`.
 - `example.env` — reference env vars.
 
 > Data lives in the **external MariaDB** and the `erpnext-one_sites` docker
 > volume. Neither is part of the image, so swapping images never touches data.
 > Always take a backup first anyway (below).
+
+---
+
+## Host networking — the VPS is IPv6-only (read this first)
+
+`zebrapig-vps-2` (Infomaniak) has **no public IPv4 address at all** — only
+`2001:1600:10:101::2e/128`. The host reaches the internet fine over IPv6, but
+docker bridge networks are IPv4-only by default, so containers get an RFC1918
+address with **nothing to NAT onto**. Symptom: DNS resolves (AAAA comes back),
+every outbound connection then times out or is refused.
+
+That silently breaks *all* ERP egress — outgoing mail, external APIs, and the
+QR-bill microservice — while the site itself keeps serving fine, because inbound
+through Traefik is unaffected.
+
+**Fix in place:** an external, IPv6-enabled network `egress-v6`. Docker ≥ 27
+does NAT66 for ULA prefixes automatically (no `daemon.json` change needed):
+
+```sh
+docker network create --ipv6 \
+  --subnet 172.23.0.0/16 --subnet fd00:e12b:2::/64 egress-v6
+```
+
+`erpnext-one.yaml` attaches it to exactly the four services that make outbound
+calls: `backend`, `queue-short`, `queue-long`, `scheduler`.
+
+> **Why a separate network and not `enable_ipv6` on `bench-network`?**
+> Turning on IPv6 for the shared bench network gives `backend` an AAAA record.
+> The frontend's nginx then resolves `backend` to IPv6 first, but gunicorn binds
+> `0.0.0.0:8000` only — every upstream connect fails with `Connection refused`
+> before nginx retries over IPv4. Keeping `bench-network` IPv4-only means nginx
+> only ever sees the IPv4 address. Do not add `enable_ipv6` to `bench-network`.
+
+Verify egress after any change:
+
+```sh
+docker exec erpnext-one-backend-1 \
+  curl -sS -m 10 -o /dev/null -w '%{http_code} via %{remote_ip}\n' \
+  https://qrbill-microservice.zebrapig.workers.dev     # expect 200 via 2606:...
+```
+
+### Consequence: `docker pull` from ghcr.io is broken
+
+**ghcr.io is IPv4-only.** The docker daemon cannot reach it from this host:
+
+```
+Get "https://ghcr.io/v2/": dial tcp 140.82.121.33:443: connect: network is unreachable
+```
+
+`erpnext-one.yaml` sets `pull_policy: always`, so a plain `docker compose up -d`
+**fails and leaves the stack down**. Until a NAT64 resolver or a registry mirror
+is in place, bring the stack up with the locally cached image:
+
+```sh
+docker compose -f erpnext-one.yaml up -d --pull never
+```
+
+New images have to reach the box another way (e.g. `docker save` / `docker load`
+over the Tailscale link, or a dual-stack registry such as Docker Hub).
+
+### Known-unhealthy: origin TLS certificate
+
+Traefik serves `TRAEFIK DEFAULT CERT` (self-signed) for `erp.zebrapig.com` —
+`acme.json` only ever held a cert for `traefik.vps2.zebrapig.com`. It works
+today because Cloudflare fronts the origin in **Full** (not Full-strict) mode.
+Let's Encrypt cannot be fixed by IPv6 egress alone: the `tlschallenge` needs LE
+to connect *inbound* to port 443, which lands on Cloudflare, not the origin. Use
+a Cloudflare **Origin Certificate**, or switch the resolver to a DNS-01
+challenge, if you want a real cert at the origin.
 
 ---
 
@@ -28,6 +99,9 @@ echo <GHCR_PAT> | docker login ghcr.io -u <github-username> --password-stdin
 ```
 
 (Do this once; the credential is cached in `~/.docker/config.json`.)
+
+> Note: on vps-2 this login succeeds only if the daemon can reach ghcr.io —
+> which it currently cannot (IPv6-only host). See *Host networking* above.
 
 ---
 
@@ -85,12 +159,25 @@ the previous one. Keep at least one previous image for rollback.
 **4. Point the compose at the new image and pull + recreate.** The live stack is
 `/root/gitops/erpnext-one.yaml`; every service uses the same image line.
 
+> ⛔ **This step currently fails on vps-2.** The host is IPv6-only and ghcr.io is
+> IPv4-only, so `docker compose up -d` (with `pull_policy: always`) errors with
+> `network is unreachable` **after `down` has already removed the containers** —
+> i.e. it leaves the ERP hard down. Get the image onto the box first, then bring
+> the stack up with `--pull never`. See *Host networking* above.
+>
+> ```sh
+> # from your Mac, over Tailscale — moves the image without touching ghcr.io
+> docker pull ghcr.io/zebra-pig/erp-zebrapig@$NEW
+> docker save ghcr.io/zebra-pig/erp-zebrapig@$NEW | \
+>   ssh root@zebrapig-vps-2 'docker load'
+> ```
+
 ```sh
 sudo cp /root/gitops/erpnext-one.yaml /root/gitops/erpnext-one.yaml.bak-$(date +%F)
 # replace the image digest (or use :latest). NEW= the sha256:... from step 1:
 sudo sed -i "s|ghcr.io/zebra-pig/erp-zebrapig@sha256:[0-9a-f]*|ghcr.io/zebra-pig/erp-zebrapig@$NEW|g" \
   /root/gitops/erpnext-one.yaml
-sudo bash -c 'cd /root/gitops && docker compose -f erpnext-one.yaml up -d'
+sudo bash -c 'cd /root/gitops && docker compose -f erpnext-one.yaml up -d --pull never'
 ```
 
 **5. Migrate + verify.** `migrate` applies any doctype/schema changes from the
@@ -257,8 +344,12 @@ cp example.env ~/gitops/erpnext-one.env
 #   set DB_PASSWORD, DB_HOST=mariadb-database, DB_PORT=3306,
 #   SITES=`erp.zebrapig.com`, ROUTER=erpnext-one, BENCH_NETWORK=erpnext-one
 
+# Outbound-internet network (IPv6-only host — see 'Host networking' above)
+docker network create --ipv6 \
+  --subnet 172.23.0.0/16 --subnet fd00:e12b:2::/64 egress-v6
+
 docker compose --project-name erpnext-one --env-file ~/gitops/erpnext-one.env \
-  -f erpnext-one.yaml up -d
+  -f erpnext-one.yaml up -d --pull never
 
 # New site (or restore a backup with bench restore)
 docker compose --project-name erpnext-one exec backend \

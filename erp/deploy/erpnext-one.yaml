@@ -8,6 +8,7 @@ services:
     image: ghcr.io/zebra-pig/erp-zebrapig:latest
     networks:
       bench-network: null
+      egress-v6: null
       mariadb-network: null
     platform: linux/amd64
     pull_policy: always
@@ -106,6 +107,7 @@ services:
     image: ghcr.io/zebra-pig/erp-zebrapig:latest
     networks:
       bench-network: null
+      egress-v6: null
       mariadb-network: null
     platform: linux/amd64
     pull_policy: always
@@ -128,6 +130,7 @@ services:
     image: ghcr.io/zebra-pig/erp-zebrapig:latest
     networks:
       bench-network: null
+      egress-v6: null
       mariadb-network: null
     platform: linux/amd64
     pull_policy: always
@@ -165,6 +168,7 @@ services:
     image: ghcr.io/zebra-pig/erp-zebrapig:latest
     networks:
       bench-network: null
+      egress-v6: null
       mariadb-network: null
     platform: linux/amd64
     pull_policy: always
@@ -197,6 +201,9 @@ services:
 networks:
   bench-network:
     name: erpnext-one
+  egress-v6:
+    name: egress-v6
+    external: true
   mariadb-network:
     name: mariadb-network
     external: true
