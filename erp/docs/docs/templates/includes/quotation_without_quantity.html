@@ -1,0 +1,52 @@
+{#- Zebra & Pig quotation without quantities. Deliberately German only, as the
+    original was — this variant goes to German-speaking clients. -#}
+{%- import "docs/templates/includes/_macros.html" as zp with context -%}
+{%- set ctx = document_context(doc) -%}
+{%- set party = frappe.get_doc(doc.quotation_to, doc.party_name) if doc.quotation_to and doc.party_name else None -%}
+{% include "docs/templates/includes/_style.html" %}
+
+<div class="zp">
+  {{ zp.letterhead(ctx) }}
+
+  {{ zp.reference([
+      ("Angebotsnummer", doc.name),
+      ("Projektreferenz", doc.get_formatted("po_no") if doc.po_no else None),
+      ("Angebotsdatum", doc.get_formatted("transaction_date")),
+      ("Gültig bis", doc.get_formatted("valid_till") if doc.valid_till else None),
+  ]) }}
+
+  {{ zp.address_block(ctx, doc.customer_name, doc.contact_display, party.tax_id if party else None) }}
+
+  {{ zp.salutation(
+      "Angebot Nr. " ~ doc.name,
+      "Guten Tag " ~ ctx.contact_name,
+      ["Vielen Dank für die Anfrage.", "Gerne unterbreiten wir Ihnen folgendes Angebot:"]
+  ) }}
+
+  <table class="zp-items">
+    <thead>
+      <tr>
+        <th class="col-index">#</th>
+        <th class="col-item" style="width:80%">Produkt</th>
+        <th class="col-last">Preis</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%- for item in doc.items %}
+      <tr>
+        <td class="col-index">{{ loop.index }}</td>
+        <td class="col-item">{{ item.description }}</td>
+        <td class="col-last">{{ item.get_formatted("amount") }}</td>
+      </tr>
+      {%- endfor %}
+    </tbody>
+  </table>
+
+  {{ zp.totals_table(doc, net_field="base_total", net_label="Subtotal") }}
+
+  {{ zp.closing(
+      doc.terms,
+      "Wir hoffen, das Angebot entspricht Ihren Vorstellungen.<br>Bei Fragen stehen wir Ihnen gerne zur Verfügung.",
+      "Léonce Aklin"
+  ) }}
+</div>

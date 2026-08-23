@@ -1,0 +1,49 @@
+{#- Zebra & Pig quotation. -#}
+{%- import "docs/templates/includes/_macros.html" as zp with context -%}
+{%- set ctx = document_context(doc) -%}
+{%- set party = frappe.get_doc(doc.quotation_to, doc.party_name) if doc.quotation_to and doc.party_name else None -%}
+{% include "docs/templates/includes/_style.html" %}
+
+<div class="zp">
+  {{ zp.letterhead(ctx) }}
+
+  {{ zp.reference([
+      (_("Quotation Number"), doc.name),
+      (_("Project Reference"), doc.get_formatted("po_no") if doc.po_no else None),
+      (_("Quotation Date"), doc.get_formatted("transaction_date")),
+      (_("Expiry Date"), doc.get_formatted("valid_till") if doc.valid_till else None),
+  ]) }}
+
+  {{ zp.address_block(ctx, doc.customer_name, doc.contact_display, party.tax_id if party else None) }}
+
+  {{ zp.salutation(
+      _("Quotation No.") ~ " " ~ doc.name,
+      _("Hello %(name)s") % {"name": ctx.contact_name},
+      [_("Thank you for your inquiry."), _("We would be pleased to make you the following offer:")]
+  ) }}
+
+  {{ zp.items_table(doc.items) }}
+
+  <div class="zp-totals-wrap">
+    <table class="zp-totals">
+      <tr><td class="zp-total-label">{{ _("Base Total") }}</td>
+          <td class="zp-total-value">{{ doc.get_formatted("net_total") }}</td></tr>
+      {%- if doc.discount_amount %}
+      <tr><td class="zp-total-label">{{ _("Discount") }} ({{ doc.additional_discount_percentage }}%)</td>
+          <td class="zp-total-value">{{ doc.get_formatted("discount_amount") }}</td></tr>
+      {%- endif %}
+      {%- for tax in doc.taxes %}
+      <tr><td class="zp-total-label">{{ tax.description }}</td>
+          <td class="zp-total-value">{{ tax.get_formatted("tax_amount") }}</td></tr>
+      {%- endfor %}
+      <tr class="zp-grand"><td class="zp-total-label">{{ _("Total") }}</td>
+          <td class="zp-total-value">{{ doc.get_formatted("grand_total") }}</td></tr>
+    </table>
+  </div>
+
+  {{ zp.closing(
+      doc.terms,
+      _("We hope the offer meets your expectations.") ~ "<br>" ~ _("Feel free to contact us if you have any questions."),
+      "Léonce Aklin"
+  ) }}
+</div>

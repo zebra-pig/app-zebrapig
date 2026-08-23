@@ -1,0 +1,52 @@
+{#- Zebra & Pig payment receipt. One items table per referenced invoice, then the
+    receipt total.
+
+    The original raised «Address None not found» whenever the payer had no primary
+    address; `document_context` degrades to blanks instead. -#}
+{%- import "docs/templates/includes/_macros.html" as zp with context -%}
+{%- set ctx = document_context(doc) -%}
+{% include "docs/templates/includes/_style.html" %}
+
+<div class="zp">
+  {{ zp.letterhead(ctx) }}
+
+  {{ zp.reference([
+      (_("Receipt Number"), doc.name),
+      (_("Payment Date"), doc.get_formatted("posting_date")),
+      (_("Mode of Payment"), doc.mode_of_payment),
+  ]) }}
+
+  {{ zp.address_block(ctx, doc.party_name, doc.contact_display) }}
+
+  {{ zp.salutation(
+      _("Receipt No.") ~ " " ~ doc.name,
+      _("Hello %(name)s") % {"name": ctx.contact_name},
+      [_("We hereby confirm that we have received the following payment:")]
+  ) }}
+
+  {%- for reference in doc.references %}
+    {%- if reference.reference_doctype and reference.reference_name %}
+      {%- set invoice = frappe.get_doc(reference.reference_doctype, reference.reference_name) %}
+      <h2 class="zp-invoice-heading">{{ _("Invoice No.") }} {{ invoice.name }}</h2>
+      {{ zp.items_table(invoice.items) }}
+      {{ zp.totals_table(invoice, net_field="base_total", net_label=_("Subtotal")) }}
+    {%- endif %}
+  {%- endfor %}
+
+  <div class="zp-totals-wrap">
+    <table class="zp-totals">
+      <tr><td class="zp-total-label">{{ _("Subtotal") }}</td>
+          <td class="zp-total-value">{{ doc.get_formatted("received_amount") }}</td></tr>
+      <tr class="zp-grand"><td class="zp-total-label">{{ _("Total") }}</td>
+          <td class="zp-total-value">{{ doc.get_formatted("received_amount") }}</td></tr>
+    </table>
+  </div>
+
+  {{ zp.closing(
+      None,
+      _("We sincerely thank you for your order and your trust.") ~ "<br>" ~ _("If you have any questions, we are happy to help."),
+      "Léonce Aklin"
+  ) }}
+
+  {{ zp.footer(ctx, "Léonce Aklin", doc.get_formatted("posting_date")) }}
+</div>

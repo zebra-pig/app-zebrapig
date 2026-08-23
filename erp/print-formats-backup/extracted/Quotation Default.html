@@ -1,0 +1,294 @@
+{% set contact = frappe.get_doc("Contact", doc.contact_person) %}
+{% set address = frappe.get_doc("Address", doc.customer_address) %}
+{% set company = frappe.get_doc("Company", doc.company) %}
+{% set company_address = frappe.get_doc("Address", doc.company_address or "Zebra & Pig") %}
+{% set account = frappe.get_doc("Account", company.default_bank_account) %}
+{% set party = frappe.get_doc(doc.quotation_to, doc.party_name) %}
+{% set bank_account = frappe.get_doc("Bank Account", frappe.get_all("Bank Account", filters={'account': company.default_bank_account}, limit=1)[0].name) %}
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+<table style="width:100%;text-align:center;font-family:'Inter';font-size:12px;" border="0" cellspacing="2" cellpadding="2">
+  <tbody style="text-align:left;">
+    <tr style="text-align:left;">
+      <td style="text-align:left;padding-bottom: 30px;">
+        <p><img style="float:left;max-width:200px;width:200px" src="https://erp.zebrapig.com/files/zebrapig-logo-dark.png" alt="" /></p>
+      </td>
+    </tr>
+    <tr>
+        <td style="text-align:left;width:65%;vertical-align:top;">{{ company.name }} - {{ company_address.address_line1 }} - {{ company_address.pincode }} {{ company_address.city }} - {{ company_address.country }}</td>
+    </tr>
+    </tbody>
+    </table>
+<table style="width:100%;text-align:center;font-family:'Inter';font-size:12px;" border="0" cellspacing="2" cellpadding="2">
+  <tbody style="text-align:left;">
+    <tr>
+      <td style="text-align:left;width:60%;vertical-align:top;"></td>
+      <td style="text-align:left;width:20%;vertical-align:top;">{{ _("Quotation Number") }}</td>
+      <td style="text-align:left;width:20%;vertical-align:top;text-align: right"><b>{{ doc.name }}</b></td>
+    </tr>
+    {% if doc.po_no %}
+    <tr>
+      <td style="text-align:left;width:60%;vertical-align:top;"></td>
+      <td style="text-align:left;width:20%;vertical-align:top;">{{ _("Project Reference") }}</td>
+      <td style="text-align:left;width:20%;vertical-align:top;text-align: right"><b>{{ doc.get_formatted("po_no") }}</b></td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td style="text-align:left;width:60%;vertical-align:top;"></td>
+      <td style="text-align:left;width:20%;vertical-align:top;">{{ _("Quotation Date") }}</td>
+      <td style="text-align:left;width:20%;vertical-align:top;text-align: right"><b>{{ doc.get_formatted("transaction_date") }}</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:left;width:50%;vertical-align:top;"></td>
+      <td style="text-align:left;width:20%;vertical-align:top;">{{ _("Expiry Date") }}</td>
+      <td style="text-align:left;width:30%;vertical-align:top;text-align: right"><b>{{ doc.get_formatted("valid_till") }}</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:left">{{ doc.customer_name }}<br>
+        {% if not address.hide_contact_name %}
+            {{ doc.contact_display }}<br>
+        {% endif %}
+      {{ address.address_line1 }}
+        <br>{{ address.pincode }} {{ address.city }}
+        <br>{{ address.country }}
+        {% if party.tax_id %}
+        <br><br>{{ _("Tax ID") }}: {{ party.tax_id }}
+        {% endif %}
+        </td>
+    </tr>
+    <tr style="text-align:left;">
+      <td colspan="8" style="text-align:left;">
+        <h1>{{_("Quotation No.") }} {{ doc.name}}</h1>
+      </td>
+    </tr>
+    <tr style="text-align:left;">
+      <td colspan="8" style="text-align:left;">
+        {{ _("Hello %(name)s") % {'name': contact.first_name+" "+contact.last_name} }}<br>
+        {{ _("Thank you for your inquiry.") }}<br>{{ _("We would be pleased to make you the following offer:") }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table width="100%" class="items-table" cellspacing="0" border="0">
+    <tr class="item-table-heading-row">
+        <th width="2%" class="pr-20 text-right item-table-heading">#</th>
+        <th width="40%" class="pl-0 text-left item-table-heading">{{ _("Product") }}</th>
+        <th class="pr-20 text-right item-table-heading">{{ _("Quantity") }}</th>
+        <th class="pr-20 text-right item-table-heading">{{ _("Rate") }}</th>
+        <th class="text-right item-table-heading">{{ _("Amount") }}</th>
+    </tr>
+    {% for item in doc.items %}
+        <tr class="item-row">
+            <td
+                class="pr-20 text-right item-cell"
+                style="vertical-align: top;"
+            >
+                {{ loop.index }}
+            </td>
+            <td
+                class="pl-0 text-left item-cell"
+                style="vertical-align: top;"
+            >
+                <span>{{ item.description }}</span><br>
+                <span class="item-description"></span>
+            </td>
+            <td
+                class="pr-20 text-right item-cell"
+                style="vertical-align: top;"
+            >
+                {{ item.qty }}
+            </td>
+            <td
+                class="pr-20 text-right item-cell"
+                style="vertical-align: top;"
+            >
+                {{ item.get_formatted("net_rate") }}
+            </td>
+
+            <td
+                class="text-right item-cell"
+                style="vertical-align: top;"
+            >
+                {{ item.get_formatted("amount") }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<div class="total-display-container">
+    <table class="total-display-table page-break">
+        <tr>
+            <td class="border-0 total-table-attribute-label">{{ _("Base Total") }}</td>
+            <td class="py-2 border-0 text-right item-cell total-table-attribute-value">
+                {{ doc.get_formatted("net_total") }}
+            </td>
+        </tr>
+        {% if doc.discount_amount %}
+        <tr>
+            <td class="border-0 total-table-attribute-label">{{ _("Discount") }} ({{ doc.additional_discount_percentage }}%)</td>
+            <td class="py-2 border-0 text-right item-cell total-table-attribute-value">
+                {{ doc.get_formatted("discount_amount") }}
+            </td>
+        </tr>
+        {% endif %}
+        {% for tax in doc.taxes %}
+        <tr>
+            <td class="border-0 total-table-attribute-label">{{ tax.description }}</td>
+            <td class="py-2 border-0 text-right item-cell total-table-attribute-value">
+                {{ tax.get_formatted("tax_amount") }}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td class="border-0 total-border-left total-table-attribute-label" style="font-weight: bold;">
+              Total
+            </td>
+            <td
+                class="py-8 border-0 text-right total-border-right item-cell total-table-attribute-value"
+                style="font-weight: bold;"
+            >
+              {{ doc.get_formatted("grand_total") }}
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="clearer"></div>
+
+
+
+
+
+<table style="width:100%;border:0pt none;border-spacing:0pt;font-family:Inter;font-size:12px;">
+  <tbody>
+      {% if doc.terms != None %}
+      <tr>
+          <td colspan="8">
+            {{ doc.terms }}
+          </td>
+      </tr>
+      {% endif %}
+    <tr>
+      <td colspan="8" style="padding-top: 30px">
+         {{ _("We hope the offer meets your expectations.") }}<br>
+            {{ _("Feel free to contact us if you have any questions.") }}<br>
+        <br>
+        {{ _("Best regards") }}<br>Léonce Aklin</td>
+    </tr>
+  </tbody>
+</table>
+<style>
+    
+.item-table-heading{
+    font-weight: bold !important;
+    color: black !important;
+}
+
+          *{
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        line-height: 1.2em;
+      }
+
+      p{
+        margin: 0px;
+      }
+      
+      h1{
+          font-size: 12px;
+          font-weight: bold;
+      }
+
+  .items-table, .items-table .item-row{
+    margin-top: 30px;
+    font-size: 10px !important;
+  }
+  .print-format .item-row td{
+    padding: 5px 5px !important;
+    border-bottom: dotted 1px #808080;
+  }
+  .text-right{
+    text-align: right;
+  }
+  .text-left{
+    text-align: left;
+  }
+  .total-display-container{
+    float: right;
+    width: 100%;
+    display: flex;
+        flex-direction: row-reverse !important;
+    
+  }
+  .total-display-table{
+    width: 300px;
+    margin-left: 0px;
+    text-align: right;
+    flex-direction: row-reverse !important;
+  }
+  .clearer{
+    clear: both;
+  }
+  
+.footer{
+    bottom: 0px;
+    margin-bottom: -200px;
+  }
+  
+  @page{
+      margin-bottom: 140px;
+      overflow: visible;
+      
+      
+      @bottom-left{
+          content: '{{ company.name }}\a Léonce Aklin\a {{ company_address.address_line1 }}\a {{ company_address.pincode }} {{ company_address.city }}\a \a';
+          white-space: pre;
+          color: gray;
+          font-size: 12px;
+          display: flex;
+          height: 100px;
+          bottom: 0;
+          padding-top: 20px;
+          font-family: Inter;
+      }
+      
+      @bottom-center{
+          content: '{{ company_address.phone }}\a {{ company_address.email_id }}\a {{ company.domain }}\a \a \a';
+          white-space: pre;
+          text-align: left;
+          color: gray;
+          display: flex;
+          height: 100px;
+          bottom: 0px;
+          padding-top: 20px;
+          font-size: 12px;
+          font-family: Inter;
+      }
+      
+      @bottom-right{
+          content: 'UID: {{ company.tax_id }}\a IBAN: {{ bank_account.iban }}\a BIC: {{ bank_account.branch_code }}\a \a {{ doc.get_formatted("transaction_date") }}';
+          white-space: pre;
+          text-align: right;
+          color: gray;
+          display: flex;
+          width: 250px;
+          bottom: 0px;
+          padding-top: 20px;
+          height: 100px;
+          font-size: 12px;
+          font-family: Inter;
+      }
+  }
+</style>
+
+</body>
+</html>

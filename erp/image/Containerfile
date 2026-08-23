@@ -58,6 +58,14 @@ RUN useradd -ms /bin/bash frappe \
     jq \
     # For MIME type detection
     media-types \
+    # Fonts for PDF rendering. The base image ships six DejaVu faces and nothing
+    # else, so any print format asking for a real typeface silently fell back to
+    # DejaVu in wkhtmltopdf and in headless Chromium. Inter is what the Zebra & Pig
+    # print formats are set in (Print Settings -> Font), and Liberation gives
+    # metric-compatible stand-ins for Arial/Times/Courier.
+    fonts-inter \
+    fonts-inter-variable \
+    fonts-liberation2 \
     # NodeJS
     && mkdir -p ${NVM_DIR} \
     && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash \
@@ -83,6 +91,8 @@ RUN useradd -ms /bin/bash frappe \
         DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
         chromium-headless-shell; \
     fi \
+    # Make the newly installed fonts resolvable by name (wkhtmltopdf/Chromium)
+    && fc-cache -f \
     # Clean up
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /etc/nginx/sites-enabled/default \
@@ -211,8 +221,10 @@ RUN cp -r /home/frappe/frappe-bench/sites/assets /home/frappe/frappe-bench/asset
 # apps.txt is regenerated to include them (install-app / migrate then see them).
 COPY --chown=frappe:frappe gear /home/frappe/frappe-bench/apps/gear
 COPY --chown=frappe:frappe swisstax /home/frappe/frappe-bench/apps/swisstax
+COPY --chown=frappe:frappe docs /home/frappe/frappe-bench/apps/docs
 RUN ./env/bin/pip install --no-cache-dir -e apps/gear \
     && ./env/bin/pip install --no-cache-dir -e apps/swisstax \
+    && ./env/bin/pip install --no-cache-dir -e apps/docs \
     && ls -1 apps > sites/apps.txt
 
 VOLUME [ \

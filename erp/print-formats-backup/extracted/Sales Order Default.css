@@ -1,0 +1,7 @@
+.print-format td, .print-format th{
+    padding: 5px !important;
+}
+
+.print-format{
+    font-family: "Inter";
+}

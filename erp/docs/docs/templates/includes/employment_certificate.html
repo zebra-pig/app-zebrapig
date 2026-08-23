@@ -1,0 +1,54 @@
+{#- Arbeitszeugnis. German by design — it is issued to employees in Switzerland. -#}
+{%- import "docs/templates/includes/_macros.html" as zp with context -%}
+{%- set ctx = document_context(doc) -%}
+{%- set female = doc.gender == "Female" -%}
+{% include "docs/templates/includes/_style.html" %}
+
+<div class="zp">
+  {{ zp.letterhead(ctx) }}
+
+  <div class="zp-certificate">
+    <h1 class="zp-certificate-title">Arbeitszeugnis</h1>
+
+    <p>
+      Hiermit bestätigen wir, dass {{ doc.first_name }} {{ doc.last_name }}, geboren am
+      {{ doc.get_formatted("date_of_birth") }}, vom {{ doc.get_formatted("date_of_joining") }}
+      bis zum {{ doc.get_formatted("relieving_date") }} bei {{ ctx.company.name }}
+      in folgenden Arbeitsbereichen tätig war:
+    </p>
+
+    {%- if doc.employment_certificate_activities %}
+    <div>{{ doc.employment_certificate_activities }}</div>
+    {%- endif %}
+    {%- if doc.employment_certificate_remark %}
+    <div>{{ doc.employment_certificate_remark }}</div>
+    {%- endif %}
+
+    <p>
+      Wir danken {{ doc.first_name }} für {{ "ihre" if female else "seine" }} wertvolle Arbeit
+      und wünschen {{ "ihr" if female else "ihm" }} alles Gute auf
+      {{ "ihrer" if female else "seiner" }} weiteren beruflichen Laufbahn.
+    </p>
+
+    <div class="zp-signature">
+      {% include "docs/templates/includes/_signature.html" %}
+      <p>Léonce Aklin, Geschäftsführer</p>
+    </div>
+  </div>
+
+  <table class="zp-footer">
+    <tr>
+      <td>
+        {{ ctx.company.name }}<br>Léonce Aklin<br>
+        {{ ctx.company_address.address_line1 }}<br>
+        {{ ctx.company_address.pincode }} {{ ctx.company_address.city }}
+      </td>
+      <td>
+        {{ ctx.company_address.phone }}<br>
+        {{ ctx.company_address.email_id }}<br>
+        {{ ctx.company.domain }}
+      </td>
+      <td></td>
+    </tr>
+  </table>
+</div>

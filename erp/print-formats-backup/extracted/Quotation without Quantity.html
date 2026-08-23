@@ -1,0 +1,215 @@
+{% set contact = frappe.get_doc("Contact", doc.contact_person) %}
+{% set address = frappe.get_doc("Address", doc.customer_address) %}
+{% set company = frappe.get_doc("Company", doc.company) %}
+{% set company_address = frappe.get_doc("Address", doc.company_address or "Zebra & Pig") %}
+{% set account = frappe.get_doc("Account", company.default_bank_account) %}
+{% set bank_account = frappe.get_doc("Bank Account", frappe.get_all("Bank Account", filters={'account': company.default_bank_account}, limit=1)[0].name) %}
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+<table style="width:100%;text-align:center;font-family:'Inter';font-size:12px;" border="0" cellspacing="2" cellpadding="2">
+  <tbody style="text-align:left;">
+    <tr style="text-align:left;">
+      <td style="text-align:left;padding-bottom: 30px;">
+        <p><img style="float:left;max-width:200px;width:200px" src="https://erp.zebrapig.com/files/zebrapig-logo-dark.png" alt="" /></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:left;width:65%;vertical-align:top;">{{ company.name }} - {{ company_address.address_line1 }} - {{ company_address.pincode }} {{ company_address.city }} - {{ company_address.country }}</td>
+      <td style="text-align:left;width:20%;vertical-align:top;">Angebotsnummer</td>
+      <td style="text-align:left;width:15%;vertical-align:top;text-align: right"><b>{{ doc.name }}</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:left;width:65%;vertical-align:top;"></td>
+      <td style="text-align:left;width:20%;vertical-align:top;">Angebotsdatum</td>
+      <td style="text-align:left;width:15%;vertical-align:top;text-align: right"><b>{{ doc.get_formatted("transaction_date") }}</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:left;width:65%;vertical-align:top;"></td>
+      <td style="text-align:left;width:20%;vertical-align:top;">Verfallsdatum</td>
+      <td style="text-align:left;width:15%;vertical-align:top;text-align: right"><b>{{ doc.get_formatted("valid_till") }}</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:left">{{ doc.customer_name }}<br>
+           {{ contact.first_name }} {{ contact.last_name }}
+      <br>{{ address.address_line1 }}
+        <br>{{ address.pincode }} {{ address.city }}
+        <br>{{ address.country }}
+        </td>
+    </tr>
+    <tr style="text-align:left;">
+      <td style="text-align:left;">
+        <h1>Angebot Nr. {{ doc.name}}</h1>
+      </td>
+    </tr>
+    <tr style="text-align:left;">
+      <td colspan="8" style="text-align:left;">
+        Guten Tag {{ contact.first_name }} {{ contact.last_name }}<br>
+        Vielen Dank für die Anfrage.<br>Gerne unterbreiten wir Ihnen folgendes Angebot:</td>
+    </tr>
+  </tbody>
+</table>
+
+<table width="100%" class="items-table" cellspacing="0" border="0">
+    <tr class="item-table-heading-row">
+        <th width="2%" class="pr-20 text-right item-table-heading">#</th>
+        <th width="80%" class="pl-0 text-left item-table-heading">Produkt</th>
+        <th class="text-right item-table-heading">Preis</th>
+    </tr>
+    {% for item in doc.items %}
+        <tr class="item-row">
+            <td
+                class="pr-20 text-right item-cell"
+                style="vertical-align: top;"
+            >
+                {{ loop.index }}
+            </td>
+            <td
+                class="pl-0 text-left item-cell"
+                style="vertical-align: top;"
+            >
+                <span>{{ item.description }}</span><br>
+                <span class="item-description"></span>
+            </td>
+
+            <td
+                class="text-right item-cell"
+                style="vertical-align: top;"
+            >
+                {{ item.get_formatted("amount") }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<div class="total-display-container">
+    <table class="total-display-table page-break">
+        <tr>
+            <td class="border-0 total-table-attribute-label">Subtotal</td>
+            <td class="py-2 border-0 text-right item-cell total-table-attribute-value">
+                {{ doc.get_formatted("base_total") }}
+            </td>
+        </tr>
+        {% for tax in doc.taxes %}
+        <tr>
+            <td class="border-0 total-table-attribute-label">{{ tax.description }}</td>
+            <td class="py-2 border-0 text-right item-cell total-table-attribute-value">
+                {{ tax.get_formatted("tax_amount") }}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td class="border-0 total-border-left total-table-attribute-label" style="font-weight: bold;">
+              Total
+            </td>
+            <td
+                class="py-8 border-0 text-right total-border-right item-cell total-table-attribute-value"
+                style="font-weight: bold;"
+            >
+              {{ doc.get_formatted("grand_total") }}
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="clearer"></div>
+
+
+
+
+
+<table style="width:100%;border:0pt none;border-spacing:0pt;font-family:Inter;font-size:12px;">
+  <tbody>
+    <tr>
+      <td colspan="8" style="padding-top: 30px">
+          Wir hoffen, das Angebot entspricht Ihren Vorstellungen.<br>
+            Bei Fragen stehen wir Ihnen gerne zur Verfügung.<br>
+        <br>
+        Freundliche Grüsse<br>Léonce Aklin</td>
+    </tr>
+  </tbody>
+</table>
+
+<table style="border:0pt none;border-spacing:0pt;font-family:Montserrat;font-size:12px;" class="footer">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width:33%; text-align: left; color: gray">{{ company.name }}<br>Léonce Aklin<br>{{ company_address.address_line1 }}<br>{{ company_address.pincode }} {{ company_address.city }}</td>
+      <td style="vertical-align: top; width:33%; text-align: left; color: gray">{{ company_address.phone }}<br>{{ company_address.email_id }}<br>{{ company.domain }}</td>
+      <td style="vertical-align: top; width:33%; text-align: left; color: gray">UID: {{ company.tax_id }}<br>IBAN: {{ bank_account.iban }}<br>BIC: {{ bank_account.branch_code }}</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="color: gray; padding-top:50px"></td>
+      <td style="text-align:right;color:gray">{{ doc.get_formatted("transaction_date") }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<style>
+    
+.item-table-heading{
+    font-weight: bold !important;
+    color: black !important;
+}
+
+          *{
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        line-height: 1.2em;
+      }
+
+      p{
+        margin: 0px;
+      }
+      
+      h1{
+          font-size: 12px;
+          font-weight: bold;
+      }
+
+  .items-table, .items-table .item-row{
+    margin-top: 30px;
+    font-size: 10px !important;
+  }
+  .print-format .item-row td{
+    padding: 5px 5px !important;
+    border-bottom: dotted 1px #808080;
+  }
+  .text-right{
+    text-align: right;
+  }
+  .text-left{
+    text-align: left;
+  }
+  .total-display-container{
+    float: right;
+    width: 100%;
+    display: flex;
+        flex-direction: row-reverse !important;
+    
+  }
+  .total-display-table{
+    width: 300px;
+    margin-left: 0px;
+    text-align: right;
+    flex-direction: row-reverse !important;
+  }
+  .clearer{
+    clear: both;
+  }
+  
+.footer{
+    position: absolute;
+    bottom: 0px;
+  }
+</style>
+
+</body>
+</html>

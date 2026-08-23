@@ -1,0 +1,46 @@
+{% set company = frappe.get_doc("Company", doc.company) %}
+{% set company_address = frappe.get_doc("Address", doc.company_address or "Zebra & Pig") %}
+
+<table style="width:100%;font-family:'Inter';font-size:12px;border: 0; color: black">
+  <tbody>
+    <tr>
+      <td style="padding-bottom: 30px;">
+        <p><img style="max-width:200px;width:200px" src="https://erp.zebrapig.com/files/zebrapig-logo-dark.png" alt="" /></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="width:65%;">{{ company.name }} - {{ company_address.address_line1 }} - {{ company_address.pincode }} {{ company_address.city }} - {{ company_address.country }}</td>
+    </tr>
+    <tr>
+        <td style="display: flex;flex-direction:column;gap:20px; margin-top: 50px;">
+            <h1>Arbeitszeugnis</h1>
+<p>Hiermit bestätigen wir, dass {{doc.first_name}} {{doc.last_name}}, geboren am {{doc.get_formatted("date_of_birth")}}, vom {{doc.get_formatted("date_of_joining")}} bis zum {{doc.get_formatted("relieving_date")}} bei {{company.name}} in folgenden Arbeitsbereichen tätig war:</p>
+<div>{{ doc.employment_certificate_activities }}</div>
+<div>{{ doc.employment_certificate_remark }}</div>
+<p>Wir danken {{ doc.first_name }} für {% if doc.gender == "Female" %}ihre{% else %}seine{%endif%} wertvolle Arbeit und wünschen {% if doc.gender == "Female" %}ihr{% else %}ihm{%endif%} alles Gute auf {% if doc.gender == "Female" %}ihrer{% else %}seiner{%endif%} weiteren beruflichen Laufbahn.</p>
+
+<div>
+
+<svg class="signature" width="100%" height="100%" viewBox="0 0 260 213" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(8.33333,0,0,8.33333,-2338.66,-5426)">
+        <path d="M295.459,652.676C293.98,654.732 292.456,657.086 291.13,659.365C290.904,659.752 290.504,660.389 290.239,660.78C289.975,661.172 289.505,661.898 289.196,662.394C288.887,662.889 288.504,663.483 288.344,663.713C288.185,663.943 287.863,664.496 287.628,664.942C287.394,665.389 286.981,666.049 286.711,666.41C286.441,666.77 286.144,667.237 286.051,667.447C285.958,667.657 285.415,668.542 284.844,669.414C282.203,673.444 280.639,675.968 280.639,676.201C280.639,676.573 281.033,676.664 281.917,676.497C283.74,676.151 286.262,674.479 289.649,671.371C290.413,670.671 291.095,670.098 291.165,670.098C291.236,670.098 291.294,670.584 291.294,671.178L291.294,672.259L293.802,672.147L293.962,672.638C294.273,673.588 294.493,673.704 295.994,673.704C297.203,673.704 297.473,673.762 298.286,674.196C298.793,674.466 299.386,674.687 299.604,674.687C299.822,674.687 300.641,674.42 301.425,674.093C303.57,673.199 303.883,673.132 304.273,673.485C304.56,673.745 304.864,673.775 306.757,673.731C308.571,673.69 309.084,673.736 309.98,674.019C311.787,674.589 312.451,674.383 311.005,673.7C309.995,673.223 307.592,672.866 306.182,672.983C305.325,673.054 304.99,673.016 304.704,672.816C304.065,672.368 303.177,672.528 301.213,673.445C299.819,674.096 299.732,674.099 298.564,673.553C297.653,673.126 297.29,673.048 296.226,673.048C294.925,673.048 294.572,672.901 294.572,672.36C294.572,672.197 294.422,671.915 294.239,671.732C293.904,671.396 293.868,671.395 292.038,671.634C291.947,671.646 291.901,671.196 291.929,670.567C291.957,669.935 291.906,669.434 291.806,669.373C291.517,669.194 289.948,670.209 288.999,671.189C288.133,672.083 284.895,674.586 283.737,675.256C283.024,675.668 281.746,676.023 281.578,675.856C281.507,675.785 281.587,675.548 281.756,675.33C282.246,674.697 283.189,673.317 283.316,673.048C283.379,672.913 283.633,672.496 283.879,672.121C284.126,671.746 284.622,670.984 284.983,670.428C285.343,669.871 285.954,668.934 286.339,668.344C286.841,667.577 287.84,665.907 288.327,665.069C288.791,664.274 289.686,662.848 290.316,661.902C290.946,660.955 291.536,660.033 291.627,659.853C291.718,659.672 292.01,659.193 292.277,658.787C292.544,658.382 292.836,657.882 292.927,657.677C293.017,657.472 293.585,656.587 294.189,655.71C294.793,654.833 295.537,653.747 295.843,653.296C296.149,652.845 296.582,652.304 296.806,652.093C297.241,651.682 297.268,651.2 296.861,651.121C296.707,651.091 296.174,651.682 295.459,652.676M297.14,658.405C297.08,658.465 297.031,658.654 297.031,658.825C297.031,659.17 296.821,659.417 294.572,661.726C292.038,664.327 291.593,664.867 291.789,665.102C292.069,665.44 292.555,665.194 293.207,664.384C293.544,663.965 294.38,663.033 295.066,662.312C295.751,661.59 296.635,660.594 297.029,660.099C297.424,659.603 297.853,659.108 297.983,659C298.313,658.725 298.102,658.296 297.637,658.296C297.424,658.296 297.2,658.345 297.14,658.405" style="fill-rule:nonzero;"/>
+    </g>
+</svg>
+
+        <p>Léonce Aklin, Geschäftsführer</p>
+    </div>
+    
+    
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<table style="border:0;border-spacing:0pt;font-family:Inter;font-size:12px;color: gray" class="footer">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width:33%; text-align: left;color: gray">{{ company.name }}<br>Léonce Aklin<br>{{ company_address.address_line1 }}<br>{{ company_address.pincode }} {{ company_address.city }}</td>
+      <td style="vertical-align: top; width:33%; text-align: left;color: gray">{{ company_address.phone }}<br>{{ company_address.email_id }}<br>{{ company.domain }}</td>
+    </tr>
+  </tbody>
+</table>

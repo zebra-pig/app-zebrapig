@@ -1,0 +1,104 @@
+{#-
+  The one stylesheet every Zebra & Pig business document uses.
+
+  It reproduces the look the previous per-format `<style>` blocks produced in a
+  browser, but as named rules on real elements instead of a `*` selector and a
+  thicket of inline attributes. Two things it deliberately does NOT rely on:
+
+  * the selected Print Style — «Redesign» forces `padding: 10px !important` onto
+    every cell, so the rules here carry their own `!important` and the document
+    looks the same whichever style Print Settings happens to point at;
+  * a font being installed anywhere — `_fonts.html` embeds Inter.
+-#}
+{% include "docs/templates/includes/_fonts.html" %}
+<style>
+  .zp {
+    /* One vertical rhythm for every table row in the document. The formats this
+       replaces inherited 10px on header cells from the Print Style and 5px on
+       body rows from their own <style>, so a table's header sat on a different
+       rhythm from its rows. */
+    --zp-row-y: 8px;
+    --zp-cell-x: 5px;
+
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px; line-height: 1.2; color: #000;
+    -webkit-font-smoothing: antialiased;
+  }
+  .zp p { margin: 0; }
+  .zp table { width: 100%; border-collapse: collapse; border-spacing: 0; }
+  .zp td, .zp th { padding: 0 !important; vertical-align: top; text-align: left; }
+  .zp .right { text-align: right; }
+  .zp .muted { color: #808080; }
+  .zp .strong { font-weight: 700; }
+  .zp .paid { color: #1a7f37; font-weight: 700; }
+
+  /* --- letterhead ------------------------------------------------------ */
+  .zp-letterhead { padding-top: 22px; padding-bottom: 26px; }
+  .zp-letterhead .zp-logo { width: 200px; max-width: 200px; display: block; }
+  .zp-letterhead .zp-logo svg { width: 100%; height: auto; display: block; }
+  .zp-origin { padding-bottom: 12px; }
+
+  /* --- reference block (number / date / status), right aligned --------- */
+  .zp-ref td { padding: var(--zp-row-y) 0 !important; }
+  .zp-ref .zp-ref-spacer { width: 60%; }
+  .zp-ref .zp-ref-label  { width: 20%; }
+  .zp-ref .zp-ref-value  { width: 20%; text-align: right; font-weight: 700; }
+
+  /* --- recipient ------------------------------------------------------- */
+  .zp-address { padding-top: 16px; }
+  .zp-address .zp-address-extra { white-space: pre-wrap; }
+
+  /* --- salutation ------------------------------------------------------ */
+  .zp-salutation { padding-top: 28px; }
+  .zp-salutation h1 { font-size: 12px; font-weight: 700; margin: 0 0 6px; }
+
+  /* --- items ----------------------------------------------------------- */
+  .zp-items { margin-top: 10px; font-size: 12px; }
+  .zp-items th {
+    font-weight: 700 !important; color: #000 !important;
+    padding: var(--zp-row-y) var(--zp-cell-x) !important; border-bottom: 0;
+  }
+  .zp-items td {
+    padding: var(--zp-row-y) var(--zp-cell-x) !important;
+    border-bottom: 1px dotted #808080;
+  }
+  .zp-items .col-index { width: 2%; text-align: right; }
+  .zp-items .col-item  { width: 40%; }
+  .zp-items .col-num   { text-align: right; }
+  .zp-items .col-last  { text-align: right; }
+  .zp-items .zp-item-description { display: block; }
+
+  /* --- totals ---------------------------------------------------------- */
+  .zp-totals-wrap { display: flex; flex-direction: row-reverse; width: 100%; margin-top: 24px; }
+  .zp table.zp-totals { width: 274px; text-align: right; }
+  .zp-totals td { padding: var(--zp-row-y) 10px !important; border: 0; }
+  .zp-totals .zp-total-label { text-align: left; }
+  .zp-totals .zp-total-value { text-align: right; }
+  .zp-totals tr.zp-grand td { font-weight: 700; padding-top: 8px !important; }
+
+  /* --- closing --------------------------------------------------------- */
+  .zp-closing { padding-top: 7px; }
+  .zp-terms { padding-top: 12px; }
+
+  /* --- footer ---------------------------------------------------------- */
+  .zp-footer { position: absolute; bottom: 0; width: 100%; color: #808080; }
+  .zp-footer td { width: 33%; vertical-align: top; color: #808080; }
+  .zp-footer .zp-footer-date { text-align: right; padding-top: 50px !important; }
+
+  /* --- payment receipt: one block per referenced invoice ---------------- */
+  .zp-invoice-heading { font-size: 12px; font-weight: 700; margin: 24px 0 0; }
+
+  /* --- employment certificate ------------------------------------------ */
+  .zp-certificate { display: flex; flex-direction: column; gap: 20px; margin-top: 50px; }
+  .zp-certificate .zp-certificate-title { font-size: 16px; font-weight: 700; margin: 0; }
+  .zp-certificate p { margin: 0; }
+  .zp-signature .signature { width: 80px; height: 70px; margin-bottom: 5px; display: block; }
+
+  /* --- Swiss QR bill --------------------------------------------------- */
+  .zp-qrbill {
+    position: relative; width: 100%; margin-top: 40px;
+    page-break-inside: avoid; -webkit-column-break-inside: avoid;
+  }
+
+  .zp .page-break { page-break-before: always; }
+</style>

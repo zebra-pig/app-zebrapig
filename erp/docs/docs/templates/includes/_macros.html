@@ -1,0 +1,163 @@
+{#-
+  The pieces every Zebra & Pig business document is built from.
+
+  Import once at the top of a print format:
+
+      {%- import "docs/templates/includes/_macros.html" as zp with context -%}
+
+  `with context` matters: the macros use `_()` and `frappe` from the print
+  format's own context.
+-#}
+
+{#- Letterhead: the wordmark plus the one-line sender, as it appears above the
+    address window. -#}
+{%- macro letterhead(ctx) -%}
+<div class="zp-letterhead">
+  <div class="zp-logo">{% include "docs/templates/includes/_logo.html" %}</div>
+</div>
+<div class="zp-origin">
+  {{ ctx.company.name }} - {{ ctx.company_address.address_line1 }} -
+  {{ ctx.company_address.pincode }} {{ ctx.company_address.city }} -
+  {{ ctx.company_address.country }}
+</div>
+{%- endmacro -%}
+
+{#- Reference block: a list of (label, value, css_class) rows, right aligned.
+    `css_class` is optional and styles only the value. -#}
+{%- macro reference(rows) -%}
+<table class="zp-ref">
+  {%- for row in rows %}{% if row[1] %}
+  <tr>
+    <td class="zp-ref-spacer"></td>
+    <td class="zp-ref-label">{{ row[0] }}</td>
+    <td class="zp-ref-value {{ row[2] if row|length > 2 else '' }}">{{ row[1] }}</td>
+  </tr>
+  {%- endif %}{% endfor %}
+</table>
+{%- endmacro -%}
+
+{#- Recipient. `party_name` / `contact_name` are passed in because each doctype
+    names them differently. The `hide_*` flags are custom fields on Address. -#}
+{%- macro address_block(ctx, party_name, contact_name, tax_id=None) -%}
+<div class="zp-address">
+  {%- if party_name and not ctx.address.get("hide_customer_name") %}
+  {{ party_name }}<br>
+  {%- endif %}
+  {%- if contact_name and not ctx.address.get("hide_contact_name") %}
+  {{ contact_name }}<br>
+  {%- endif %}
+  {%- if ctx.address.get("address_line0") %}
+  <div class="zp-address-extra">{{ ctx.address.address_line0 }}</div>
+  {%- endif %}
+  {{ ctx.address.address_line1 }}<br>
+  {{ ctx.address.pincode }} {{ ctx.address.city }}<br>
+  {{ ctx.address.country }}
+  {%- if tax_id %}
+  <br><br>{{ _("Tax ID") }}: {{ tax_id }}
+  {%- endif %}
+</div>
+{%- endmacro -%}
+
+{#- Heading and greeting. `lines` are the sentences under the heading. -#}
+{%- macro salutation(heading, greeting, lines) -%}
+<div class="zp-salutation">
+  <h1>{{ heading }}</h1>
+  {%- if greeting %}{{ greeting }}<br>{% endif %}
+  {%- for line in lines %}{{ line }}<br>{% endfor %}
+</div>
+{%- endmacro -%}
+
+{#- Items. `with_quantity` drops the quantity and rate columns for the
+    «without Quantity» quotation. -#}
+{%- macro items_table(items, with_quantity=True) -%}
+<table class="zp-items">
+  <thead>
+    <tr>
+      <th class="col-index">#</th>
+      <th class="col-item">{{ _("Product") }}</th>
+      {%- if with_quantity %}
+      <th class="col-num">{{ _("Quantity") }}</th>
+      <th class="col-num">{{ _("Rate") }}</th>
+      {%- endif %}
+      <th class="col-last">{{ _("Amount") }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%- for item in items %}
+    <tr>
+      <td class="col-index">{{ loop.index }}</td>
+      <td class="col-item">{{ item.description }}</td>
+      {%- if with_quantity %}
+      <td class="col-num">{{ item.qty }}</td>
+      <td class="col-num">{{ item.get_formatted("net_rate") }}</td>
+      {%- endif %}
+      <td class="col-last">{{ item.get_formatted("amount") }}</td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
+{%- endmacro -%}
+
+{#- Totals: net, each tax row, then the grand total. -#}
+{%- macro totals_table(doc, net_field="net_total", total_field="grand_total", net_label=None) -%}
+<div class="zp-totals-wrap">
+  <table class="zp-totals">
+    <tr>
+      <td class="zp-total-label">{{ net_label or _("Base Total") }}</td>
+      <td class="zp-total-value">{{ doc.get_formatted(net_field) }}</td>
+    </tr>
+    {%- for tax in doc.taxes %}
+    <tr>
+      <td class="zp-total-label">{{ tax.description }}</td>
+      <td class="zp-total-value">{{ tax.get_formatted("tax_amount") }}</td>
+    </tr>
+    {%- endfor %}
+    <tr class="zp-grand">
+      <td class="zp-total-label">{{ _("Total") }}</td>
+      <td class="zp-total-value">{{ doc.get_formatted(total_field) }}</td>
+    </tr>
+  </table>
+</div>
+{%- endmacro -%}
+
+{#- Terms, the closing sentence and the sign-off. -#}
+{%- macro closing(terms, sentence, signatory) -%}
+{%- if terms %}<div class="zp-terms">{{ terms }}</div>{% endif %}
+<div class="zp-closing">
+  {%- if sentence %}{{ sentence }}<br>{% endif %}
+  <br>
+  {{ _("Best regards") }}<br>{{ signatory }}
+</div>
+{%- endmacro -%}
+
+{#- Three-column footer pinned to the bottom of the sheet. -#}
+{%- macro footer(ctx, signatory, date=None) -%}
+<table class="zp-footer">
+  <tr>
+    <td>
+      {{ ctx.company.name }}<br>{{ signatory }}<br>
+      {{ ctx.company_address.address_line1 }}<br>
+      {{ ctx.company_address.pincode }} {{ ctx.company_address.city }}
+    </td>
+    <td>
+      {{ ctx.company_address.phone }}<br>
+      {{ ctx.company_address.email_id }}<br>
+      {{ ctx.company.domain }}
+    </td>
+    <td>
+      {{ _("UID") }}: {{ ctx.company.tax_id }}<br>
+      {{ _("IBAN") }}: {{ ctx.bank_account.iban }}<br>
+      {{ _("BIC") }}: {{ ctx.bank_account.branch_code }}
+    </td>
+  </tr>
+  {#- The spacer row is what pushes the block to the foot of the sheet; it stays
+      whether or not there is a date to print in it. -#}
+  <tr><td colspan="2"></td><td class="zp-footer-date">{{ date or "" }}</td></tr>
+</table>
+{%- endmacro -%}
+
+{#- The Swiss QR bill, pre-rendered into the document by the «QR Bill
+    generation» server script. -#}
+{%- macro qr_bill(html) -%}
+<div class="zp-qrbill">{{ html }}</div>
+{%- endmacro -%}

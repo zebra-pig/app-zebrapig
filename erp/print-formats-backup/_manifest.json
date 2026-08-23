@@ -1,0 +1,82 @@
+[
+ {
+  "doctype": "Print Format",
+  "name": "Test2",
+  "file": "Print_Format__Test2.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "ABC",
+  "file": "Print_Format__ABC.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "Employment Certificate",
+  "file": "Print_Format__Employment Certificate.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "Quotation without Quantity",
+  "file": "Print_Format__Quotation without Quantity.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "Test",
+  "file": "Print_Format__Test.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "Payment Default",
+  "file": "Print_Format__Payment Default.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "Sales Order Default",
+  "file": "Print_Format__Sales Order Default.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "Quotation Default",
+  "file": "Print_Format__Quotation Default.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "Sales Invoice Default",
+  "file": "Print_Format__Sales Invoice Default.json"
+ },
+ {
+  "doctype": "Print Format",
+  "name": "IRS 1099 Form",
+  "file": "Print_Format__IRS 1099 Form.json"
+ },
+ {
+  "doctype": "Letter Head",
+  "name": "Default",
+  "file": "Letter_Head__Default.json"
+ },
+ {
+  "doctype": "Print Settings",
+  "name": "Print Settings",
+  "file": "Print_Settings__Print Settings.json"
+ },
+ {
+  "doctype": "Print Style",
+  "name": "Redesign",
+  "file": "Print_Style__Redesign.json"
+ },
+ {
+  "doctype": "Print Style",
+  "name": "Modern",
+  "file": "Print_Style__Modern.json"
+ },
+ {
+  "doctype": "Print Style",
+  "name": "Monochrome",
+  "file": "Print_Style__Monochrome.json"
+ },
+ {
+  "doctype": "Print Style",
+  "name": "Classic",
+  "file": "Print_Style__Classic.json"
+ }
+]

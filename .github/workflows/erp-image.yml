@@ -1,7 +1,7 @@
 name: Build ERP image
 
 # Builds the custom Zebra & Pig ERPNext image (Frappe + ERPNext + HRMS + CRM +
-# the local `gear` app) and pushes it to GHCR as a private package.
+# the local `gear`, `swisstax` and `docs` apps) and pushes it to GHCR as a private package.
 #
 # Trigger manually (Actions -> Build ERP image -> Run workflow) or on pushes
 # that touch the ERP sources on main.
@@ -17,6 +17,8 @@ on:
     branches: [main]
     paths:
       - "erp/gear/**"
+      - "erp/swisstax/**"
+      - "erp/docs/**"
       - "erp/image/**"
       - ".github/workflows/erp-image.yml"
 

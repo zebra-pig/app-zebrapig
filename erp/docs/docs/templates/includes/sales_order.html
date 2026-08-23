@@ -1,0 +1,33 @@
+{#- Zebra & Pig order confirmation. -#}
+{%- import "docs/templates/includes/_macros.html" as zp with context -%}
+{%- set ctx = document_context(doc) -%}
+{% include "docs/templates/includes/_style.html" %}
+
+<div class="zp">
+  {{ zp.letterhead(ctx) }}
+
+  {{ zp.reference([
+      (_("Order Number"), doc.name),
+      (_("Reference"), doc.get_formatted("po_no") if doc.po_no else None),
+      (_("Order Date"), doc.get_formatted("transaction_date")),
+  ]) }}
+
+  {{ zp.address_block(ctx, doc.customer_name, doc.contact_display, doc.tax_id) }}
+
+  {{ zp.salutation(
+      _("Order Confirmation No.") ~ " " ~ doc.name,
+      _("Hello %(name)s") % {"name": ctx.contact_name},
+      [_("Thank you for the order."), _("We hereby confirm that we will provide the following services:")]
+  ) }}
+
+  {{ zp.items_table(doc.items) }}
+  {{ zp.totals_table(doc) }}
+
+  {{ zp.closing(
+      doc.terms,
+      _("We sincerely thank you for your order and your trust.") ~ "<br>" ~ _("If you have any questions, we are happy to help."),
+      "Léonce Aklin"
+  ) }}
+
+  {{ zp.footer(ctx, "Léonce Aklin", doc.get_formatted("transaction_date")) }}
+</div>

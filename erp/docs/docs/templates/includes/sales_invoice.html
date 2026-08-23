@@ -1,0 +1,47 @@
+{#- Zebra & Pig invoice. -#}
+{%- import "docs/templates/includes/_macros.html" as zp with context -%}
+{%- set ctx = document_context(doc) -%}
+{%- set is_paid = doc.status == "Paid" -%}
+{% include "docs/templates/includes/_style.html" %}
+
+<div class="zp">
+  {{ zp.letterhead(ctx) }}
+
+  {{ zp.reference([
+      (_("Invoice Number"), doc.name),
+      (_("Reference"), doc.get_formatted("po_no") if doc.po_no else None),
+      (_("Invoice Date"), doc.get_formatted("posting_date")),
+      (_("Status"), _("Paid") if is_paid else None, "paid"),
+  ]) }}
+
+  {{ zp.address_block(ctx, doc.customer_name, doc.contact_display, doc.tax_id) }}
+
+  {{ zp.salutation(
+      _("Invoice No.") ~ " " ~ doc.name,
+      _("Hello %(name)s") % {"name": ctx.contact_name},
+      [_("Thank you for the order."), _("We reserve the right to invoice as follows:")]
+  ) }}
+
+  {{ zp.items_table(doc.items) }}
+  {{ zp.totals_table(doc) }}
+
+  {%- if is_paid %}
+    {%- set sentence = _("This invoice has already been paid. Thank you!") %}
+  {%- else %}
+    {%- set sentence = _("We ask you to transfer the amount of %(grand_total)s to the bank account with the IBAN %(iban)s by %(due_date)s.") % {
+        "grand_total": doc.get_formatted("grand_total"),
+        "due_date": doc.get_formatted("due_date"),
+        "iban": ctx.bank_account.get("iban", ""),
+    } %}
+  {%- endif %}
+  {{ zp.closing(doc.terms, sentence, "Léonce Aklin") }}
+
+  {%- if not doc.hide_qr_bill and not is_paid %}
+  {{ zp.qr_bill(doc.get("qr_bill_html")) }}
+  {%- else %}
+  {#- No date in the invoice footer: the format this replaces asked for
+      `transaction_date`, which a Sales Invoice does not carry, so it always
+      rendered blank. Pass `doc.get_formatted("posting_date")` to show one. -#}
+  {{ zp.footer(ctx, "Léonce Aklin") }}
+  {%- endif %}
+</div>

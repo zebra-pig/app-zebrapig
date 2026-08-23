@@ -1,0 +1,15 @@
+.footer{
+    position: absolute;
+    bottom: 0;
+}
+
+.signature{
+    width: 80px;
+    height: 70px;
+    margin-bottom: 5px;
+}
+
+h1{
+    font-weight: bold;
+    font-size: 16px;
+}
