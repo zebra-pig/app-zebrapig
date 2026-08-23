@@ -13,13 +13,6 @@
 {% include "docs/templates/includes/_fonts.html" %}
 <style>
   .zp {
-    /* The sheet's margin is padding here, not a PDF page margin. The Swiss
-       QR-bill payment part has to span the full 210 mm of the page, and content
-       cannot escape an engine-level margin — so the print formats set their
-       margins to 0 and the whitespace is applied below. */
-    padding: 15mm;
-    box-sizing: border-box;
-
     /* One vertical rhythm for every table row in the document. The formats this
        replaces inherited 10px on header cells from the Print Style and 5px on
        body rows from their own <style>, so a table's header sat on a different
@@ -106,15 +99,25 @@
   .zp-signature .signature { width: 80px; height: 70px; margin-bottom: 5px; display: block; }
 
   /* --- Swiss QR bill --------------------------------------------------- */
-  /* Exactly 210 x 105 mm, unscaled: bank scanners and the perforation line
-     depend on the geometry, so this is a conformance requirement, not styling.
-     The negative margins cancel .zp's 15 mm padding to reach the sheet edges. */
+  /* KNOWN GAP — the Swiss payment part is defined as exactly 210 x 105 mm and
+     must not be scaled: bank scanners and the perforation line depend on that
+     geometry. It currently starts at the 15 mm text margin and so loses its
+     right-hand 15 mm off the sheet.
+       Measured while trying to fix it: the print engines clip content that
+     reaches into the LEFT page margin but not the right, so `margin-left: -15mm`
+     cuts the Empfangsschein instead of moving it. The real fix is page margins
+     of 0 with the sheet margin as CSS padding — that reached a true 0..210 mm
+     span, but left a ~17 mm inset on the body text coming from Frappe's own
+     `.print-format { padding: 0.75in }`, which an `!important` reset did not
+     beat. Resolve that offline against `frappe.get_print`, not on production. */
   .zp-qrbill {
-    position: relative;
-    width: 210mm; margin: 40px -15mm -15mm; 
+    position: relative; width: 210mm; margin: 40px 0 0 0;
     page-break-inside: avoid; -webkit-column-break-inside: avoid;
   }
-  .zp-qrbill svg { display: block; width: 210mm; height: 105mm; }
+  /* No sizing override on the SVG: it carries width="210mm" height="105mm" and
+     no viewBox, so `height: auto` would compute to zero and the bill would
+     disappear — the same trap as the logo above. */
+  .zp-qrbill svg { display: block; }
 
   .zp .page-break { page-break-before: always; }
 </style>
