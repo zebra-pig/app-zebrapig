@@ -102,6 +102,40 @@ RUN useradd -ms /bin/bash frappe \
     && chmod 644 /templates/nginx/frappe.conf.template
 
 
+# RFC 6724 address selection: prefer IPv6 for global destinations.
+#
+# WHY — this ERP runs on an IPv6-only VPS. Containers reach the internet through
+# the `egress-v6` docker network, whose IPv6 prefix is a ULA (fd00:e12b:2::/64),
+# because Docker NAT66s ULA prefixes automatically. glibc's default gai.conf
+# gives fc00::/7 label 6 while global destinations get label 1, and RFC 6724
+# destination rule 5 ("prefer matching label") is evaluated BEFORE precedence.
+# A ULA source therefore makes glibc sort the IPv4 address of every dual-stack
+# host FIRST.
+#
+# The containers' IPv4 default route points at the docker bridge and dies there
+# — the host has no IPv4 at all — so every outbound connection burned ~7.2s on a
+# blackholed IPv4 SYN (1+2+4s retries) before falling back to IPv6. curl hides
+# this with Happy Eyeballs; Python's requests/urllib3 does not, so each
+# server-side HTTP call cost ~7s. Google OAuth login makes several of them in
+# sequence, which is why signing in took 45-50s (Traefik access log, 19-21 Aug
+# 2026) while the site itself stayed fast. Measured 2026-08-21 in
+# erpnext-one-backend-1: 7.29s -> 0.10s per call to the Google token endpoint.
+#
+# Relabelling fc00::/7 to 1 makes the ULA source match global IPv6 destinations,
+# so rule 5 ties and precedence (IPv6 40 > IPv4 35) puts IPv6 first. Declaring
+# any label resets glibc's built-in table, so the full default table is restated
+# with only fc00::/7 changed.
+RUN printf '%s\n' \
+    'label ::1/128       0' \
+    'label ::/0          1' \
+    'label 2002::/16     2' \
+    'label ::/96         3' \
+    'label ::ffff:0:0/96 4' \
+    'label fec0::/10     5' \
+    'label fc00::/7      1' \
+    'label 2001:0::/32   7' \
+    > /etc/gai.conf
+
 FROM base AS builder
 
 RUN apt-get update \

@@ -1,0 +1,59 @@
+# Authoritative network configuration for zebrapig-vps-2 (IPv6-only host).
+#
+# WHY THIS FILE EXISTS — total network outage, 2026-08-21
+# The host lost all networking across a reboot and had to be recovered over the
+# provider's VNC console. Two stale netplan files meant NOTHING matched the one
+# real NIC:
+#   - 50-cloud-init.yaml matched ens3 on macaddress fa:16:3e:4a:0f:b3 — the MAC of
+#     the ext-net port DETACHED on 2026-08-13. That port no longer exists.
+#   - 99-ens8.yaml matched on `name: ens8`. Once the old port was detached, the
+#     kernel renumbered the remaining port from ens8 back to ens3 on the next
+#     boot, so that match went stale too.
+# Net result: the NIC came up with no address, no route, and stayed link-DOWN.
+# The failure did NOT look like a network fault from outside: on-link neighbours
+# could still complete a TCP handshake, so sshd and Traefik accepted connections
+# on 22/80/443 and then never sent a byte. It read as a hung host.
+#
+# The real NIC is MAC fa:16:3e:5c:7d:50, carrying 2001:1600:10:101::2e.
+#
+# WHY STATIC, NOT DHCPv6 + RA
+# This host runs a Docker IPv6 network (egress-v6), which sets
+# net.ipv6.conf.all.forwarding=1. With forwarding enabled the kernel ignores
+# Router Advertisements unless accept_ra=2. The RA-derived default route has a
+# ~5 minute lifetime, so it can expire and never be renewed. Static addressing
+# plus a static default route removes that dependency, and the dependency on
+# DHCPv6 timing at boot, entirely. Determinism is worth more here than
+# auto-configuration: this box has now lost its network twice.
+#
+# CAVEAT: the gateway below is a link-local address derived from the provider
+# router's MAC. It is stable in practice — vps-1 learns the same one via RA — but
+# if Infomaniak replaces that router it goes stale. Cross-check against vps-1:
+#   ip -6 route show default
+#
+# This host is SINGLE-HOMED. Do not re-add the old source-based routing from
+# 99-ens8.yaml unless a second IPv6 port is genuinely attached; with one
+# interface there is no ECMP and no reply asymmetry to correct.
+network:
+  version: 2
+  ethernets:
+    ens3:
+      match:
+        macaddress: "fa:16:3e:5c:7d:50"
+      set-name: "ens3"
+      dhcp4: false
+      dhcp6: false
+      accept-ra: false
+      addresses:
+        - "2001:1600:10:101::2e/128"
+      # Explicit resolvers: with dhcp6/RA off we no longer learn DNS from the
+      # provider, and an IPv6-only host with no resolver looks exactly like a
+      # dead host to anything doing a name lookup. These are Infomaniak's, and
+      # match what vps-1 and filmkit-meilisearch receive via DHCPv6.
+      nameservers:
+        addresses:
+          - "2001:1600:0:aaaa::53:5"
+          - "2001:1600:0:aaaa::53:6"
+      routes:
+        - to: "::/0"
+          via: "fe80::f816:3eff:feb3:5ec5"
+          on-link: true

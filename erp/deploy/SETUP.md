@@ -32,6 +32,45 @@ That silently breaks *all* ERP egress — outgoing mail, external APIs, and the
 QR-bill microservice — while the site itself keeps serving fine, because inbound
 through Traefik is unaffected.
 
+### The host's own interface config — total outage, 2026-08-21
+
+The VPS lost **all** networking across a reboot and had to be recovered through
+Infomaniak's VNC console. Cause: two stale netplan files, so nothing matched the
+one real NIC.
+
+- `50-cloud-init.yaml` matched `ens3` on MAC `fa:16:3e:4a:0f:b3` — the ext-net
+  port **detached on 2026-08-13**. cloud-init never regenerates this file (its
+  config-drive is a static ISO from instance creation in 2023).
+- `99-ens8.yaml` matched on `name: ens8`. Once the old port was detached, the
+  kernel renumbered the survivor from `ens8` back to `ens3` on the next boot, so
+  that match went stale too.
+
+The port was attached *without a reboot*, so this stayed invisible for 8 days —
+the next boot was the first time either match was re-evaluated.
+
+**It does not look like a network fault.** On-link neighbours can still complete
+a TCP handshake, so sshd and Traefik accept connections on 22/80/443 and then
+never send a byte. It reads as a hung host. Diagnose from another VPS on the
+same segment: `ping6` works, TCP connects, nothing ever replies.
+
+**Fix in place:** a single authoritative `/etc/netplan/60-ext-v6.yaml` matching
+the real NIC by MAC (`fa:16:3e:5c:7d:50`), with a **static** address, default
+route and resolvers; cloud-init network config disabled via
+`/etc/cloud/cloud.cfg.d/99-disable-network-config.cfg`. Statics were chosen
+deliberately: `egress-v6` sets `net.ipv6.conf.all.forwarding=1`, and with
+forwarding on the kernel ignores Router Advertisements unless `accept_ra=2` — so
+the RA-derived default route (~5 min lifetime) can expire and never be renewed.
+Old files are kept in `/root/netplan.bak-2026-08-21/`.
+
+> The gateway `fe80::f816:3eff:feb3:5ec5` is link-local, derived from the
+> provider router's MAC. Stable in practice — vps-1 learns the same one via RA —
+> but if Infomaniak replaces that router it goes stale. Cross-check on vps-1:
+> `ip -6 route show default`.
+>
+> The host is now **single-homed**. Do not re-add source-based routing unless a
+> second IPv6 port is genuinely attached; with one interface there is no ECMP
+> and no reply asymmetry to correct.
+
 **Fix in place:** an external, IPv6-enabled network `egress-v6`. Docker ≥ 27
 does NAT66 for ULA prefixes automatically (no `daemon.json` change needed):
 
@@ -57,6 +96,41 @@ docker exec erpnext-one-backend-1 \
   curl -sS -m 10 -o /dev/null -w '%{http_code} via %{remote_ip}\n' \
   https://qrbill-microservice.zebrapig.workers.dev     # expect 200 via 2606:...
 ```
+
+### Consequence: every outbound call paid a 7-second IPv4 stall
+
+`egress-v6` uses a **ULA** prefix (`fd00:e12b:2::/64`) because that is what Docker
+NAT66s automatically. That has a non-obvious side effect on address selection.
+
+glibc's default `gai.conf` labels `fc00::/7` **6** and global IPv6 **1**, and
+RFC 6724 destination rule 5 ("prefer matching label") is evaluated *before*
+precedence. With a ULA source address, glibc therefore sorts the **IPv4** address
+of every dual-stack host first. The containers' IPv4 default route points at the
+docker bridge and dies there — the host has no IPv4 at all — so each outbound
+connection burned **~7.2s** on a blackholed IPv4 SYN (1+2+4s retries) before
+falling back to IPv6.
+
+Symptom: the site is fast, but anything doing a *server-side* HTTP call is not.
+Google OAuth login makes several calls in sequence and took **45–50s**
+(Traefik access log, 19–21 Aug 2026) — starting the same evening `egress-v6`
+was created. Outgoing mail and the QR-bill microservice paid the same tax.
+
+Fixed in the image (`erp/image/Containerfile`) by relabelling `fc00::/7` to `1`
+in `/etc/gai.conf`, which makes the ULA source match global IPv6 destinations so
+precedence (IPv6 40 > IPv4 35) puts IPv6 first. Measured in
+`erpnext-one-backend-1`: **7.29s -> 0.10s** per call to the Google token endpoint.
+
+> ⚠️ **`curl` cannot detect this.** curl does Happy Eyeballs — it races v4 and v6
+> and reports the winner, so the egress check above returns a healthy `200` in
+> ~200ms even while every Python call is stalling 7s. Verify with the resolver
+> order, or with `requests`, not curl:
+>
+> ```sh
+> docker exec erpnext-one-backend-1 python3 -c \
+>   "import socket;print([('v6' if a[0]==socket.AF_INET6 else 'v4') for a in \
+>    socket.getaddrinfo('accounts.google.com',443,type=socket.SOCK_STREAM)])"
+> # expect ['v6', 'v4'] — if 'v4' is first, /etc/gai.conf is not in effect
+> ```
 
 ### Consequence: `docker pull` from ghcr.io is broken
 
@@ -86,6 +160,70 @@ Let's Encrypt cannot be fixed by IPv6 egress alone: the `tlschallenge` needs LE
 to connect *inbound* to port 443, which lands on Cloudflare, not the origin. Use
 a Cloudflare **Origin Certificate**, or switch the resolver to a DNS-01
 challenge, if you want a real cert at the origin.
+
+---
+
+## Performance — log-table bloat makes every login slow
+
+Symptom: the site is fast (median `/desk` **220ms**) but the **first `/desk` load
+after a login** takes **11–16s**. Bimodal latency like this is the tell.
+
+Profiled with `cProfile` on 2026-08-21:
+
+```
+get_bootinfo                              13.26s
+└─ get_sidebar_items                      12.42s
+   └─ is_item_allowed (821x) -> has_permission (494x)
+      └─ get_lazy_doc (75x)               10.79s
+         └─ System Health Report.load_from_db   9.80s
+            └─ fetch_scheduler -> 2 SQL queries 9.66s
+```
+
+Building the desk sidebar permission-checks every item. `System Health Report`
+is a **virtual DocType**, so `has_permission` instantiates it — which runs the
+entire health report on every login. (The `UserWarning: Virtual doctypes don't
+support lazy loading: System Health Report` in `frappe.log` is this firing.)
+
+Its scheduler query aggregates 7 days of `tabScheduled Job Log`. That table had
+grown to **157,086 rows / 384 MB** — larger than all business data combined —
+against an `innodb_buffer_pool_size` of only **128 MB**. The 7-day working set
+could not stay cached, so the query did physical I/O and took **9.7s**. The
+giveaway: the same query over *1 day* ran in **0.12s**. It is buffer-pool
+thrashing, not row count.
+
+Retention was set to 90 days, which is simply too long for a 2 GB box.
+
+**Fix applied** — retention cut to 7 days in **Log Settings**, old rows deleted
+in 5,000-row batches (delete them in batches; one 145k-row transaction on 1 vCPU
+is a long lock), then the tablespace compacted:
+
+```sh
+# in Log Settings: Scheduled Job Log -> 7 days, then:
+DELETE FROM `tabScheduled Job Log` WHERE creation < NOW() - INTERVAL 7 DAY LIMIT 5000;  -- repeat
+OPTIMIZE TABLE `tabScheduled Job Log`;    -- 380MB -> 38MB, ~2s
+```
+
+Measured result:
+
+| | before | after |
+|---|---|---|
+| health-check query | 9.7 s | **0.15 s** |
+| cold `get_bootinfo` | 13.2 s | **0.8–1.2 s** (5.7 s on a fully cold cache) |
+| first `/desk` after login | 11–16 s | expect ~2–4 s |
+
+Frappe's daily `run_log_clean_up` now keeps the table at ~12k rows. Re-check with:
+
+```sh
+docker exec mariadb-database mariadb -u<db> -p<pw> <db> -e \
+  "SELECT COUNT(*), ROUND((data_length+index_length)/1024/1024) mb
+   FROM information_schema.tables t, \`tabScheduled Job Log\`
+   WHERE t.table_name='tabScheduled Job Log' AND t.table_schema=DATABASE();"
+```
+
+> The host has **1 vCPU / 2 GB and no swap**. That is the standing constraint
+> behind this class of problem — any table that outgrows the 128 MB buffer pool
+> turns into disk I/O. Watch `/proc/pressure/io`; it hit `full avg10=55%` during
+> the 2026-08-21 incident.
 
 ---
 
