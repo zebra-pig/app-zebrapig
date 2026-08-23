@@ -1,0 +1,164 @@
+{#-
+  Vereinfachter Jahresabschluss — the package a self-employed person attaches to the
+  tax return when they keep simplified books.
+
+  Art. 125 Abs. 2 DBG names exactly three statements: assets and liabilities, income
+  and expenditure, and private withdrawals and deposits — and they must be signed.
+  Art. 958d Abs. 2 OR asks for the prior-year figures beside them. The final table
+  restates the result in the boxes of Formular 15a, the federal questionnaire that
+  accompanies the return.
+-#}
+{% include "swisstax/templates/includes/_swiss_fonts.html" %}
+{%- macro n(value, blank_zero=True) -%}
+  {%- set v = value or 0 -%}
+  {%- if v == 0 and blank_zero %}–{% else %}{{ "{:,.2f}".format(v).replace(",", "@").replace(".", ",").replace("@", "’") }}{% endif -%}
+{%- endmacro -%}
+{%- macro table(rows, section, heading) -%}
+  {%- set filtered = rows | selectattr("section", "equalto", section) | list -%}
+  {%- if filtered %}
+  <table class="stmt">
+    <thead><tr>
+      <th class="acct">Konto</th><th>{{ heading }}</th>
+      <th class="amt">{{ doc.fiscal_year }}</th>
+      <th class="amt prev">{{ doc.previous_fiscal_year or "Vorjahr" }}</th>
+    </tr></thead>
+    <tbody>
+    {%- for row in filtered %}
+      <tr>
+        <td class="acct">{{ row.account_number or "" }}</td>
+        <td>{{ row.label }}</td>
+        <td class="amt">{{ n(row.amount) }}</td>
+        <td class="amt prev">{{ n(row.previous_amount) }}</td>
+      </tr>
+    {%- endfor %}
+    </tbody>
+  </table>
+  {%- else %}
+  <p class="empty">Keine Positionen erfasst.</p>
+  {%- endif -%}
+{%- endmacro -%}
+{%- macro total(label, value, strong=False) -%}
+  <table class="stmt totals"><tr class="{{ 'strong' if strong else '' }}">
+    <td>{{ label }}</td><td class="amt">{{ n(value, False) }}</td>
+  </tr></table>
+{%- endmacro -%}
+<style>
+  html, body { margin: 0 !important; padding: 0 !important; }
+  .vja {
+    font-family: 'SwissForm', 'Segoe UI', Arial, sans-serif;
+    font-weight: 300; font-size: 9.5pt; line-height: 1.45; color: #1f2225;
+  }
+  .vja h1 { font-size: 15pt; font-weight: 700; margin: 0 0 1mm; letter-spacing: -0.01em; }
+  .vja h2 {
+    font-size: 10.5pt; font-weight: 700; margin: 7mm 0 2mm;
+    padding-bottom: 1mm; border-bottom: 1pt solid #1f2225;
+  }
+  .vja .lead { font-size: 9pt; color: #4a4f55; margin: 0 0 5mm; }
+  .vja .meta { width: 100%; border-collapse: collapse; margin-bottom: 5mm; font-size: 9pt; }
+  .vja .meta td { padding: 0.6mm 0; vertical-align: top; }
+  .vja .meta td.k { color: #6b7178; width: 34mm; }
+  .vja .notice {
+    border: 0.6pt solid #c9ced4; border-left: 2.5pt solid #1f2225;
+    padding: 3mm 4mm; font-size: 8.5pt; color: #33383d; margin-bottom: 2mm;
+  }
+  .vja .notice p { margin: 0 0 1.8mm; }
+  .vja .notice p:last-child { margin-bottom: 0; }
+  .vja table.stmt { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  .vja table.stmt th {
+    text-align: left; font-weight: 600; font-size: 8pt; color: #6b7178;
+    border-bottom: 0.5pt solid #c9ced4; padding: 1mm 1.5mm; text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .vja table.stmt td { padding: 0.9mm 1.5mm; border-bottom: 0.4pt solid #e6e9ec; }
+  .vja table.stmt .acct { width: 16mm; color: #6b7178; font-variant-numeric: tabular-nums; }
+  .vja table.stmt .amt {
+    text-align: right; width: 27mm; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .vja table.stmt .prev { color: #6b7178; }
+  .vja table.totals { margin-top: 1.5mm; }
+  .vja table.totals td { border: 0; border-top: 0.8pt solid #1f2225; font-weight: 600; }
+  .vja table.totals tr.strong td { border-top: 2pt double #1f2225; font-weight: 700; font-size: 10pt; }
+  .vja .empty { font-size: 9pt; color: #8b9198; font-style: italic; }
+  .vja .sign { margin-top: 12mm; page-break-inside: avoid; }
+  .vja .sign .line { border-top: 0.5pt solid #1f2225; width: 70mm; margin-top: 14mm; padding-top: 1mm; font-size: 8.5pt; }
+  .vja footer.legal {
+    margin-top: 9mm; padding-top: 2.5mm; border-top: 0.4pt solid #c9ced4;
+    font-size: 7.5pt; color: #6b7178;
+  }
+  .vja footer.legal li { margin-bottom: 0.6mm; }
+</style>
+
+<div class="vja">
+  <h1>Vereinfachter Jahresabschluss</h1>
+  <p class="lead">
+    Aufstellungen über Aktiven und Passiven, Einnahmen und Ausgaben sowie Privatentnahmen
+    und Privateinlagen nach Art.&nbsp;125 Abs.&nbsp;2 DBG
+  </p>
+
+  <table class="meta">
+    <tr><td class="k">Unternehmen</td><td><strong>{{ doc.company }}</strong></td>
+        <td class="k">Geschäftsjahr</td><td>{{ doc.fiscal_year }}</td></tr>
+    <tr><td class="k">UID</td><td>{{ frappe.db.get_value("Company", doc.company, "tax_id") or "—" }}</td>
+        <td class="k">Periode</td>
+        <td>{{ frappe.utils.formatdate(doc.from_date, "dd.MM.yyyy") }} – {{ frappe.utils.formatdate(doc.to_date, "dd.MM.yyyy") }}</td></tr>
+    <tr><td class="k">Währung</td><td>{{ doc.currency }}</td>
+        <td class="k">Vorjahr</td><td>{{ doc.previous_fiscal_year or "—" }}</td></tr>
+  </table>
+
+  {%- if doc.compliance_note %}
+  <div class="notice">
+    {%- for para in doc.compliance_note.split("\n\n") %}<p>{{ para }}</p>{% endfor %}
+  </div>
+  {%- endif %}
+
+  <h2>1 · Aufstellung über Einnahmen und Ausgaben</h2>
+  {{ table(doc.income_lines, "Einnahmen", "Einnahmen") }}
+  {{ total("Total Einnahmen", doc.total_income) }}
+  {{ table(doc.expense_lines, "Ausgaben", "Ausgaben") }}
+  {{ total("Total Ausgaben", doc.total_expense) }}
+  {{ total("Ergebnis des Geschäftsjahres — Einkommen aus selbstständiger Erwerbstätigkeit", doc.profit_loss, True) }}
+
+  <h2>2 · Aufstellung über Aktiven und Passiven (Vermögenslage)</h2>
+  {{ table(doc.asset_lines, "Aktiven", "Aktiven") }}
+  {{ total("Total Aktiven", doc.total_assets) }}
+  {{ table(doc.liability_lines, "Passiven", "Passiven") }}
+  {{ total("Total Passiven", doc.total_liabilities) }}
+  {{ total("Reinvermögen (Eigenkapital)", doc.net_assets, True) }}
+
+  <h2>3 · Aufstellung über Privatentnahmen und Privateinlagen</h2>
+  {{ table(doc.private_lines, "Privatentnahmen", "Privatentnahmen") }}
+  {{ total("Total Privatentnahmen", doc.total_private_withdrawals) }}
+  {{ table(doc.private_lines, "Privateinlagen", "Privateinlagen") }}
+  {{ total("Total Privateinlagen", doc.total_private_deposits) }}
+
+  <h2>4 · Übertrag auf Formular 15a</h2>
+  <table class="stmt">
+    <thead><tr><th class="acct">Ziffer</th><th>Fragebogen für Selbstständigerwerbende mit vereinfachter Buchführung</th><th class="amt">{{ doc.fiscal_year }}</th></tr></thead>
+    <tbody>
+      <tr><td class="acct">1f</td><td>Umsatz (Erlös)</td><td class="amt">{{ n(doc.f15a_1f_turnover, False) }}</td></tr>
+      <tr><td class="acct">2e</td><td>Waren- und Materialaufwand</td><td class="amt">{{ n(doc.f15a_2e_goods, False) }}</td></tr>
+      <tr><td class="acct">3</td><td>Bruttogewinn</td><td class="amt">{{ n(doc.f15a_3_gross_profit, False) }}</td></tr>
+      <tr><td class="acct">4</td><td>Andere Geschäftserträge</td><td class="amt">{{ n(doc.f15a_4_other_income, False) }}</td></tr>
+      <tr><td class="acct">5</td><td>Total Geschäftserträge</td><td class="amt">{{ n(doc.f15a_5_total_income, False) }}</td></tr>
+      <tr><td class="acct">6</td><td>Geschäftsaufwendungen</td><td class="amt">{{ n(doc.f15a_6_expenses, False) }}</td></tr>
+      <tr><td class="acct">7</td><td><strong>Einkommen aus selbstständiger Erwerbstätigkeit</strong></td><td class="amt"><strong>{{ n(doc.f15a_7_income, False) }}</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="sign">
+    <p style="font-size:9pt;margin:0">Die Richtigkeit und Vollständigkeit der vorstehenden Aufstellungen bestätigt:</p>
+    <div class="line">
+      {{ doc.place }}{% if doc.place and doc.statement_date %}, {% endif %}{{ frappe.utils.formatdate(doc.statement_date, "dd.MM.yyyy") }}
+      &nbsp;·&nbsp; {{ doc.signatory }}
+    </div>
+  </div>
+
+  <footer class="legal">
+    <ul style="margin:0;padding-left:4mm">
+      <li>Art. 957 Abs. 2 Ziff. 1 OR — Einzelunternehmen mit weniger als CHF 500'000 Umsatzerlös führen Buch lediglich über die Einnahmen und Ausgaben sowie über die Vermögenslage; Art. 957 Abs. 3 OR erklärt die Grundsätze ordnungsmässiger Buchführung als sinngemäss anwendbar.</li>
+      <li>Art. 958b Abs. 2 OR — bis CHF 100'000 Nettoerlös darf auf die zeitliche Abgrenzung verzichtet und auf Einnahmen und Ausgaben abgestellt werden. Derselbe Betrag ist die Umsatzgrenze der Mehrwertsteuerpflicht (Art. 10 Abs. 2 Bst. a MWSTG).</li>
+      <li>Art. 125 Abs. 2 DBG — der Steuererklärung sind die unterzeichneten Aufstellungen über Aktiven und Passiven, Einnahmen und Ausgaben sowie Privatentnahmen und Privateinlagen beizulegen.</li>
+      <li>Art. 958d Abs. 2 OR — Vorjahreswerte; Art. 958f Abs. 1 OR und Art. 126 Abs. 3 DBG — Aufbewahrung während zehn Jahren.</li>
+    </ul>
+  </footer>
+</div>

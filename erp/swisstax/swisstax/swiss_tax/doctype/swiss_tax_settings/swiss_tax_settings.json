@@ -1,0 +1,145 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-08-23 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "employer_section",
+  "employer_place",
+  "employer_block",
+  "employer_col",
+  "expense_regulations_approved",
+  "expense_regulations_canton",
+  "expense_regulations_date",
+  "mapping_section",
+  "mapping_help",
+  "component_map",
+  "statement_section",
+  "statement_signatory",
+  "statement_place",
+  "statement_col",
+  "simplified_bookkeeping_threshold",
+  "accrual_waiver_threshold"
+ ],
+ "fields": [
+  {
+   "fieldname": "employer_section",
+   "fieldtype": "Section Break",
+   "label": "Employer block (Formular 11, field I)"
+  },
+  {
+   "fieldname": "employer_place",
+   "fieldtype": "Data",
+   "label": "Place",
+   "description": "«Ort» printed in field I."
+  },
+  {
+   "fieldname": "employer_block",
+   "fieldtype": "Small Text",
+   "label": "Name, address, contact and telephone",
+   "description": "Rz 12: the employer's name and exact address, the person responsible for the certificate and their telephone number. Printed in the confirmation box."
+  },
+  {
+   "fieldname": "employer_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expense_regulations_approved",
+   "fieldtype": "Check",
+   "label": "Approved expense regulations (Spesenreglement)",
+   "description": "Rz 59/65 — a regulation approved by the canton of domicile."
+  },
+  {
+   "fieldname": "expense_regulations_canton",
+   "fieldtype": "Data",
+   "label": "Approving canton",
+   "depends_on": "expense_regulations_approved",
+   "description": "Vehicle-plate abbreviation, e.g. ZH."
+  },
+  {
+   "fieldname": "expense_regulations_date",
+   "fieldtype": "Date",
+   "label": "Approval date",
+   "depends_on": "expense_regulations_approved"
+  },
+  {
+   "fieldname": "mapping_section",
+   "fieldtype": "Section Break",
+   "label": "Salary component mapping"
+  },
+  {
+   "fieldname": "mapping_help",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted small'>Every Salary Component that appears on a Salary Slip must be assigned to a box of Formular 11 (or explicitly marked <em>Not on the certificate</em>). Pulling a certificate fails loudly on an unmapped component rather than dropping it.</p>"
+  },
+  {
+   "fieldname": "component_map",
+   "fieldtype": "Table",
+   "label": "Components",
+   "options": "Swiss Salary Certificate Component"
+  },
+  {
+   "fieldname": "statement_section",
+   "fieldtype": "Section Break",
+   "label": "Simplified annual statement"
+  },
+  {
+   "fieldname": "statement_signatory",
+   "fieldtype": "Data",
+   "label": "Signatory",
+   "description": "Name printed above the signature line of the annual statement."
+  },
+  {
+   "fieldname": "statement_place",
+   "fieldtype": "Data",
+   "label": "Place"
+  },
+  {
+   "fieldname": "statement_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "simplified_bookkeeping_threshold",
+   "fieldtype": "Currency",
+   "label": "Simplified bookkeeping threshold (CHF)",
+   "default": "500000",
+   "precision": "0",
+   "description": "Art. 957 Abs. 2 Ziff. 1 OR — below this turnover only income, expenditure and the asset position must be recorded."
+  },
+  {
+   "fieldname": "accrual_waiver_threshold",
+   "fieldtype": "Currency",
+   "label": "Accrual waiver threshold (CHF)",
+   "default": "100000",
+   "precision": "0",
+   "description": "Art. 958b Abs. 2 OR — up to this net revenue, accruals may be waived and receipts/payments used instead. It is also the VAT registration threshold (Art. 10 Abs. 2 Bst. a MWSTG)."
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-08-23 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Swiss Tax",
+ "name": "Swiss Tax Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

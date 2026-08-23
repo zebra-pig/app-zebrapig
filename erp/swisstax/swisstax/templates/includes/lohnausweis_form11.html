@@ -1,0 +1,299 @@
+{#-
+  Lohnausweis / Rentenbescheinigung — a faithful reproduction of Formular 11 dfi
+  (605.040.18N 01.21, ESTV/SSK) on plain white paper, which Rz 75 of the Wegleitung
+  names as the normal way for payroll software to issue the certificate.
+
+  GENERATED — do not edit by hand. Every label position, rule and box below was read
+  out of the official PDF's own geometry and expressed in millimetres on the A4
+  sheet. Rebuild with erp/swisstax/tools/build_form11_template.py; the surrounding
+  markup lives in erp/swisstax/tools/form11_parts/.
+
+  Type is Source Sans 3 (SIL OFL 1.1), embedded as base64 woff2 so the renderer needs
+  neither a network nor a system font — that is what makes Chrome, Safari and
+  wkhtmltopdf agree. It is the closest freely redistributable match to the form's
+  Frutiger LT Com, tracking its advance widths to within about 3% across this form.
+-#}
+{%- macro chf(value, always=False) -%}
+  {%- set n = (value or 0) | round(0, 'common') | int -%}
+  {%- if n or always %}{{ "{:,}".format(n).replace(",", "’") }}{% endif -%}
+{%- endmacro -%}
+{%- macro d(value) -%}
+  {%- if value %}{{ frappe.utils.formatdate(value, "dd.MM.yyyy") }}{% endif -%}
+{%- endmacro -%}
+{% include "swisstax/templates/includes/_swiss_fonts.html" %}
+<style>
+@page { size: A4 portrait; margin: 0; }
+/* The sheet *is* the page: nothing above it may occupy height, or every box on
+   the form shifts away from the millimetres the official layout puts it at.
+   A letter head is what pushes it down in a stock Frappe print view. */
+html, body { margin: 0 !important; padding: 0 !important; }
+.print-format, .print-format-gutter, .page-break {
+  padding: 0 !important; margin: 0 !important; border: 0 !important; min-height: 0 !important;
+}
+.letter-head, .letter-head-footer, #header-html, #footer-html,
+.print-heading, .letterhead-footer { display: none !important; }
+.la-sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm; overflow: hidden;
+  background: #fff; color: #37393b;
+  font-family: 'SwissForm', 'Frutiger LT Com', 'Frutiger', 'Segoe UI', Arial, sans-serif;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.la-sheet .t, .la-sheet .f, .la-sheet .side {
+  position: absolute; white-space: pre; line-height: 1.424; transform-origin: left top;
+}
+.la-sheet .w300 { font-weight: 300 }
+.la-sheet .w600 { font-weight: 600 }
+.la-sheet .w700 { font-weight: 700 }
+.la-sheet .w900 { font-weight: 900 }
+.la-sheet .rule { position: absolute; height: 0; border-top: 0.3pt solid #37393b }
+.la-sheet .crop { position: absolute; background: #37393b }
+/* Address-window guide of field H — the form prints it dashed, in magenta. */
+.la-sheet .window {
+  position: absolute; left: 15.02mm; top: 40.02mm; width: 184.96mm; height: 44.96mm;
+  border: 0.4pt dashed #eb6a84; border-radius: 2.2mm;
+}
+/* Value layer: one box per AcroForm field of the official PDF, at its own rect. */
+.la-sheet .f { font-size: 8pt; font-weight: 300; height: 5mm; line-height: 5mm }
+.la-sheet .f.num { text-align: right; padding-right: 1.2mm; font-variant-numeric: tabular-nums }
+.la-sheet .f.cross { text-align: center; font-weight: 700; font-size: 9pt }
+.la-sheet .f.multi { white-space: pre-line; line-height: 3.6mm; height: auto }
+.la-sheet .f.small { font-size: 6.5pt; line-height: 2.9mm }
+.la-sheet .side { font-weight: 600; font-size: 6.5pt; transform: rotate(-90deg) }
+</style>
+
+<div class="la-sheet">
+
+  {#- corner crop marks of the printed form -#}
+  <div class="crop" style="left:5.18mm;top:5mm;width:0.25mm;height:5mm"></div>
+  <div class="crop" style="left:5.21mm;top:5.18mm;width:4.79mm;height:0.25mm"></div>
+  <div class="crop" style="left:200mm;top:5.18mm;width:5mm;height:0.25mm"></div>
+  <div class="crop" style="left:204.82mm;top:5.21mm;width:0.25mm;height:4.79mm"></div>
+  <div class="crop" style="left:5.18mm;top:287mm;width:0.25mm;height:4.79mm"></div>
+  <div class="crop" style="left:204.82mm;top:287mm;width:0.25mm;height:5mm"></div>
+  <div class="crop" style="left:5mm;top:291.82mm;width:5mm;height:0.25mm"></div>
+  <div class="crop" style="left:200mm;top:291.82mm;width:4.79mm;height:0.25mm"></div>
+
+  <div class="window"></div>
+
+  {#- ------------------------------------------------------------- generated form -#}
+  <div class="t w600" style="left:16.0mm;top:5.59mm;font-size:8.0pt">A</div>
+  <div class="t w900" style="left:32.5mm;top:4.65mm;font-size:12.0pt">Lohnausweis – Certificat de salaire – Certificato di salario</div>
+  <div class="t w600" style="left:16.0mm;top:11.6mm;font-size:8.0pt">B</div>
+  <div class="t w900" style="left:32.5mm;top:10.65mm;font-size:12.0pt">Rentenbescheinigung – Attestation de rentes – Attestazione delle rendite</div>
+  <div class="t w300" style="left:137.0mm;top:17.25mm;font-size:6.5pt">Unentgeltliche Beförderung zwischen Wohn- und Arbeitsort</div>
+  <div class="t w600" style="left:16.0mm;top:18.59mm;font-size:8.0pt">C</div>
+  <div class="t w600" style="left:121.0mm;top:18.59mm;font-size:8.0pt">F</div>
+  <div class="t w300" style="left:137.0mm;top:20.25mm;font-size:6.5pt">Transport gratuit entre le domicile et le lieu de travail</div>
+  <div class="t w300" style="left:68.0mm;top:23.25mm;font-size:6.5pt">Geburtsdatum – Date de naissance – Data di nascita</div>
+  <div class="t w300" style="left:137.0mm;top:23.25mm;font-size:6.5pt">Trasporto gratuito dal domicilio al luogo di lavoro</div>
+  <div class="t w300" style="left:20.5mm;top:23.35mm;font-size:6.5pt">AHV-Nr. – No AVS – N. AVS</div>
+  <div class="t w300" style="left:137.0mm;top:27.25mm;font-size:6.5pt">Kantinenverpflegung / Lunch-Checks</div>
+  <div class="t w600" style="left:16.0mm;top:28.6mm;font-size:8.0pt">D</div>
+  <div class="t w600" style="left:51.0mm;top:28.6mm;font-size:8.0pt">E</div>
+  <div class="t w600" style="left:121.0mm;top:28.6mm;font-size:8.0pt">G</div>
+  <div class="t w300" style="left:137.0mm;top:30.25mm;font-size:6.5pt">Repas à la cantine / chèques-repas</div>
+  <div class="t w300" style="left:137.0mm;top:33.25mm;font-size:6.5pt">Pasti alla mensa / buoni pasto</div>
+  <div class="t w300" style="left:20.5mm;top:33.25mm;font-size:6.5pt">Jahr – Année – Anno</div>
+  <div class="t w300" style="left:55.0mm;top:33.25mm;font-size:6.5pt">von – du – dal</div>
+  <div class="t w300" style="left:81.0mm;top:33.25mm;font-size:6.5pt">bis – au – al</div>
+  <div class="t w600" style="left:16.0mm;top:40.08mm;font-size:8.0pt">H</div>
+  <div class="t w300" style="left:168.0mm;top:92.65mm;font-size:6.5pt">Nur ganze Frankenbeträge</div>
+  <div class="t w300" style="left:168.0mm;top:95.65mm;font-size:6.5pt">Que des montants entiers</div>
+  <div class="t w300" style="left:30.17mm;top:97.65mm;font-size:6.5pt">soweit nicht unter Ziffer 2–7 aufzuführen</div>
+  <div class="t w600" style="left:16.49mm;top:97.11mm;font-size:8.0pt">1.</div>
+  <div class="t w300" style="left:20.5mm;top:97.11mm;font-size:8.0pt">Lohn</div>
+  <div class="t w300" style="left:79.91mm;top:97.11mm;font-size:8.0pt">/ Rente</div>
+  <div class="t w300" style="left:168.0mm;top:98.65mm;font-size:6.5pt">Unicamente importi interi</div>
+  <div class="t w300" style="left:30.17mm;top:100.65mm;font-size:6.5pt">qui ne concerne pas les chiffres 2 à 7 ci-dessous</div>
+  <div class="t w300" style="left:20.5mm;top:100.11mm;font-size:8.0pt">Salaire</div>
+  <div class="t w300" style="left:79.91mm;top:100.11mm;font-size:8.0pt">/ Rente</div>
+  <div class="t w300" style="left:30.17mm;top:103.65mm;font-size:6.5pt">se non da indicare sotto cifre da 2 a 7 più sotto</div>
+  <div class="t w300" style="left:20.5mm;top:103.11mm;font-size:8.0pt">Salario</div>
+  <div class="t w300" style="left:79.91mm;top:103.11mm;font-size:8.0pt">/ Rendita</div>
+  <div class="t w600" style="left:55.0mm;top:108.48mm;font-size:8.0pt">2.1</div>
+  <div class="t w300" style="left:60.5mm;top:108.48mm;font-size:8.0pt">Verpflegung, Unterkunft – Pension, logement – Vitto, alloggio</div>
+  <div class="t w300" style="left:164.89mm;top:108.48mm;font-size:8.0pt">+</div>
+  <div class="t w600" style="left:16.49mm;top:108.67mm;font-size:8.0pt">2.</div>
+  <div class="t w300 fit" style="left:20.5mm;top:108.67mm;font-size:8.0pt;transform:scaleX(0.950)">Gehaltsnebenleistungen</div>
+  <div class="t w300 fit" style="left:20.5mm;top:111.67mm;font-size:8.0pt;transform:scaleX(0.906)">Prestations salariales accessoires</div>
+  <div class="t w600" style="left:55.0mm;top:114.48mm;font-size:8.0pt">2.2</div>
+  <div class="t w300 fit" style="left:60.5mm;top:114.48mm;font-size:8.0pt;transform:scaleX(0.914)">Privatanteil Geschäftsfahrzeug – Part privée voiture de service – Quota privata automobile di servizio</div>
+  <div class="t w300" style="left:164.89mm;top:114.48mm;font-size:8.0pt">+</div>
+  <div class="t w300 fit" style="left:20.5mm;top:114.67mm;font-size:8.0pt;transform:scaleX(0.889)">Prestazioni accessorie al salario</div>
+  <div class="t w600" style="left:55.0mm;top:118.98mm;font-size:8.0pt">2.3</div>
+  <div class="t w300" style="left:60.5mm;top:118.98mm;font-size:8.0pt">Andere – Autres – Altre</div>
+  <div class="t w300" style="left:164.89mm;top:120.48mm;font-size:8.0pt">+</div>
+  <div class="t w300" style="left:60.5mm;top:122.52mm;font-size:6.5pt">Art – Genre – Genere</div>
+  <div class="t w300" style="left:122.04mm;top:128.12mm;font-size:6.5pt">Art – Genre – Genere</div>
+  <div class="t w600" style="left:16.49mm;top:127.58mm;font-size:8.0pt">3.</div>
+  <div class="t w300" style="left:20.5mm;top:127.58mm;font-size:8.0pt">Unregelmässige Leistungen – Prestations non périodiques – Prestazioni aperiodiche</div>
+  <div class="t w300" style="left:164.89mm;top:132.58mm;font-size:8.0pt">+</div>
+  <div class="t w600" style="left:16.49mm;top:137.08mm;font-size:8.0pt">4.</div>
+  <div class="t w300" style="left:20.5mm;top:137.08mm;font-size:8.0pt">Kapitalleistungen – Prestations en capital – Prestazioni in capitale</div>
+  <div class="t w300" style="left:164.89mm;top:138.58mm;font-size:8.0pt">+</div>
+  <div class="t w300" style="left:20.5mm;top:140.62mm;font-size:6.5pt">Art – Genre – Genere</div>
+  <div class="t w600" style="left:16.49mm;top:144.58mm;font-size:8.0pt">5.</div>
+  <div class="t w300" style="left:20.5mm;top:144.58mm;font-size:8.0pt">Beteiligungsrechte gemäss Beiblatt – Droits de participation selon annexe – Diritti di partecipazione secondo allegato</div>
+  <div class="t w300" style="left:164.89mm;top:144.58mm;font-size:8.0pt">+</div>
+  <div class="t w600" style="left:16.49mm;top:150.58mm;font-size:8.0pt">6.</div>
+  <div class="t w300 fit" style="left:20.5mm;top:150.58mm;font-size:8.0pt;transform:scaleX(0.908)">Verwaltungsratsentschädigungen – Indemnités des membres de l’administration – Indennità dei membri di consigli d’amministrazione</div>
+  <div class="t w300" style="left:164.89mm;top:150.58mm;font-size:8.0pt">+</div>
+  <div class="t w600" style="left:16.49mm;top:155.07mm;font-size:8.0pt">7.</div>
+  <div class="t w300" style="left:20.5mm;top:155.07mm;font-size:8.0pt">Andere Leistungen – Autres prestations – Altre prestazioni</div>
+  <div class="t w300" style="left:164.89mm;top:156.57mm;font-size:8.0pt">+</div>
+  <div class="t w300" style="left:20.5mm;top:158.61mm;font-size:6.5pt">Art – Genre – Genere</div>
+  <div class="t w600" style="left:16.49mm;top:162.57mm;font-size:8.0pt">8.</div>
+  <div class="t w300" style="left:20.5mm;top:162.57mm;font-size:8.0pt">Bruttolohn total / Rente – Salaire brut total / Rente – Salario lordo totale / Rendita</div>
+  <div class="t w300" style="left:164.89mm;top:162.57mm;font-size:8.0pt">=</div>
+  <div class="t w600" style="left:16.49mm;top:168.57mm;font-size:8.0pt">9.</div>
+  <div class="t w300" style="left:20.5mm;top:168.57mm;font-size:8.0pt">Beiträge AHV/IV/EO/ALV/NBUV – Cotisations AVS/AI/APG/AC/AANP – Contributi AVS/AI/IPG/AD/AINP</div>
+  <div class="t w300" style="left:165.16mm;top:168.57mm;font-size:8.0pt">–</div>
+  <div class="t w300" style="left:53.0mm;top:175.21mm;font-size:6.5pt">2. Säule</div>
+  <div class="t w600" style="left:15.0mm;top:174.67mm;font-size:8.0pt">10.</div>
+  <div class="t w300" style="left:20.5mm;top:174.67mm;font-size:8.0pt"> Berufliche Vorsorge</div>
+  <div class="t w600" style="left:65.5mm;top:174.67mm;font-size:8.0pt">10.1</div>
+  <div class="t w300" style="left:70.58mm;top:174.67mm;font-size:8.0pt">  Ordentliche Beiträge – Cotisations ordinaires – Contributi ordinari</div>
+  <div class="t w300" style="left:165.16mm;top:174.67mm;font-size:8.0pt">–</div>
+  <div class="t w300" style="left:54.19mm;top:178.35mm;font-size:4.22pt">e</div>
+  <div class="t w300" style="left:53.0mm;top:178.21mm;font-size:6.5pt">2</div>
+  <div class="t w300" style="left:54.9mm;top:178.21mm;font-size:6.5pt"> pilier</div>
+  <div class="t w300" style="left:20.5mm;top:177.67mm;font-size:8.0pt">Prévoyance professionnelle</div>
+  <div class="t w300" style="left:54.18mm;top:181.35mm;font-size:4.22pt">o</div>
+  <div class="t w300" style="left:53.0mm;top:181.2mm;font-size:6.5pt">2</div>
+  <div class="t w300" style="left:54.97mm;top:181.2mm;font-size:6.5pt"> pilastro</div>
+  <div class="t w300" style="left:20.5mm;top:180.66mm;font-size:8.0pt">Previdenza professionale</div>
+  <div class="t w600" style="left:65.5mm;top:180.67mm;font-size:8.0pt">10.2</div>
+  <div class="t w300" style="left:70.86mm;top:180.67mm;font-size:8.0pt">  Beiträge für den Einkauf – Cotisations pour le rachat – Contributi per il riscatto</div>
+  <div class="t w300" style="left:165.16mm;top:180.67mm;font-size:8.0pt">–</div>
+  <div class="t w700" style="left:15.0mm;top:186.67mm;font-size:8.0pt">11.</div>
+  <div class="t w700" style="left:20.5mm;top:186.67mm;font-size:8.0pt">Nettolohn / Rente – Salaire net / Rente – Salario netto / Rendita</div>
+  <div class="t w300" style="left:164.89mm;top:186.67mm;font-size:8.0pt">=</div>
+  <div class="t w600" style="left:20.5mm;top:191.21mm;font-size:6.5pt">In die Steuererklärung übertragen – A reporter sur la déclaration d’impôt – Da riportare nella dichiarazione d’imposta</div>
+  <div class="t w600" style="left:15.0mm;top:195.67mm;font-size:8.0pt">12.</div>
+  <div class="t w300" style="left:20.5mm;top:195.67mm;font-size:8.0pt">Quellensteuerabzug – Retenue de l’impôt à la source – Ritenuta d’imposta alla fonte</div>
+  <div class="t w600" style="left:15.0mm;top:201.11mm;font-size:8.0pt">13.</div>
+  <div class="t w300" style="left:20.5mm;top:201.11mm;font-size:8.0pt">Spesenvergütungen – Allocations pour frais – Indennità per spese</div>
+  <div class="t w300" style="left:20.5mm;top:204.65mm;font-size:6.5pt">Nicht im Bruttolohn (gemäss Ziffer 8) enthalten – Non comprises dans le salaire brut (au chiffre 8) – Non comprese nel salario lordo (sotto cifra 8)</div>
+  <div class="t w600" style="left:20.5mm;top:207.67mm;font-size:8.0pt">13.1</div>
+  <div class="t w300" style="left:25.55mm;top:207.67mm;font-size:8.0pt">  Effektive Spesen</div>
+  <div class="t w600 fit" style="left:50.0mm;top:207.67mm;font-size:8.0pt;transform:scaleX(0.967)">13.1.1</div>
+  <div class="t w300" style="left:59.0mm;top:207.67mm;font-size:8.0pt">Reise, Verpflegung, Übernachtung – Voyage, repas, nuitées – Viaggio, vitto, alloggio</div>
+  <div class="t w300" style="left:26.0mm;top:210.67mm;font-size:8.0pt"> Frais effectifs</div>
+  <div class="t w600" style="left:50.0mm;top:212.17mm;font-size:8.0pt">13.1.2</div>
+  <div class="t w300" style="left:59.0mm;top:212.17mm;font-size:8.0pt">Übrige – Autres – Altre</div>
+  <div class="t w300" style="left:26.0mm;top:213.67mm;font-size:8.0pt"> Spese effettive</div>
+  <div class="t w300" style="left:59.0mm;top:215.71mm;font-size:6.5pt">Art – Genre – Genere</div>
+  <div class="t w600" style="left:50.0mm;top:219.58mm;font-size:8.0pt">13.2.1</div>
+  <div class="t w300" style="left:59.0mm;top:219.58mm;font-size:8.0pt">Repräsentation – Représentation – Rappresentanza</div>
+  <div class="t w600" style="left:20.5mm;top:219.67mm;font-size:8.0pt">13.2</div>
+  <div class="t w300" style="left:26.0mm;top:219.67mm;font-size:8.0pt"> Pauschalspesen</div>
+  <div class="t w300" style="left:26.0mm;top:222.67mm;font-size:8.0pt"> Frais forfaitaires</div>
+  <div class="t w600" style="left:50.0mm;top:225.58mm;font-size:8.0pt">13.2.2</div>
+  <div class="t w300" style="left:57.78mm;top:225.58mm;font-size:8.0pt"> Auto – Voiture – Automobile</div>
+  <div class="t w300" style="left:26.0mm;top:225.66mm;font-size:8.0pt"> Spese forfettarie</div>
+  <div class="t w600" style="left:50.0mm;top:230.08mm;font-size:8.0pt">13.2.3</div>
+  <div class="t w300" style="left:57.77mm;top:230.08mm;font-size:8.0pt"> Übrige – Autres – Altre</div>
+  <div class="t w300" style="left:59.0mm;top:233.62mm;font-size:6.5pt">Art – Genre – Genere</div>
+  <div class="t w600" style="left:20.6mm;top:237.67mm;font-size:8.0pt">13.3</div>
+  <div class="t w300" style="left:25.92mm;top:237.67mm;font-size:8.0pt">  Beiträge an die Weiterbildung – Contributions au perfectionnement – Contributi per il perfezionamento</div>
+  <div class="t w300" style="left:68.0mm;top:243.62mm;font-size:6.5pt">Art</div>
+  <div class="t w600" style="left:15.0mm;top:243.08mm;font-size:8.0pt">14.</div>
+  <div class="t w300" style="left:20.5mm;top:243.08mm;font-size:8.0pt">Weitere Gehaltsnebenleistungen</div>
+  <div class="t w300" style="left:68.0mm;top:246.62mm;font-size:6.5pt">Genre</div>
+  <div class="t w300" style="left:20.5mm;top:246.08mm;font-size:8.0pt">Autres prestations salariales accessoires</div>
+  <div class="t w300" style="left:68.0mm;top:249.62mm;font-size:6.5pt">Genere</div>
+  <div class="t w300" style="left:20.5mm;top:249.08mm;font-size:8.0pt">Altre prestazioni accessorie al salario</div>
+  <div class="t w600" style="left:15.0mm;top:255.08mm;font-size:8.0pt">15.</div>
+  <div class="t w300" style="left:20.5mm;top:255.08mm;font-size:8.0pt">B</div>
+  <div class="t w300" style="left:22.03mm;top:255.08mm;font-size:8.0pt">emerkungen</div>
+  <div class="t w300" style="left:20.5mm;top:258.08mm;font-size:8.0pt">Observations</div>
+  <div class="t w300" style="left:20.5mm;top:261.08mm;font-size:8.0pt">Osservazioni</div>
+  <div class="t w600" style="left:16.49mm;top:269.08mm;font-size:8.0pt">I</div>
+  <div class="t w300" style="left:20.5mm;top:269.08mm;font-size:8.0pt">Ort und Datum – Lieu et date – Luogo e data</div>
+  <div class="t w300" style="left:79.0mm;top:269.08mm;font-size:8.0pt">Die Richtigkeit und Vollständigkeit bestätigt</div>
+  <div class="t w300" style="left:79.0mm;top:272.62mm;font-size:6.5pt">inkl. genauer Anschrift und Telefonnummer des Arbeitgebers</div>
+  <div class="t w300" style="left:79.0mm;top:276.58mm;font-size:8.0pt">Certifié exact et complet</div>
+  <div class="t w300" style="left:79.0mm;top:280.12mm;font-size:6.5pt">y.c. adresse et numéro de téléphone exacts de l’employeur</div>
+  <div class="t w300" style="left:79.0mm;top:284.07mm;font-size:8.0pt">Certificato esatto e completo</div>
+  <div class="t w300" style="left:79.0mm;top:287.61mm;font-size:6.5pt">compresi indirizzo e numero di telefono esatti del datore di lavoro</div>
+  <div class="t w600" style="left:15.0mm;top:289.65mm;font-size:6.5pt">Form. 11 dfi</div>
+  <div class="t w300" style="left:29.56mm;top:289.65mm;font-size:6.5pt">605.040.18N</div>
+  <div class="t w300" style="left:44.27mm;top:289.65mm;font-size:6.5pt">01.21</div>
+
+  <div class="rule" style="left:20.5mm;top:107.0mm;width:142.5mm"></div>
+  <div class="rule" style="left:60.5mm;top:113.0mm;width:102.5mm"></div>
+  <div class="rule" style="left:60.5mm;top:119.0mm;width:102.5mm"></div>
+  <div class="rule" style="left:20.5mm;top:149.0mm;width:142.5mm"></div>
+  <div class="rule" style="left:20.5mm;top:155.0mm;width:142.5mm"></div>
+  <div class="rule" style="left:20.5mm;top:167.0mm;width:142.5mm"></div>
+  <div class="rule" style="left:20.5mm;top:173.0mm;width:142.5mm"></div>
+  <div class="rule" style="left:72.32mm;top:179.0mm;width:90.68mm"></div>
+  <div class="rule" style="left:72.32mm;top:185.0mm;width:90.68mm"></div>
+  <div class="rule" style="left:20.5mm;top:191.0mm;width:142.5mm"></div>
+  <div class="rule" style="left:20.5mm;top:200.0mm;width:142.5mm"></div>
+  <div class="rule" style="left:59.0mm;top:212.0mm;width:98.0mm"></div>
+  <div class="rule" style="left:59.0mm;top:224.0mm;width:104.0mm"></div>
+  <div class="rule" style="left:59.0mm;top:230.0mm;width:104.0mm"></div>
+  <div class="rule" style="left:27.0mm;top:242.0mm;width:136.0mm"></div>
+
+  {#- the three rotated lines in the left margin -#}
+  <div class="side" style="left:4.88mm;top:169.5mm">Bitte die Wegleitung beachten</div>
+  <div class="side" style="left:7.88mm;top:169.5mm">Observer s.v.p. la directive</div>
+  <div class="side" style="left:10.88mm;top:169.5mm">Osservare p.f. l’istruzioni</div>
+
+  {#- ---------------------------------------------------------------- value layer -#}
+  {%- if doc.document_type == "Rentenbescheinigung" %}
+  <div class="f cross" style="left:20.6mm;top:11mm;width:10mm">X</div>
+  {%- else %}
+  <div class="f cross" style="left:20.6mm;top:5mm;width:10mm">X</div>
+  {%- endif %}
+  {%- if doc.free_transport %}<div class="f cross" style="left:125mm;top:18mm;width:10mm">X</div>{% endif %}
+  {%- if doc.canteen_meals %}<div class="f cross" style="left:125mm;top:28mm;width:10mm">X</div>{% endif %}
+
+  <div class="f" style="left:20.5mm;top:18mm;width:45mm">{{ doc.ahv_number or "" }}</div>
+  <div class="f" style="left:68mm;top:18mm;width:35mm">{{ d(doc.date_of_birth) }}</div>
+  <div class="f" style="left:20.5mm;top:28mm;width:22mm">{{ doc.tax_year or "" }}</div>
+  <div class="f" style="left:55mm;top:28mm;width:22mm">{{ d(doc.period_from) }}</div>
+  <div class="f" style="left:81mm;top:28mm;width:22mm">{{ d(doc.period_to) }}</div>
+
+  <div class="f multi" style="left:105.35mm;top:47mm;width:89.65mm;font-size:9pt">{{ doc.employee_address or "" }}</div>
+
+  <div class="f num" style="left:168mm;top:102mm;width:32mm">{{ chf(doc.z1) }}</div>
+  <div class="f num" style="left:168mm;top:108mm;width:32mm">{{ chf(doc.z2_1) }}</div>
+  <div class="f num" style="left:168mm;top:114mm;width:32mm">{{ chf(doc.z2_2) }}</div>
+  <div class="f num" style="left:168mm;top:120mm;width:32mm">{{ chf(doc.z2_3) }}</div>
+  <div class="f" style="left:89mm;top:120mm;width:74mm">{{ doc.z2_3_kind or "" }}</div>
+  <div class="f" style="left:20.5mm;top:132mm;width:142.5mm">{{ doc.z3_kind or "" }}</div>
+  <div class="f num" style="left:168mm;top:132mm;width:32mm">{{ chf(doc.z3) }}</div>
+  <div class="f" style="left:97mm;top:138mm;width:66mm">{{ doc.z4_kind or "" }}</div>
+  <div class="f num" style="left:168mm;top:138mm;width:32mm">{{ chf(doc.z4) }}</div>
+  <div class="f num" style="left:168mm;top:144mm;width:32mm">{{ chf(doc.z5) }}</div>
+  <div class="f num" style="left:168mm;top:150mm;width:32mm">{{ chf(doc.z6) }}</div>
+  <div class="f" style="left:89mm;top:156mm;width:74mm">{{ doc.z7_kind or "" }}</div>
+  <div class="f num" style="left:168mm;top:156mm;width:32mm">{{ chf(doc.z7) }}</div>
+  <div class="f num w600" style="left:168mm;top:162mm;width:32mm">{{ chf(doc.z8, True) }}</div>
+  <div class="f num" style="left:168mm;top:168mm;width:32mm">{{ chf(doc.z9) }}</div>
+  <div class="f num" style="left:168mm;top:174mm;width:32mm">{{ chf(doc.z10_1) }}</div>
+  <div class="f num" style="left:168mm;top:180mm;width:32mm">{{ chf(doc.z10_2) }}</div>
+  <div class="f num w700" style="left:168mm;top:186mm;width:32mm">{{ chf(doc.z11, True) }}</div>
+  <div class="f num" style="left:168mm;top:195mm;width:32mm">{{ chf(doc.z12) }}</div>
+
+  {%- if doc.z13_1_1_flag %}<div class="f cross" style="left:158mm;top:207mm;width:5mm">X</div>{% endif %}
+  <div class="f num" style="left:168mm;top:207mm;width:32mm">{{ chf(doc.z13_1_1) }}</div>
+  <div class="f" style="left:89mm;top:213mm;width:74mm">{{ doc.z13_1_2_kind or "" }}</div>
+  <div class="f num" style="left:168mm;top:213mm;width:32mm">{{ chf(doc.z13_1_2) }}</div>
+  <div class="f num" style="left:168mm;top:219mm;width:32mm">{{ chf(doc.z13_2_1) }}</div>
+  <div class="f num" style="left:168mm;top:225mm;width:32mm">{{ chf(doc.z13_2_2) }}</div>
+  <div class="f" style="left:89mm;top:231mm;width:74mm">{{ doc.z13_2_3_kind or "" }}</div>
+  <div class="f num" style="left:168mm;top:231mm;width:32mm">{{ chf(doc.z13_2_3) }}</div>
+  <div class="f num" style="left:168mm;top:237mm;width:32mm">{{ chf(doc.z13_3) }}</div>
+
+  <div class="f" style="left:77mm;top:243mm;width:123mm">{{ doc.z14_line1 or "" }}</div>
+  <div class="f" style="left:77mm;top:249mm;width:123mm">{{ doc.z14_line2 or "" }}</div>
+  <div class="f small" style="left:39mm;top:255mm;width:161mm">{{ doc.z15_line1 or "" }}</div>
+  <div class="f small" style="left:39mm;top:261mm;width:161mm">{{ doc.z15_line2 or "" }}</div>
+
+  <div class="f" style="left:20.5mm;top:275mm;width:56.5mm">{{ doc.place or "" }}{% if doc.place and doc.certificate_date %}, {% endif %}{{ d(doc.certificate_date) }}</div>
+  <div class="f multi small" style="left:144mm;top:267mm;width:56mm">{{ doc.employer_block or "" }}</div>
+</div>

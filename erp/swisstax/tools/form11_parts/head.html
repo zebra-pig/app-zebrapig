@@ -1,0 +1,79 @@
+{#-
+  Lohnausweis / Rentenbescheinigung — a faithful reproduction of Formular 11 dfi
+  (605.040.18N 01.21, ESTV/SSK) on plain white paper, which Rz 75 of the Wegleitung
+  names as the normal way for payroll software to issue the certificate.
+
+  GENERATED — do not edit by hand. Every label position, rule and box below was read
+  out of the official PDF's own geometry and expressed in millimetres on the A4
+  sheet. Rebuild with erp/swisstax/tools/build_form11_template.py; the surrounding
+  markup lives in erp/swisstax/tools/form11_parts/.
+
+  Type is Source Sans 3 (SIL OFL 1.1), embedded as base64 woff2 so the renderer needs
+  neither a network nor a system font — that is what makes Chrome, Safari and
+  wkhtmltopdf agree. It is the closest freely redistributable match to the form's
+  Frutiger LT Com, tracking its advance widths to within about 3% across this form.
+-#}
+{%- macro chf(value, always=False) -%}
+  {%- set n = (value or 0) | round(0, 'common') | int -%}
+  {%- if n or always %}{{ "{:,}".format(n).replace(",", "’") }}{% endif -%}
+{%- endmacro -%}
+{%- macro d(value) -%}
+  {%- if value %}{{ frappe.utils.formatdate(value, "dd.MM.yyyy") }}{% endif -%}
+{%- endmacro -%}
+{% include "swisstax/templates/includes/_swiss_fonts.html" %}
+<style>
+@page { size: A4 portrait; margin: 0; }
+/* The sheet *is* the page: nothing above it may occupy height, or every box on
+   the form shifts away from the millimetres the official layout puts it at.
+   A letter head is what pushes it down in a stock Frappe print view. */
+html, body { margin: 0 !important; padding: 0 !important; }
+.print-format, .print-format-gutter, .page-break {
+  padding: 0 !important; margin: 0 !important; border: 0 !important; min-height: 0 !important;
+}
+.letter-head, .letter-head-footer, #header-html, #footer-html,
+.print-heading, .letterhead-footer { display: none !important; }
+.la-sheet {
+  position: relative; box-sizing: border-box;
+  width: 210mm; height: 297mm; overflow: hidden;
+  background: #fff; color: #37393b;
+  font-family: 'SwissForm', 'Frutiger LT Com', 'Frutiger', 'Segoe UI', Arial, sans-serif;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.la-sheet .t, .la-sheet .f, .la-sheet .side {
+  position: absolute; white-space: pre; line-height: 1.424; transform-origin: left top;
+}
+.la-sheet .w300 { font-weight: 300 }
+.la-sheet .w600 { font-weight: 600 }
+.la-sheet .w700 { font-weight: 700 }
+.la-sheet .w900 { font-weight: 900 }
+.la-sheet .rule { position: absolute; height: 0; border-top: 0.3pt solid #37393b }
+.la-sheet .crop { position: absolute; background: #37393b }
+/* Address-window guide of field H — the form prints it dashed, in magenta. */
+.la-sheet .window {
+  position: absolute; left: 15.02mm; top: 40.02mm; width: 184.96mm; height: 44.96mm;
+  border: 0.4pt dashed #eb6a84; border-radius: 2.2mm;
+}
+/* Value layer: one box per AcroForm field of the official PDF, at its own rect. */
+.la-sheet .f { font-size: 8pt; font-weight: 300; height: 5mm; line-height: 5mm }
+.la-sheet .f.num { text-align: right; padding-right: 1.2mm; font-variant-numeric: tabular-nums }
+.la-sheet .f.cross { text-align: center; font-weight: 700; font-size: 9pt }
+.la-sheet .f.multi { white-space: pre-line; line-height: 3.6mm; height: auto }
+.la-sheet .f.small { font-size: 6.5pt; line-height: 2.9mm }
+.la-sheet .side { font-weight: 600; font-size: 6.5pt; transform: rotate(-90deg) }
+</style>
+
+<div class="la-sheet">
+
+  {#- corner crop marks of the printed form -#}
+  <div class="crop" style="left:5.18mm;top:5mm;width:0.25mm;height:5mm"></div>
+  <div class="crop" style="left:5.21mm;top:5.18mm;width:4.79mm;height:0.25mm"></div>
+  <div class="crop" style="left:200mm;top:5.18mm;width:5mm;height:0.25mm"></div>
+  <div class="crop" style="left:204.82mm;top:5.21mm;width:0.25mm;height:4.79mm"></div>
+  <div class="crop" style="left:5.18mm;top:287mm;width:0.25mm;height:4.79mm"></div>
+  <div class="crop" style="left:204.82mm;top:287mm;width:0.25mm;height:5mm"></div>
+  <div class="crop" style="left:5mm;top:291.82mm;width:5mm;height:0.25mm"></div>
+  <div class="crop" style="left:200mm;top:291.82mm;width:4.79mm;height:0.25mm"></div>
+
+  <div class="window"></div>
+
+  {#- ------------------------------------------------------------- generated form -#}

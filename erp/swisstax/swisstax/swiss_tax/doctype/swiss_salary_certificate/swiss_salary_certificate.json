@@ -1,0 +1,544 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-08-23 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "header_section",
+  "company",
+  "employee",
+  "employee_name",
+  "tax_year",
+  "header_col",
+  "document_type",
+  "period_from",
+  "period_to",
+  "amended_from",
+  "person_section",
+  "ahv_number",
+  "date_of_birth",
+  "person_col",
+  "employee_address",
+  "flags_section",
+  "free_transport",
+  "canteen_meals",
+  "income_section",
+  "z1",
+  "z2_1",
+  "z2_2",
+  "z2_3",
+  "z2_3_kind",
+  "z3",
+  "z3_kind",
+  "z4",
+  "z4_kind",
+  "income_col",
+  "z5",
+  "z6",
+  "z7",
+  "z7_kind",
+  "z8",
+  "deduction_section",
+  "z9",
+  "z10_1",
+  "z10_2",
+  "deduction_col",
+  "z11",
+  "z12",
+  "expense_section",
+  "z13_1_1_flag",
+  "z13_1_1",
+  "z13_1_2",
+  "z13_1_2_kind",
+  "expense_col",
+  "z13_2_1",
+  "z13_2_2",
+  "z13_2_3",
+  "z13_2_3_kind",
+  "z13_3",
+  "text_section",
+  "z14_line1",
+  "z14_line2",
+  "text_col",
+  "z15_line1",
+  "z15_line2",
+  "signature_section",
+  "place",
+  "certificate_date",
+  "signature_col",
+  "employer_block",
+  "audit_section",
+  "pulled_from_payroll",
+  "pull_log"
+ ],
+ "fields": [
+  {
+   "fieldname": "header_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "fetch_from": "employee.employee_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tax_year",
+   "fieldtype": "Int",
+   "label": "Calendar Year (D)",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "description": "Rz 7 — the calendar year the payments are certified for."
+  },
+  {
+   "fieldname": "header_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Select",
+   "label": "Document type",
+   "options": "Lohnausweis\nRentenbescheinigung",
+   "default": "Lohnausweis",
+   "reqd": 1,
+   "description": "Rz 4/5 — ticks field A (salary certificate) or field B (pension statement)."
+  },
+  {
+   "fieldname": "period_from",
+   "fieldtype": "Date",
+   "label": "Period from (E)",
+   "reqd": 1,
+   "description": "Rz 8 — exact entry date; state the period even for a full year."
+  },
+  {
+   "fieldname": "period_to",
+   "fieldtype": "Date",
+   "label": "Period to (E)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Swiss Salary Certificate",
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  },
+  {
+   "fieldname": "person_section",
+   "fieldtype": "Section Break",
+   "label": "Person (C, H)"
+  },
+  {
+   "fieldname": "ahv_number",
+   "fieldtype": "Data",
+   "label": "AHV number (C)",
+   "reqd": 1,
+   "description": "AHVN13, 756.XXXX.XXXX.XX. Checked against its EAN-13 check digit."
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of birth (C)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "person_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employee_address",
+   "fieldtype": "Small Text",
+   "label": "Name and address (H)",
+   "reqd": 1,
+   "description": "Rz 11 — current, complete residential address; sized for window envelopes."
+  },
+  {
+   "fieldname": "flags_section",
+   "fieldtype": "Section Break",
+   "label": "Standing declarations (F, G)"
+  },
+  {
+   "fieldname": "free_transport",
+   "fieldtype": "Check",
+   "label": "F — Free transport between home and workplace",
+   "description": "Rz 9/25. Tick whenever the employee bears no commuting cost — in particular whenever a company vehicle is declared under 2.2."
+  },
+  {
+   "fieldname": "canteen_meals",
+   "fieldtype": "Check",
+   "label": "G — Canteen meals / lunch cheques",
+   "description": "Rz 10 — lunch cheques, subsidised staff restaurant, or a lunch allowance for 40–60 % external working time."
+  },
+  {
+   "fieldname": "income_section",
+   "fieldtype": "Section Break",
+   "label": "Gross income (1–8)"
+  },
+  {
+   "fieldname": "z1",
+   "fieldtype": "Currency",
+   "label": "1 — Salary / pension",
+   "options": "CHF",
+   "precision": "0",
+   "description": "Rz 13–18. Everything not itemised under 2–7."
+  },
+  {
+   "fieldname": "z2_1",
+   "fieldtype": "Currency",
+   "label": "2.1 — Board and lodging",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "z2_2",
+   "fieldtype": "Currency",
+   "label": "2.2 — Private share of company vehicle",
+   "options": "CHF",
+   "precision": "0",
+   "description": "Rz 21 — 0.9 % of the purchase price per month, at least CHF 150."
+  },
+  {
+   "fieldname": "z2_3",
+   "fieldtype": "Currency",
+   "label": "2.3 — Other fringe benefits",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "z2_3_kind",
+   "fieldtype": "Data",
+   "label": "2.3 — Art / Genre / Genere",
+   "description": "Rz 26 — name the kind; with several items list them here and enter only the total."
+  },
+  {
+   "fieldname": "z3",
+   "fieldtype": "Currency",
+   "label": "3 — Irregular benefits",
+   "options": "CHF",
+   "precision": "0",
+   "description": "Rz 27 — bonuses, joining/leaving payments, loyalty and anniversary gifts, lump-sum relocation."
+  },
+  {
+   "fieldname": "z3_kind",
+   "fieldtype": "Data",
+   "label": "3 — Art / Genre / Genere"
+  },
+  {
+   "fieldname": "z4",
+   "fieldtype": "Currency",
+   "label": "4 — Capital payments",
+   "options": "CHF",
+   "precision": "0",
+   "description": "Rz 28 — severance and capital payments with a pension character, back payments of salary."
+  },
+  {
+   "fieldname": "z4_kind",
+   "fieldtype": "Data",
+   "label": "4 — Art / Genre / Genere"
+  },
+  {
+   "fieldname": "income_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "z5",
+   "fieldtype": "Currency",
+   "label": "5 — Participation rights per annex",
+   "options": "CHF",
+   "precision": "0",
+   "description": "Rz 29 — a separate annex with the employee's personal data is mandatory."
+  },
+  {
+   "fieldname": "z6",
+   "fieldtype": "Currency",
+   "label": "6 — Board of directors' remuneration",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "z7",
+   "fieldtype": "Currency",
+   "label": "7 — Other benefits",
+   "options": "CHF",
+   "precision": "0",
+   "description": "Rz 31–40 — tips, daily allowances, employer-paid insurance premiums, employer-paid withholding tax, school fees."
+  },
+  {
+   "fieldname": "z7_kind",
+   "fieldtype": "Data",
+   "label": "7 — Art / Genre / Genere"
+  },
+  {
+   "fieldname": "z8",
+   "fieldtype": "Currency",
+   "label": "8 — Gross salary / pension total",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1,
+   "bold": 1,
+   "description": "Rz 41 — total of 1 to 7, before social security and withholding tax."
+  },
+  {
+   "fieldname": "deduction_section",
+   "fieldtype": "Section Break",
+   "label": "Deductions and net salary (9–12)"
+  },
+  {
+   "fieldname": "z9",
+   "fieldtype": "Currency",
+   "label": "9 — AHV/IV/EO/ALV/NBUV contributions",
+   "options": "CHF",
+   "precision": "0",
+   "description": "Rz 42 — the employee's share only."
+  },
+  {
+   "fieldname": "z10_1",
+   "fieldtype": "Currency",
+   "label": "10.1 — Occupational pension, ordinary contributions",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "z10_2",
+   "fieldtype": "Currency",
+   "label": "10.2 — Occupational pension, buy-in contributions",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "deduction_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "z11",
+   "fieldtype": "Currency",
+   "label": "11 — Net salary / pension",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1,
+   "bold": 1,
+   "description": "Rz 47 — box 8 less boxes 9, 10.1 and 10.2."
+  },
+  {
+   "fieldname": "z12",
+   "fieldtype": "Currency",
+   "label": "12 — Withholding tax deducted",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "expense_section",
+   "fieldtype": "Section Break",
+   "label": "Expense allowances (13) — not included in box 8"
+  },
+  {
+   "fieldname": "z13_1_1_flag",
+   "fieldtype": "Check",
+   "label": "13.1.1 — Effective expenses within the Rz 52 limits (cross only)",
+   "description": "Rz 52 — tick instead of stating an amount when receipts, the CHF 35/30 meal limits, 75 Rp./km and the CHF 20 daily incidentals cap are all respected. Not to be ticked when an approved expense regulation exists (Rz 65)."
+  },
+  {
+   "fieldname": "z13_1_1",
+   "fieldtype": "Currency",
+   "label": "13.1.1 — Travel, meals, overnight stays",
+   "options": "CHF",
+   "precision": "0",
+   "depends_on": "eval:!doc.z13_1_1_flag"
+  },
+  {
+   "fieldname": "z13_1_2",
+   "fieldtype": "Currency",
+   "label": "13.1.2 — Other effective expenses",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "z13_1_2_kind",
+   "fieldtype": "Data",
+   "label": "13.1.2 — Art / Genre / Genere",
+   "description": "Rz 54 — external workplace costs must read «Spesen für externen Arbeitsplatz»."
+  },
+  {
+   "fieldname": "expense_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "z13_2_1",
+   "fieldtype": "Currency",
+   "label": "13.2.1 — Lump-sum representation expenses",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "z13_2_2",
+   "fieldtype": "Currency",
+   "label": "13.2.2 — Lump-sum car expenses",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "z13_2_3",
+   "fieldtype": "Currency",
+   "label": "13.2.3 — Other lump-sum expenses",
+   "options": "CHF",
+   "precision": "0"
+  },
+  {
+   "fieldname": "z13_2_3_kind",
+   "fieldtype": "Data",
+   "label": "13.2.3 — Art / Genre / Genere"
+  },
+  {
+   "fieldname": "z13_3",
+   "fieldtype": "Currency",
+   "label": "13.3 — Contributions to further education",
+   "options": "CHF",
+   "precision": "0",
+   "description": "Rz 61 — only reimbursements paid to the employee, not invoices settled directly."
+  },
+  {
+   "fieldname": "text_section",
+   "fieldtype": "Section Break",
+   "label": "Further benefits and remarks (14, 15)"
+  },
+  {
+   "fieldname": "z14_line1",
+   "fieldtype": "Data",
+   "label": "14 — Further fringe benefits, line 1",
+   "description": "Rz 62 — benefits the employer cannot value itself; no amount is given."
+  },
+  {
+   "fieldname": "z14_line2",
+   "fieldtype": "Data",
+   "label": "14 — Further fringe benefits, line 2"
+  },
+  {
+   "fieldname": "text_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "z15_line1",
+   "fieldtype": "Data",
+   "label": "15 — Remarks, line 1",
+   "length": 140
+  },
+  {
+   "fieldname": "z15_line2",
+   "fieldtype": "Data",
+   "label": "15 — Remarks, line 2",
+   "length": 140
+  },
+  {
+   "fieldname": "signature_section",
+   "fieldtype": "Section Break",
+   "label": "Confirmation (I)"
+  },
+  {
+   "fieldname": "place",
+   "fieldtype": "Data",
+   "label": "Place",
+   "reqd": 1
+  },
+  {
+   "fieldname": "certificate_date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "signature_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employer_block",
+   "fieldtype": "Small Text",
+   "label": "Employer name, address and telephone",
+   "reqd": 1
+  },
+  {
+   "fieldname": "audit_section",
+   "fieldtype": "Section Break",
+   "label": "Source"
+  },
+  {
+   "fieldname": "pulled_from_payroll",
+   "fieldtype": "Check",
+   "label": "Figures pulled from Salary Slips",
+   "read_only": 1,
+   "print_hide": 1
+  },
+  {
+   "fieldname": "pull_log",
+   "fieldtype": "Small Text",
+   "label": "Pull log",
+   "read_only": 1,
+   "print_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-08-23 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Swiss Tax",
+ "name": "Swiss Salary Certificate",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:LA-{tax_year}-{employee}",
+ "title_field": "employee_name",
+ "search_fields": "employee_name,tax_year"
+}

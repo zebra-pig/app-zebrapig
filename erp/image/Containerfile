@@ -205,12 +205,14 @@ WORKDIR /home/frappe/frappe-bench
 RUN cp -r /home/frappe/frappe-bench/sites/assets /home/frappe/frappe-bench/assets && \
   rm -rf /home/frappe/frappe-bench/sites/assets
 
-# The local `gear` app as the THIN FINAL content layer. Placed AFTER the ~3GB
-# bench copy and the asset move, so a gear-only change rebuilds just this small
-# layer (~a few MB) — the VPS pull for a gear iteration is tiny, not 3GB.
-# apps.txt is regenerated to include gear (install-app / migrate then see it).
+# The local apps as the THIN FINAL content layer. Placed AFTER the ~3GB bench
+# copy and the asset move, so an app-only change rebuilds just this small layer
+# (~a few MB) — the VPS pull for such an iteration is tiny, not 3GB.
+# apps.txt is regenerated to include them (install-app / migrate then see them).
 COPY --chown=frappe:frappe gear /home/frappe/frappe-bench/apps/gear
+COPY --chown=frappe:frappe swisstax /home/frappe/frappe-bench/apps/swisstax
 RUN ./env/bin/pip install --no-cache-dir -e apps/gear \
+    && ./env/bin/pip install --no-cache-dir -e apps/swisstax \
     && ls -1 apps > sites/apps.txt
 
 VOLUME [ \

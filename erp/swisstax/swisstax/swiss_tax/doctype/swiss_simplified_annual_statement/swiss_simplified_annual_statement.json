@@ -1,0 +1,431 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-08-23 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "header_section",
+  "company",
+  "fiscal_year",
+  "from_date",
+  "to_date",
+  "header_col",
+  "previous_fiscal_year",
+  "currency",
+  "amended_from",
+  "compliance_section",
+  "turnover",
+  "under_simplified_threshold",
+  "under_accrual_waiver",
+  "compliance_col",
+  "vat_liable_by_turnover",
+  "compliance_note",
+  "income_section",
+  "income_lines",
+  "total_income",
+  "expense_section",
+  "expense_lines",
+  "total_expense",
+  "profit_loss",
+  "assets_section",
+  "asset_lines",
+  "total_assets",
+  "liability_lines",
+  "total_liabilities",
+  "net_assets",
+  "private_section",
+  "private_lines",
+  "total_private_withdrawals",
+  "private_col",
+  "total_private_deposits",
+  "f15a_section",
+  "f15a_help",
+  "f15a_1f_turnover",
+  "f15a_2e_goods",
+  "f15a_3_gross_profit",
+  "f15a_col",
+  "f15a_4_other_income",
+  "f15a_5_total_income",
+  "f15a_6_expenses",
+  "f15a_7_income",
+  "signature_section",
+  "place",
+  "statement_date",
+  "signature_col",
+  "signatory"
+ ],
+ "fields": [
+  {
+   "fieldname": "header_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "fiscal_year",
+   "fieldtype": "Link",
+   "label": "Fiscal Year",
+   "options": "Fiscal Year",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "header_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "previous_fiscal_year",
+   "fieldtype": "Link",
+   "label": "Previous Fiscal Year",
+   "options": "Fiscal Year",
+   "read_only": 1,
+   "description": "Art. 958d Abs. 2 OR — the prior-year figures shown alongside."
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Swiss Simplified Annual Statement",
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  },
+  {
+   "fieldname": "compliance_section",
+   "fieldtype": "Section Break",
+   "label": "Statutory position"
+  },
+  {
+   "fieldname": "turnover",
+   "fieldtype": "Currency",
+   "label": "Net revenue from deliveries and services",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "under_simplified_threshold",
+   "fieldtype": "Check",
+   "label": "Below CHF 500'000 — simplified bookkeeping (Art. 957 Abs. 2 OR)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "under_accrual_waiver",
+   "fieldtype": "Check",
+   "label": "Net revenue ≤ CHF 100'000 — accruals may be waived (Art. 958b Abs. 2 OR)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "compliance_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vat_liable_by_turnover",
+   "fieldtype": "Check",
+   "label": "Turnover reaches the VAT threshold (Art. 10 Abs. 2 Bst. a MWSTG)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "compliance_note",
+   "fieldtype": "Small Text",
+   "label": "Notes",
+   "read_only": 1
+  },
+  {
+   "fieldname": "income_section",
+   "fieldtype": "Section Break",
+   "label": "Einnahmen"
+  },
+  {
+   "fieldname": "income_lines",
+   "fieldtype": "Table",
+   "label": "Income",
+   "options": "Swiss Simplified Statement Line"
+  },
+  {
+   "fieldname": "total_income",
+   "fieldtype": "Currency",
+   "label": "Total income",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1,
+   "bold": 1
+  },
+  {
+   "fieldname": "expense_section",
+   "fieldtype": "Section Break",
+   "label": "Ausgaben"
+  },
+  {
+   "fieldname": "expense_lines",
+   "fieldtype": "Table",
+   "label": "Expenses",
+   "options": "Swiss Simplified Statement Line"
+  },
+  {
+   "fieldname": "total_expense",
+   "fieldtype": "Currency",
+   "label": "Total expenditure",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1,
+   "bold": 1
+  },
+  {
+   "fieldname": "profit_loss",
+   "fieldtype": "Currency",
+   "label": "Result for the year",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1,
+   "bold": 1,
+   "description": "Income from self-employment; also the basis for the personal AHV contribution."
+  },
+  {
+   "fieldname": "assets_section",
+   "fieldtype": "Section Break",
+   "label": "Vermögenslage — Aktiven und Passiven"
+  },
+  {
+   "fieldname": "asset_lines",
+   "fieldtype": "Table",
+   "label": "Assets",
+   "options": "Swiss Simplified Statement Line"
+  },
+  {
+   "fieldname": "total_assets",
+   "fieldtype": "Currency",
+   "label": "Total assets",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1,
+   "bold": 1
+  },
+  {
+   "fieldname": "liability_lines",
+   "fieldtype": "Table",
+   "label": "Liabilities",
+   "options": "Swiss Simplified Statement Line"
+  },
+  {
+   "fieldname": "total_liabilities",
+   "fieldtype": "Currency",
+   "label": "Total liabilities",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1,
+   "bold": 1
+  },
+  {
+   "fieldname": "net_assets",
+   "fieldtype": "Currency",
+   "label": "Net assets (equity)",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1,
+   "bold": 1
+  },
+  {
+   "fieldname": "private_section",
+   "fieldtype": "Section Break",
+   "label": "Privatentnahmen und Privateinlagen"
+  },
+  {
+   "fieldname": "private_lines",
+   "fieldtype": "Table",
+   "label": "Private movements",
+   "options": "Swiss Simplified Statement Line"
+  },
+  {
+   "fieldname": "total_private_withdrawals",
+   "fieldtype": "Currency",
+   "label": "Total private withdrawals",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "private_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_private_deposits",
+   "fieldtype": "Currency",
+   "label": "Total private deposits",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "f15a_section",
+   "fieldtype": "Section Break",
+   "label": "Übertrag auf Formular 15a"
+  },
+  {
+   "fieldname": "f15a_help",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted small'>Figures for the federal questionnaire <em>Formular 15a — Fragebogen für Selbstständigerwerbende mit vereinfachter Buchführung</em>, which accompanies the tax return together with these statements.</p>"
+  },
+  {
+   "fieldname": "f15a_1f_turnover",
+   "fieldtype": "Currency",
+   "label": "Ziffer 1f — Umsatz (Erlös)",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "f15a_2e_goods",
+   "fieldtype": "Currency",
+   "label": "Ziffer 2e — Waren- und Materialaufwand",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "f15a_3_gross_profit",
+   "fieldtype": "Currency",
+   "label": "Ziffer 3 — Bruttogewinn",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "f15a_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "f15a_4_other_income",
+   "fieldtype": "Currency",
+   "label": "Ziffer 4 — Andere Geschäftserträge",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "f15a_5_total_income",
+   "fieldtype": "Currency",
+   "label": "Ziffer 5 — Total Geschäftserträge",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "f15a_6_expenses",
+   "fieldtype": "Currency",
+   "label": "Ziffer 6 — Geschäftsaufwendungen",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "f15a_7_income",
+   "fieldtype": "Currency",
+   "label": "Ziffer 7 — Einkommen aus selbstständiger Erwerbstätigkeit",
+   "options": "CHF",
+   "precision": "0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "signature_section",
+   "fieldtype": "Section Break",
+   "label": "Signature"
+  },
+  {
+   "fieldname": "place",
+   "fieldtype": "Data",
+   "label": "Place",
+   "reqd": 1
+  },
+  {
+   "fieldname": "statement_date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "signature_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "signatory",
+   "fieldtype": "Data",
+   "label": "Signatory",
+   "reqd": 1,
+   "description": "Art. 125 Abs. 2 DBG requires the statements to be signed."
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-08-23 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Swiss Tax",
+ "name": "Swiss Simplified Annual Statement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1,
+   "amend": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "autoname": "format:VA-{fiscal_year}",
+ "title_field": "fiscal_year"
+}

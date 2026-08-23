@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-08-23 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "salary_component",
+  "ziffer",
+  "kind_text",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "salary_component",
+   "fieldtype": "Link",
+   "label": "Salary Component",
+   "options": "Salary Component",
+   "in_list_view": 1,
+   "reqd": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "ziffer",
+   "fieldtype": "Select",
+   "label": "Ziffer",
+   "options": "\n1\n2.1\n2.2\n2.3\n3\n4\n5\n6\n7\n9\n10.1\n10.2\n12\n13.1.1\n13.1.2\n13.2.1\n13.2.2\n13.2.3\n13.3\nNot on the certificate",
+   "in_list_view": 1,
+   "reqd": 1,
+   "columns": 2,
+   "description": "Box of Formular 11 this component is added to."
+  },
+  {
+   "fieldname": "kind_text",
+   "fieldtype": "Data",
+   "label": "Art / Genre / Genere",
+   "in_list_view": 1,
+   "columns": 4,
+   "description": "Free text for the boxes that require the kind to be named (2.3, 3, 4, 7, 13.1.2, 13.2.3)."
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Note"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-08-23 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Swiss Tax",
+ "name": "Swiss Salary Certificate Component",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
