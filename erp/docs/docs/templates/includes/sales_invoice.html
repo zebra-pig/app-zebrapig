@@ -36,8 +36,11 @@
   {%- endif %}
   {{ zp.closing(doc.terms, sentence, "Léonce Aklin") }}
 
-  {%- if not doc.hide_qr_bill and not is_paid %}
-  {{ zp.qr_bill(doc.get("qr_bill_html")) }}
+  {#- Generated here from the document, not fetched from a microservice and
+      stored on it. See docs/utils/qrbill.py. -#}
+  {%- set qr = qr_bill_svg(doc) if (not doc.hide_qr_bill and not is_paid) else "" %}
+  {%- if qr %}
+  {{ zp.qr_bill(qr) }}
   {%- else %}
   {#- No date in the invoice footer: the format this replaces asked for
       `transaction_date`, which a Sales Invoice does not carry, so it always

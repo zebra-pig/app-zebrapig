@@ -51,6 +51,28 @@ underneath:
 - **The item table's `margin-top: -10px`** is gone; it pulled the header row up
   into the sentence above it.
 
+## The Swiss QR-bill
+
+`docs/utils/qrbill.py` builds the payment part from the invoice at print time,
+via [`chqr`](https://pypi.org/project/chqr/) (ISC, Swiss Payment Standards v2.3).
+It replaces a `before_save` Server Script that called the
+`qrbill-microservice` Cloudflare Worker. That arrangement had three problems:
+
+* a bearer token sat in the database in plain text;
+* the script raised on any failure, so an unreachable Worker made the invoice
+  **unsaveable** — a document write depending on a remote HTTP call;
+* each invoice stored ~196 KB of returned SVG. 93 invoices held 17.8 MB, about
+  91% of the whole Sales Invoice table.
+
+Generated here it is ~10 KB, produced on demand and never stored. Decoding both
+QR codes and diffing the payloads field by field, the two agree on every value —
+except that the microservice emitted `'Sonneckstrasse '` with a trailing space,
+where the standard wants none. The old `qr_bill_html` field is left in place so
+historical invoices keep their record; nothing reads it any more.
+
+The payment part is 210 x 105 mm and must not be scaled, which is why the print
+formats carry no page margin — see the note on `.print-format` in `_style.html`.
+
 ## Regenerating the embedded font
 
 ```sh

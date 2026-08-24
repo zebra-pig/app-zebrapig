@@ -10,5 +10,6 @@ app_license = "MIT"
 jinja = {
 	"methods": [
 		"docs.utils.context.document_context",
+		"docs.utils.qrbill.qr_bill_svg",
 	],
 }
