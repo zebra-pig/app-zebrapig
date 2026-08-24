@@ -32,6 +32,19 @@ form to well under a millimetre.
 | field F when a company car is declared in 2.2 (advisory) | Rz 25 |
 | an annex is due whenever box 5 is used (advisory) | Rz 29 |
 
+**Fields H and I fill themselves.** Field H (Rz 11 — the employee's name and
+current residential address) comes from the Employee's *Current Address*,
+falling back to *Permanent Address*; ERPNext stores these as free text, so
+trailing spaces and blank lines are stripped, the block being sized for a window
+envelope. Field I (Rz 12 — the employer's name, exact address, the responsible
+person and their phone) is derived from the Company and its primary Address; only
+the responsible person is configured, in *Swiss Tax Settings*, since nothing on
+the Company records it. Both fill in when the employee is chosen and again on
+save, so documents created through the API behave the same. An employee with no
+address on file gets a warning naming the record rather than a silently short
+block, and `Swiss Tax Settings.employer_block` overrides field I verbatim when
+the exact wording matters.
+
 **Pull from Salary Slips** aggregates the year's submitted slips into the boxes,
 using the component map in *Swiss Tax Settings*. A Salary Component that is not
 mapped is a hard error — a component may be excluded, but only deliberately, by

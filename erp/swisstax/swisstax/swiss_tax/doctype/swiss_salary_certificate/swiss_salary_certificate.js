@@ -20,12 +20,23 @@ frappe.ui.form.on("Swiss Salary Certificate", {
 		);
 	},
 
+	// Field H comes from the employee's Current Address and field I from the
+	// company's, so both fill in as soon as the person is chosen rather than
+	// waiting until save. The server owns the formatting — see the controller.
 	employee(frm) {
 		if (!frm.doc.employee) return;
-		frappe.db.get_doc("Employee", frm.doc.employee).then((employee) => {
-			frm.set_value("date_of_birth", employee.date_of_birth);
-			frm.set_value("ahv_number", employee.ahv_number);
-			frm.set_value("company", employee.company);
+		frappe.db.get_value("Employee", frm.doc.employee, "company").then((r) => {
+			if (r.message && r.message.company && !frm.doc.company) {
+				frm.set_value("company", r.message.company);
+			}
+			frm.call("fetch_from_employee").then(() => frm.refresh_fields());
 		});
+	},
+
+	// Changing the company changes whose address belongs in field I.
+	company(frm) {
+		if (frm.doc.company && !frm.doc.employer_block) {
+			frm.call("fetch_from_employee").then(() => frm.refresh_fields());
+		}
 	},
 });

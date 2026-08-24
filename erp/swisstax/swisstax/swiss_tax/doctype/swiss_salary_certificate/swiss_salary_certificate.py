@@ -30,6 +30,53 @@ KIND_REQUIRED = {
 	"z13_2_3": ("z13_2_3_kind", "13.2.3", 58),
 }
 
+def employee_address_block(employee) -> str:
+	"""Field H: the employee's name and current residential address (Rz 11).
+
+	Rz 11 asks for the address *at the time of completion*, so the current
+	address wins over the permanent one. ERPNext keeps both as free multi-line
+	text, which in practice carries trailing spaces and blank lines — those are
+	stripped, since this block is positioned to sit in a window envelope.
+	"""
+	address = (employee.get("current_address") or employee.get("permanent_address") or "").strip()
+	lines = [employee.get("employee_name") or ""]
+	lines += [line.strip() for line in address.splitlines()]
+	return "\n".join(line for line in lines if line)
+
+
+def employer_address_block(company_name: str, contact_person: str | None = None) -> tuple[str, str]:
+	"""Field I: the employer's name, exact address, responsible person and phone.
+
+	Rz 12 asks for all four. Everything but the person is on the Company and its
+	primary Address, so only the person is configured. Returns the block and the
+	town, the latter being the natural default for «Ort» on the same line.
+	"""
+	company = frappe.get_cached_doc("Company", company_name)
+	address_name = frappe.db.get_value(
+		"Dynamic Link",
+		{"link_doctype": "Company", "link_name": company_name, "parenttype": "Address"},
+		"parent",
+	)
+	address = frappe.get_cached_doc("Address", address_name) if address_name else frappe._dict()
+
+	lines = [company.name]
+	for part in (address.get("address_line1"), address.get("address_line2")):
+		if part:
+			lines.append(part.strip())
+	town = (address.get("city") or "").strip()
+	if town:
+		lines.append(f"{(address.get('pincode') or '').strip()} {town}".strip())
+	# The form is domestic; naming Switzerland on a Swiss employer is just noise.
+	if address.get("country") and address.country != "Switzerland":
+		lines.append(address.country)
+	if contact_person:
+		lines.append(contact_person)
+	phone = (address.get("phone") or company.get("phone_no") or "").strip()
+	if phone:
+		lines.append(phone)
+	return "\n".join(line for line in lines if line), town
+
+
 # Ziffer -> field, for the payroll pull.
 ZIFFER_FIELD = {
 	"1": "z1", "2.1": "z2_1", "2.2": "z2_2", "2.3": "z2_3", "3": "z3", "4": "z4",
@@ -42,6 +89,8 @@ IGNORED_ZIFFER = "Not on the certificate"
 
 class SwissSalaryCertificate(Document):
 	def validate(self):
+		self.apply_employee_defaults()
+		self.apply_settings_defaults(frappe.get_single("Swiss Tax Settings"))
 		self.round_to_whole_francs()
 		self.validate_ahv_number()
 		self.validate_period()
@@ -208,15 +257,32 @@ class SwissSalaryCertificate(Document):
 		self.compute_totals()
 		return {"slips": len(slips), "boxes": {k: v for k, v in totals.items() if v}}
 
+	@frappe.whitelist()
+	def fetch_from_employee(self):
+		"""Pull the person's details across from the Employee record."""
+		self.apply_employee_defaults()
+		self.apply_settings_defaults(frappe.get_single("Swiss Tax Settings"))
+		return {
+			"employee_address": self.employee_address,
+			"employer_block": self.employer_block,
+			"ahv_number": self.ahv_number,
+		}
+
 	def apply_employee_defaults(self):
 		employee = frappe.get_doc("Employee", self.employee)
 		self.ahv_number = self.ahv_number or employee.get("ahv_number")
 		self.date_of_birth = self.date_of_birth or employee.get("date_of_birth")
 		if not self.employee_address:
-			address = employee.get("current_address") or employee.get("permanent_address") or ""
-			self.employee_address = "\n".join(
-				part for part in [employee.employee_name, address.strip()] if part
-			)
+			self.employee_address = employee_address_block(employee)
+			if "\n" not in (self.employee_address or ""):
+				# only the name came back — the Employee has no address on file
+				frappe.msgprint(
+					_("{0} has no Current Address, so field H is incomplete. "
+					  "Rz 11 requires the full residential address.").format(
+						frappe.utils.get_link_to_form("Employee", self.employee)
+					),
+					indicator="orange", alert=True,
+				)
 		# Rz 8 — the exact entry and leaving dates, clipped to the certified year.
 		joining, relieving = employee.get("date_of_joining"), employee.get("relieving_date")
 		year_start, year_end = getdate(f"{self.tax_year}-01-01"), getdate(f"{self.tax_year}-12-31")
@@ -226,8 +292,17 @@ class SwissSalaryCertificate(Document):
 			self.period_to = min(getdate(relieving), year_end) if relieving else year_end
 
 	def apply_settings_defaults(self, settings):
+		if not self.employer_block:
+			# An explicit override in the settings wins; otherwise derive it.
+			if settings.employer_block:
+				self.employer_block = settings.employer_block
+			elif self.company:
+				block, town = employer_address_block(
+					self.company, settings.employer_contact_person
+				)
+				self.employer_block = block
+				self.place = self.place or settings.employer_place or town
 		self.place = self.place or settings.employer_place
-		self.employer_block = self.employer_block or settings.employer_block
 		if settings.expense_regulations_approved and not self.expense_regulation_remark_present():
 			# Rz 60/65 — the wording is prescribed verbatim.
 			remark = _("Spesenreglement durch Kanton {0} am {1} genehmigt.").format(

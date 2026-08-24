@@ -27,9 +27,23 @@
    the form shifts away from the millimetres the official layout puts it at.
    A letter head is what pushes it down in a stock Frappe print view. */
 html, body { margin: 0 !important; padding: 0 !important; }
-.print-format, .print-format-gutter, .page-break {
-  padding: 0 !important; margin: 0 !important; border: 0 !important; min-height: 0 !important;
+/* frappe.utils.pdf.read_options_from_html lifts the PDF page margins out of a
+   rule whose selector is exactly `.print-format`, and reads the LONGHAND
+   properties only — a `margin: 0` shorthand is reported under the name "margin"
+   and ignored, leaving Frappe's 15 mm default and pushing this sheet onto a
+   second page. These four lines are the page margins. */
+.print-format {
+  margin-top: 0mm;
+  margin-bottom: 0mm;
+  margin-left: 0mm;
+  margin-right: 0mm;
+  padding: 0 !important; border: 0 !important; min-height: 0 !important;
+  max-width: none !important;
 }
+.print-format-gutter, .page-break {
+  padding: 0 !important; margin: 0 !important; border: 0 !important;
+}
+.print-toolbar { display: none !important; }
 .letter-head, .letter-head-footer, #header-html, #footer-html,
 .print-heading, .letterhead-footer { display: none !important; }
 .la-sheet {
