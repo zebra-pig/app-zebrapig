@@ -175,6 +175,28 @@ class SwissSimplifiedAnnualStatement(Document):
 		)
 		return {row.account: flt(row.net, 2) for row in rows}
 
+	# ------------------------------------------------------------------ printing
+	def visible_lines(self, section: str) -> list:
+		"""The rows to print for one section.
+
+		With the prior-year column hidden the reader is looking at a single year,
+		and a position that is nil in that year would print as a lone "–" — not a
+		position at all. Those are dropped, which in turn lets the print format
+		omit a table, and a whole section, that has nothing left to show.
+		"""
+		rows = [
+			row
+			for table in (
+				self.income_lines, self.expense_lines, self.asset_lines,
+				self.liability_lines, self.private_lines,
+			)
+			for row in (table or [])
+			if row.section == section
+		]
+		if not self.show_previous_year:
+			rows = [row for row in rows if flt(row.amount)]
+		return rows
+
 	# ------------------------------------------------------------------ totals
 	def compute_totals(self):
 		self.total_income = sum(flt(r.amount) for r in self.income_lines)
@@ -248,17 +270,27 @@ class SwissSimplifiedAnnualStatement(Document):
 				_("Turnover reaches CHF {0}: full commercial bookkeeping with balance sheet, income "
 				  "statement and notes is required (Art. 957 Abs. 1 Ziff. 1 OR).").format(chf(simplified))
 			)
+		# NOT "accruals are waived". Art. 958b Abs. 2 OR permits working from
+		# receipts and payments below this threshold, but these books do not take
+		# that option — debtors and creditors are carried, and invoices are booked
+		# to the period they belong to. The statement reports the ledger as booked.
+		# Claiming a relief that is not being used would be a false statement on a
+		# document the taxpayer signs, so the note records the threshold as an
+		# observation and says which basis the figures are on.
 		if self.under_accrual_waiver:
 			notes.append(
-				_("Net revenue does not exceed CHF {0}: accruals may be waived (Art. 958b Abs. 2 OR), "
-				  "and the business stays below the VAT registration threshold "
-				  "(Art. 10 Abs. 2 Bst. a MWSTG).").format(chf(waiver))
+				_("Net revenue does not exceed CHF {0}, which is also the VAT registration "
+				  "threshold (Art. 10 Abs. 2 Bst. a MWSTG).").format(chf(waiver))
 			)
 		else:
 			notes.append(
-				_("Net revenue exceeds CHF {0}: income and expenses must be accrued (Art. 958b Abs. 1 OR) "
-				  "and VAT liability starts unless an exemption applies.").format(chf(waiver))
+				_("Net revenue exceeds CHF {0}, the VAT registration threshold "
+				  "(Art. 10 Abs. 2 Bst. a MWSTG).").format(chf(waiver))
 			)
+		notes.append(
+			_("The figures are taken from the ledger as booked, on an accrual basis — "
+			  "receivables, payables and period-end accruals included.")
+		)
 		if not any(r.section in (SECTION_WITHDRAWAL, SECTION_DEPOSIT) for r in self.private_lines):
 			notes.append(
 				_("No private withdrawals or deposits are recorded. Art. 125 Abs. 2 DBG requires a "

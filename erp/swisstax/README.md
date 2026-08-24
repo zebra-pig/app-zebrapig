@@ -70,17 +70,32 @@ package Art. 125 Abs. 2 DBG asks a self-employed person to sign and attach:
 4. plus the **Übertrag auf Formular 15a** — the same figures in the boxes of the
    federal questionnaire that accompanies the return
 
-Prior-year columns come with it (Art. 958d Abs. 2 OR), and the document states
-its own statutory position:
+The prior-year column can be switched off, in which case positions that are nil
+in the current year are dropped and any table — or whole section — left with
+nothing is omitted rather than printed empty.
+
+**The printed statement carries no statutory citations.** It shows the company,
+UID, period, currency, the three statements, the Formular 15a transfer, and a
+signature. The form shows figures; it does not argue law, and every reference
+printed on a self-prepared statement is an assertion the signatory stands behind.
+The thresholds below are recorded in the document for the preparer, not on the
+page:
 
 | Threshold | Meaning |
 |---|---|
 | turnover < CHF 500'000 | only income, expenditure and the asset position must be recorded — Art. 957 Abs. 2 Ziff. 1 OR; GoB apply by analogy, Art. 957 Abs. 3 OR |
-| net revenue ≤ CHF 100'000 | accruals may be waived, receipts/payments suffice — Art. 958b Abs. 2 OR; also the VAT registration threshold, Art. 10 Abs. 2 Bst. a MWSTG |
+| net revenue ≤ CHF 100'000 | the VAT registration threshold, Art. 10 Abs. 2 Bst. a MWSTG. Recorded as an observation only — Art. 958b Abs. 2 OR would permit working from receipts and payments, but these books do not take that option |
 
 ERPNext keeps a full double-entry ledger, which is a superset of what
-Art. 957 Abs. 2 OR demands, so the statement reports the books as booked. That
-is always acceptable — the simplified regime is a floor, not a ceiling.
+Art. 957 Abs. 2 OR demands, so the statement reports the books **as booked, on an
+accrual basis** — receivables, payables and period-end accruals included. That is
+always acceptable, the simplified regime being a floor rather than a ceiling. It
+is also why the document must not claim the Art. 958b Abs. 2 OR relief: that
+relief is not being taken, and claiming it would be a false statement on a
+document the taxpayer signs.
+
+Balances were cross-checked against Frappe's own `get_balance_on` and agree to
+the cent.
 
 Mark the proprietor's equity accounts with **Swiss: Private Movement**
 (*Privatentnahme* / *Privateinlage*); without them the third statement is empty

@@ -13,6 +13,7 @@
   "to_date",
   "header_col",
   "previous_fiscal_year",
+  "show_previous_year",
   "currency",
   "amended_from",
   "compliance_section",
@@ -105,6 +106,13 @@
    "description": "Art. 958d Abs. 2 OR — the prior-year figures shown alongside."
   },
   {
+   "fieldname": "show_previous_year",
+   "fieldtype": "Check",
+   "label": "Show the prior-year column",
+   "default": "1",
+   "description": "Art. 958d Abs. 2 OR asks for prior-year figures, but it sits under the Rechnungslegung rules, which Art. 957 Abs. 2 OR does not impose on simplified records — so a single-year statement is legitimate here. Untick to print the current fiscal year alone; positions that are nil in that year are then left out entirely."
+  },
+  {
    "fieldname": "currency",
    "fieldtype": "Link",
    "label": "Currency",
@@ -143,8 +151,9 @@
   {
    "fieldname": "under_accrual_waiver",
    "fieldtype": "Check",
-   "label": "Net revenue ≤ CHF 100'000 — accruals may be waived (Art. 958b Abs. 2 OR)",
-   "read_only": 1
+   "label": "Net revenue ≤ CHF 100'000 (also the VAT registration threshold)",
+   "read_only": 1,
+   "description": "An observation about the threshold, not a claim that the Art. 958b Abs. 2 OR relief is being taken — this statement reports the ledger as booked, on an accrual basis."
   },
   {
    "fieldname": "compliance_col",
@@ -159,8 +168,9 @@
   {
    "fieldname": "compliance_note",
    "fieldtype": "Small Text",
-   "label": "Notes",
-   "read_only": 1
+   "label": "Notes (not printed)",
+   "read_only": 1,
+   "print_hide": 1
   },
   {
    "fieldname": "income_section",
