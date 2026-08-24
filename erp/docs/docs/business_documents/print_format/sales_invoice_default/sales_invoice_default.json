@@ -27,5 +27,6 @@
  "print_format_type": "Jinja",
  "raw_printing": 0,
  "show_section_headings": 0,
- "standard": "Yes"
+ "standard": "Yes",
+ "pdf_generator": "chrome"
 }

@@ -151,6 +151,25 @@ docker compose -f erpnext-one.yaml up -d --pull never
 New images have to reach the box another way (e.g. `docker save` / `docker load`
 over the Tailscale link, or a dual-stack registry such as Docker Hub).
 
+### PDF rendering: Chromium, not wkhtmltopdf
+
+`frappe.utils.pdf.get_pdf` is hard-wired to wkhtmltopdf. The Chromium generator is
+selected **per Print Format** (`Print Format.pdf_generator`), not in Print
+Settings — setting it there does nothing. Our formats ship with it set to
+`chrome`.
+
+Two pieces of state live in the sites volume rather than the image, so they
+survive an image swap but need restoring on a fresh site:
+
+```json
+// sites/common_site_config.json
+"chromium_path": "chromium-print-shell"
+```
+
+Without that key Frappe tries to download its own Chromium and fails (ghcr-style
+IPv4-only host). `chromium-print-shell` is a wrapper baked into the image that
+adds `--font-render-hinting=none`; see the Containerfile for why.
+
 ### Known-unhealthy: origin TLS certificate
 
 Traefik serves `TRAEFIK DEFAULT CERT` (self-signed) for `erp.zebrapig.com` —

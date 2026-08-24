@@ -93,6 +93,17 @@ RUN useradd -ms /bin/bash frappe \
     fi \
     # Make the newly installed fonts resolvable by name (wkhtmltopdf/Chromium)
     && fc-cache -f \
+    # Frappe's Chromium PDF generator hard-codes its launch flags but resolves the
+    # binary through common_site_config's `chromium_path`, so the one flag we need
+    # goes in via a wrapper. Without --font-render-hinting=none, FreeType snaps
+    # glyph advances to whole device pixels and headless Chromium bakes that into
+    # the PDF as visibly irregular letter spacing. Measured on an invoice line:
+    # per-line inter-glyph gap stdev 0.33pt with hinting, 0.064pt without — 0.064
+    # being what the same document renders at on macOS, which has no such snapping.
+    && printf '%s\n' '#!/bin/sh' \
+       'exec /usr/bin/chromium-headless-shell --font-render-hinting=none "$@"' \
+       > /usr/local/bin/chromium-print-shell \
+    && chmod 755 /usr/local/bin/chromium-print-shell \
     # Clean up
     && rm -rf /var/lib/apt/lists/* \
     && rm -fr /etc/nginx/sites-enabled/default \

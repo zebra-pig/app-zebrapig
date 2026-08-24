@@ -8,6 +8,13 @@ webfont as base64 removes the question entirely: the same bytes travel with the
 document, so a browser preview, a server-side PDF and an emailed attachment all
 set the same type.
 
+The family is deliberately called `InterEmbedded`, not `Inter`. Debian's
+fonts-inter package declares `Inter-Medium.otf` with `style=Medium,Regular`, so
+a system lookup for "Inter" at weight 400 can legitimately return the Medium
+face — which is what the server was doing, rendering every document one weight
+too heavy while a local browser with no system Inter rendered it correctly. A
+private family name cannot be shadowed by anything installed on the host.
+
     python3 tools/embed_fonts.py
 """
 
@@ -23,10 +30,14 @@ OUT = HERE.parent / "docs" / "templates" / "includes" / "_fonts.html"
 def main():
 	faces = []
 	for weight in WEIGHTS:
-		data = (FONTS / f"Inter-{weight}.woff2").read_bytes()
+		# WOFF1, not WOFF2. wkhtmltopdf's QtWebKit cannot read WOFF2 and silently
+		# falls back to a system font — which is how every document ended up set in
+		# Debian's mis-tagged Inter Medium. WOFF1 is read by both engines, so the
+		# document no longer depends on which one Frappe happens to dispatch to.
+		data = (FONTS / f"Inter-{weight}.woff").read_bytes()
 		faces.append(
-			"@font-face{font-family:'Inter';font-style:normal;font-weight:%d;"
-			"font-display:block;src:url(data:font/woff2;base64,%s) format('woff2')}"
+			"@font-face{font-family:'InterEmbedded';font-style:normal;font-weight:%d;"
+			"font-display:block;src:url(data:font/woff;base64,%s) format('woff')}"
 			% (weight, base64.b64encode(data).decode())
 		)
 	OUT.write_text(
